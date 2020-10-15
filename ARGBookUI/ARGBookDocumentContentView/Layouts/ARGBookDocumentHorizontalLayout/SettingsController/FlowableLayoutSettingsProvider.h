@@ -6,14 +6,20 @@
 //  Copyright © 2016 Argentum. All rights reserved.
 //
 
-#import "BaseBookContentViewSettingsProvider.h"
+@import Foundation;
+@import WebKit;
+@protocol ARGBookReadingSettings;
 
+@interface ARGFlowableLayoutSettingsProvider : NSObject
 
-
-@interface FlowableLayoutSettingsProvider : BaseBookContentViewSettingsProvider
+@property (nonatomic, weak, readonly) WKWebView *webView;
 
 @property (nonatomic, assign, readonly) UIOffset         relativePageMargins;
 @property (nonatomic, assign, readonly) UIOffset         absolutePageMargins;
-@property (nonatomic, assign, readonly) ReadingAlignment alignment;
+@property (nonatomic, assign, readonly) int64_t alignment;
+
+- (instancetype)initWithWebView:(WKWebView *)webView;
+
+- (void)setSettings:(id<ARGBookReadingSettings>)settings completion:(dispatch_block_t)completion;
 
 @end

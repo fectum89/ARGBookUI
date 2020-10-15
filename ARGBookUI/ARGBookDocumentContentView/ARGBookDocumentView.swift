@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ARGView
 
 class ARGBookDocumentView: UIView {
     var cacheView: ARGBookDocumentCacheView
@@ -43,6 +44,22 @@ class ARGBookDocumentView: UIView {
     
     func applyReadingSettings(_ settings: ARGBookReadingSettings, completionHandler: (() -> Void)? = nil) {
         contentView.applyReadingSettings(settings, completionHandler: completionHandler)
+    }
+    
+}
+
+extension ARGBookDocumentView: ARGNestedContiniousScrollContainer {
+    
+    func nestedScrollView(for scrollController: ARGContiniousScrollController) -> UIScrollView {
+        return contentView.webView.scrollView
+    }
+    
+    func nestedScrollViewContentReady(for scrollController: ARGContiniousScrollController) -> Bool {
+        return contentView.layout?.isReady ?? false
+    }
+    
+    func nestedScrollViewDesiredScrollPosition(_ position: ARGContinuousScrollPosition) {
+        
     }
     
 }

@@ -29,6 +29,7 @@ class ARGBookDocumentContentView: UIView {
         webView.isOpaque = false
         webView.clipsToBounds = true
         webView.navigationDelegate = self
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
         
         addSubview(webView)
         
@@ -40,13 +41,13 @@ class ARGBookDocumentContentView: UIView {
     }
     
     func reloadIfNeeded(document: ARGBookDocument, settings: ARGBookReadingSettings, completion: (() -> Void)? = nil) {
-        let LayoutClass = ARGBookDocumentLayout.documentLayoutClass(for: document, scrollType: settings.scrollType)
-        
-        if self.layout == nil || type(of: self.layout) != LayoutClass {
-            self.layout = LayoutClass.init(webView: self.webView)
-        }
-        
         documentLoader.loadDocumentIfNeeded(document) { error in
+            let LayoutClass = ARGBookDocumentLayout.documentLayoutClass(for: document, scrollType: settings.scrollType)
+            
+            if self.layout == nil || type(of: self.layout) != LayoutClass {
+                self.layout = LayoutClass.init(webView: self.webView)
+            }
+     
             self.applyReadingSettings(settings) {
                 completion?()
             }
@@ -54,9 +55,10 @@ class ARGBookDocumentContentView: UIView {
     }
     
     func scroll(to navigationPoint: ARGBookNavigationPoint) {
-        if !self.layout!.scroll(to: navigationPoint) {
-            //save navigation point to scroll to it later
-            self.navigationPoint = navigationPoint
+        if let layout = layout {
+            if !layout.scroll(to: navigationPoint) {
+                self.navigationPoint = navigationPoint //save navigation point to scroll to it later
+            }
         }
     }
     

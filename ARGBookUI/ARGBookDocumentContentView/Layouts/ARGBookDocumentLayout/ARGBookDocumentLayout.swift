@@ -7,18 +7,19 @@
 
 import UIKit
 import WebKit
+import ARGView
 
 class ARGBookDocumentLayout: NSObject {
     var webView: WKWebView
     var settingsProvider: ARGBookReadingSettingsController
     var isReady = false
-    
     var documentPrepared: Bool = false
+    var documentStateManager: ARGBookDocumentStateManager?
+    var navigationPoint: ARGBookNavigationPoint?
     
     required init(webView: WKWebView) {
         self.webView = webView
         self.settingsProvider = ARGBookReadingSettingsController(webView: webView)
-        //self.sizeManager = ARGBookDocumentSizeManager(webView: webView)
     }
     
     func prepare(completionHandler: (() -> Void)? = nil) {
@@ -52,30 +53,40 @@ class ARGBookDocumentLayout: NSObject {
         }
     }
     
-    func scroll(to navigationPoint:ARGBookNavigationPoint?, completionHandler: (() -> Void)? = nil) -> Bool {
+    func scroll(to navigationPoint: ARGBookNavigationPoint?, completionHandler: (() -> Void)? = nil) -> Bool {
         guard isReady else {
+            self.navigationPoint = navigationPoint
             return false
         }
         
         if navigationPoint != nil {
             
         } else {
-            scrollToStart()
+            scroll(to: .begin)
         }
         
         return true
     }
     
-    func measureContentSize(completionHander: (() -> Void)? = nil) {
+    func scroll(to position: ARGContinuousScrollPosition) {
+        
+    }
+    
+    func waitForDOMReady(measuredSize: CGSize, completionHandler: (() -> Void)? = nil) {
+        documentStateManager = ARGBookDocumentStateManager(webView: self.webView, measuredSize: measuredSize)
+            
+        documentStateManager!.waitForDOMReady { (size) in
+            self.isReady = true
+            self.documentStateManager = nil
+            
+            DispatchQueue.main.async {
+                completionHandler?()
+            }
+        }
+    }
+    
+    func measureContentSize(completionHandler: (() -> Void)? = nil) {
 
-    }
-    
-    func scrollToStart() {
-        
-    }
-    
-    func scrollToEnd() {
-        
     }
     
 }

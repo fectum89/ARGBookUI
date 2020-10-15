@@ -7,11 +7,12 @@
 
 import UIKit
 
-class ARGBookDocumentSizeManager: NSObject {
+class ARGBookDocumentStateManager: NSObject {
     
     var webView: WKWebView
     var measuredSize: CGSize
     var completionHandler: ((CGSize) -> Void)?
+    var observingStopped = false
     
     init(webView: WKWebView, measuredSize: CGSize) {
         self.webView = webView
@@ -24,16 +25,17 @@ class ARGBookDocumentSizeManager: NSObject {
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        guard !observingStopped  else {
+            return
+        }
+        
         let size = webView.scrollView.contentSize
         
         print("size of webView \(String(describing: webView.url?.lastPathComponent)) changed: " + NSCoder.string(for: size))
         
         if measuredSize == size {
-            let completion = {
-                self.completionHandler?(size)
-            }
-            
-            completion()
+            self.completionHandler?(size)
+            observingStopped = true
         }
     }
     

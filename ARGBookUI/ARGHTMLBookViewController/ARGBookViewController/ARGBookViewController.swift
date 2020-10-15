@@ -44,7 +44,7 @@ import ARGView
         collectionView.register(nib, forCellWithReuseIdentifier: identifier)
         collectionView.contentInsetAdjustmentBehavior = .never
         
-//        self.scrollController = ARGContiniousScrollController(scrollView: collectionView, delegate: self, scrollDirection: .horizontal)
+        self.scrollController = ARGContiniousScrollController(scrollView: collectionView, delegate: self, scrollDirection: .horizontal)
     }
     
     public override func viewDidLayoutSubviews() {
@@ -99,5 +99,19 @@ extension ARGBookViewController: UICollectionViewDataSource {
         
         return cell
     }
+    
+}
+
+extension ARGBookViewController: ARGContiniousScrollDelegate {
+    
+    public func visibleNestedScrollContainers(for scrollController: ARGContiniousScrollController) -> [UIView & ARGNestedContiniousScrollContainer]? {
+        let views = collectionView.visibleCells.map { (cell) -> ARGBookDocumentView in
+            let cell = cell as! ARGDocumentCollectionViewCell
+            return cell.documentView
+        }
+        
+        return views
+    }
+    
     
 }

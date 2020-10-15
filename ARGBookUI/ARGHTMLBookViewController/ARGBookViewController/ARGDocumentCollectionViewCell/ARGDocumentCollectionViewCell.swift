@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ARGView
 
 class ARGDocumentCollectionViewCell: UICollectionViewCell {
     
@@ -19,4 +20,6 @@ class ARGDocumentCollectionViewCell: UICollectionViewCell {
         documentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         contentView.addSubview(documentView)
     }
+    
+
 }

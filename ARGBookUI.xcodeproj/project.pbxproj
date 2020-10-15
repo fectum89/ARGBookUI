@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5D58B9CE2536B51500062144 /* ARGBookDocumentSizeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D58B9CD2536B51500062144 /* ARGBookDocumentSizeManager.swift */; };
+		5D58B9CE2536B51500062144 /* ARGBookDocumentStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D58B9CD2536B51500062144 /* ARGBookDocumentStateManager.swift */; };
 		5D58B9D62536EB5500062144 /* WKWebView+Measuring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D58B9D52536EB5500062144 /* WKWebView+Measuring.swift */; };
+		5D58B9DE25376D0400062144 /* ARGBookDocumentLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D58B9DD25376D0400062144 /* ARGBookDocumentLayoutManager.swift */; };
 		5D9693B825306A9000C3FB71 /* ARGBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D9693AE25306A9000C3FB71 /* ARGBookUI.framework */; };
 		5D9693BD25306A9000C3FB71 /* ARGBookUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9693BC25306A9000C3FB71 /* ARGBookUITests.swift */; };
 		5D9693BF25306A9000C3FB71 /* ARGBookUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D9693B125306A9000C3FB71 /* ARGBookUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -31,6 +32,7 @@
 		5D96944225319BE500C3FB71 /* ARGBookModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D96944125319BE500C3FB71 /* ARGBookModels.swift */; };
 		5D9694492531A8B800C3FB71 /* ARGBookViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D9694482531A8B800C3FB71 /* ARGBookViewController.xib */; };
 		5D9694512531A93200C3FB71 /* ARGDocumentCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D9694502531A93200C3FB71 /* ARGDocumentCollectionViewCell.xib */; };
+		5DAD701725385FFD003A8BE6 /* FlowableLayoutSettingsProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DD920412532339B0023E58C /* FlowableLayoutSettingsProvider.m */; };
 		5DBC0A932531E7F0004DE451 /* Settings.js in Resources */ = {isa = PBXBuildFile; fileRef = 5DBC0A8F2531E7F0004DE451 /* Settings.js */; };
 		5DBC0A942531E7F0004DE451 /* Selection.js in Resources */ = {isa = PBXBuildFile; fileRef = 5DBC0A902531E7F0004DE451 /* Selection.js */; };
 		5DBC0A952531E7F0004DE451 /* PrepareDocument.js in Resources */ = {isa = PBXBuildFile; fileRef = 5DBC0A912531E7F0004DE451 /* PrepareDocument.js */; };
@@ -38,7 +40,7 @@
 		5DBC0AAA2531F62B004DE451 /* ARGBookWebViewConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC0AA92531F62B004DE451 /* ARGBookWebViewConfigurator.swift */; };
 		5DD92031253229E60023E58C /* WKWebView+Scripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD92030253229E60023E58C /* WKWebView+Scripts.swift */; };
 		5DD9203E253233930023E58C /* ARGBookReadingSettingsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DD9203C253233930023E58C /* ARGBookReadingSettingsController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5DD920442532339B0023E58C /* FlowableLayoutSettingsProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DD920422532339B0023E58C /* FlowableLayoutSettingsProvider.h */; };
+		5DD920442532339B0023E58C /* FlowableLayoutSettingsProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DD920422532339B0023E58C /* FlowableLayoutSettingsProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5DD92048253235E50023E58C /* ARGSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD92047253235E50023E58C /* ARGSettingsModel.swift */; };
 		5DD92071253238AA0023E58C /* ARGView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DD92070253238AA0023E58C /* ARGView.framework */; };
 		5DD9208725323A550023E58C /* ARGBookReadingSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DD9203B253233930023E58C /* ARGBookReadingSettingsController.m */; };
@@ -56,8 +58,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5D58B9CD2536B51500062144 /* ARGBookDocumentSizeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentSizeManager.swift; sourceTree = "<group>"; };
+		5D58B9CD2536B51500062144 /* ARGBookDocumentStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentStateManager.swift; sourceTree = "<group>"; };
 		5D58B9D52536EB5500062144 /* WKWebView+Measuring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKWebView+Measuring.swift"; sourceTree = "<group>"; };
+		5D58B9DD25376D0400062144 /* ARGBookDocumentLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentLayoutManager.swift; sourceTree = "<group>"; };
 		5D9693AE25306A9000C3FB71 /* ARGBookUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ARGBookUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D9693B125306A9000C3FB71 /* ARGBookUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARGBookUI.h; sourceTree = "<group>"; };
 		5D9693B225306A9000C3FB71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -118,12 +121,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5D58B9CC2536B4F300062144 /* DocumentSizeManager */ = {
+		5D58B9CC2536B4F300062144 /* DocumentStateManager */ = {
 			isa = PBXGroup;
 			children = (
-				5D58B9CD2536B51500062144 /* ARGBookDocumentSizeManager.swift */,
+				5D58B9CD2536B51500062144 /* ARGBookDocumentStateManager.swift */,
 			);
-			path = DocumentSizeManager;
+			path = DocumentStateManager;
 			sourceTree = "<group>";
 		};
 		5D9693A425306A9000C3FB71 = {
@@ -216,6 +219,7 @@
 				5DD92036253231570023E58C /* ARGBookDocumentHorizontalLayout */,
 				5DD920372532315F0023E58C /* ARGBookDocumentVerticalLayout */,
 				5DD920382532316F0023E58C /* ARGBookDocumentFixedLayout */,
+				5D58B9DD25376D0400062144 /* ARGBookDocumentLayoutManager.swift */,
 			);
 			path = Layouts;
 			sourceTree = "<group>";
@@ -332,7 +336,7 @@
 		5DD92102253471AD0023E58C /* ARGBookDocumentLayout */ = {
 			isa = PBXGroup;
 			children = (
-				5D58B9CC2536B4F300062144 /* DocumentSizeManager */,
+				5D58B9CC2536B4F300062144 /* DocumentStateManager */,
 				5DD92103253471BA0023E58C /* SettingsController */,
 				5D96942C2531946B00C3FB71 /* ARGBookDocumentLayout.swift */,
 			);
@@ -466,7 +470,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D9693ED25306BE800C3FB71 /* BookContentModels.swift in Sources */,
-				5D58B9CE2536B51500062144 /* ARGBookDocumentSizeManager.swift in Sources */,
+				5D58B9CE2536B51500062144 /* ARGBookDocumentStateManager.swift in Sources */,
 				5D9693EE25306BE800C3FB71 /* BookContentViewController.swift in Sources */,
 				5DBC0AAA2531F62B004DE451 /* ARGBookWebViewConfigurator.swift in Sources */,
 				5D969435253194E100C3FB71 /* ARGBookDocumentHorizontalLayout.swift in Sources */,
@@ -476,6 +480,7 @@
 				5D9693F6253072E100C3FB71 /* ARGBookViewController.swift in Sources */,
 				5D9693EC25306BE800C3FB71 /* BookContentRouter.swift in Sources */,
 				5DD92048253235E50023E58C /* ARGSettingsModel.swift in Sources */,
+				5D58B9DE25376D0400062144 /* ARGBookDocumentLayoutManager.swift in Sources */,
 				5D96942625318E3B00C3FB71 /* ARGBookDocumentContentView.swift in Sources */,
 				5DD920DC253449560023E58C /* ARGBookDocumentLoader.swift in Sources */,
 				5D96942025318E0500C3FB71 /* ARGBookDocumentCacheView.swift in Sources */,
@@ -488,6 +493,7 @@
 				5D96940D25318C3600C3FB71 /* ARGBookDocumentViewController.swift in Sources */,
 				5D969439253194F300C3FB71 /* ARGBookDocumentFixedLayout.swift in Sources */,
 				5D96942D2531946B00C3FB71 /* ARGBookDocumentLayout.swift in Sources */,
+				5DAD701725385FFD003A8BE6 /* FlowableLayoutSettingsProvider.m in Sources */,
 				5D96944225319BE500C3FB71 /* ARGBookModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

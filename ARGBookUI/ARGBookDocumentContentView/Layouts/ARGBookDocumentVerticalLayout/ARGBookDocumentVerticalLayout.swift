@@ -18,24 +18,16 @@ class ARGBookDocumentVerticalLayout: ARGBookDocumentLayout {
         }
     }
     
-    override func measureContentSize(completionHander: (() -> Void)? = nil) {
+    override func measureContentSize(completionHandler: (() -> Void)? = nil) {
         webView.arg_measure(.height) { measuredHeight, error in
             if let height = measuredHeight {
-                let sizeManager = ARGBookDocumentSizeManager(webView: self.webView, measuredSize: CGSize(width: self.webView.bounds.size.width, height: height))
-                sizeManager.waitForDOMReady { (size) in
-                    let _ = sizeManager.measuredSize
-                    self.isReady = true
-                    completionHander?()
-                }
+                self.waitForDOMReady(measuredSize: CGSize(width: self.webView.bounds.size.width, height: height), completionHandler: completionHandler)
             }
         }
     }
     
     override func scrollToStart() {
-        DispatchQueue.main.async {
-            self.webView.scrollView.contentOffset = CGPoint(x: self.webView.scrollView.contentOffset.x, y: 0)
-        }
-        
+        self.webView.scrollView.contentOffset = CGPoint(x: self.webView.scrollView.contentOffset.x, y: 0)
     }
     
     override func scrollToEnd() {

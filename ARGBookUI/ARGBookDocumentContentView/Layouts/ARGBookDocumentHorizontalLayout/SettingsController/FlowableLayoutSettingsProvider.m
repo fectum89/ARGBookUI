@@ -7,52 +7,52 @@
 //
 
 #import "FlowableLayoutSettingsProvider.h"
-#import "BaseBookContentView.h"
+#import <ARGBookUI/ARGBookUI-Swift.h>
 
-@interface FlowableLayoutSettingsProvider ()
+@interface ARGFlowableLayoutSettingsProvider ()
 
 @property (nonatomic, strong, readonly) NSString *pageSettingsString;
 
 @end
 
-@implementation FlowableLayoutSettingsProvider
+@implementation ARGFlowableLayoutSettingsProvider
 
-- (void)setSettings:(ReadingSettings *)settings completion:(ObjectBlock)completion {
+- (instancetype)initWithWebView:(WKWebView *)webView {
+    self = [super init];
+    if (self) {
+        _webView = webView;
+    }
+    return self;
+}
+
+
+- (void)setSettings:(id<ARGBookReadingSettings>)settings completion:(dispatch_block_t)completion {
     __weak typeof (self) wself = self;
     
-    [super setSettings:settings completion:^(WKWebView *webView) {
-        dispatch_group_t settingsGroup = dispatch_group_create();
-        
-        dispatch_group_notify(settingsGroup, dispatch_get_main_queue(), ^{
-            if (completion) {
-                completion(webView);
-            }
-        });
-        
-        dispatch_group_enter(settingsGroup);
-        [wself setRelativePageMargins:UIOffsetMake(settings.horizontalMargin, settings.verticalMargin) completion:^{
-            dispatch_group_leave(settingsGroup);
-        }];
-        
-        dispatch_group_enter(settingsGroup);
-        [wself setAlignment:settings.alignment completion:^{
-            dispatch_group_leave(settingsGroup);
-        }];
-        
-//        [wself setRelativePageMargins:UIOffsetMake(settings.horizontalMargin, settings.verticalMargin) completion:^{
-//            [wself setAlignment:settings.alignment completion:^{
-//                if (completion) {
-//                    completion(webView);
-//                }
-//            }];
-//        }];
+    dispatch_group_t settingsGroup = dispatch_group_create();
+    
+    dispatch_group_notify(settingsGroup, dispatch_get_main_queue(), ^{
+        if (completion) {
+            completion();
+        }
+    });
+    
+    dispatch_group_enter(settingsGroup);
+    [wself setRelativePageMargins:UIOffsetMake(settings.horizontalMargin, settings.verticalMargin) completion:^{
+        dispatch_group_leave(settingsGroup);
     }];
+    
+    dispatch_group_enter(settingsGroup);
+    [wself setAlignment:settings.alignment completion:^{
+        dispatch_group_leave(settingsGroup);
+    }];
+    
 }
 
 - (void)setRelativePageMargins:(UIOffset)pageMargins completion:(dispatch_block_t)completion {
     _relativePageMargins = pageMargins;
     
-    UIOffset absolutePageMargins = UIOffsetMake(floor(self.contentView.width / 100 * pageMargins.horizontal), floor(self.contentView.height / 100 * pageMargins.vertical));
+    UIOffset absolutePageMargins = UIOffsetMake(floor(self.webView.bounds.size.width / 100 * pageMargins.horizontal), floor(self.webView.bounds.size.width / 100 * pageMargins.vertical));
     
     [self setAbsolutePageMargins:absolutePageMargins completion:completion];
 }
@@ -61,8 +61,8 @@
     _absolutePageMargins = pageMargins;
     
     NSString *pageSizeScript = [NSString stringWithFormat:@"setPageSettings(%f, %f, %f, %f, %f, %f)",
-                                floor(self.contentView.width - pageMargins.horizontal * 2),
-                                floor(self.contentView.height - pageMargins.vertical * 2),
+                                floor(self.webView.bounds.size.width - pageMargins.horizontal * 2),
+                                floor(self.webView.bounds.size.height - pageMargins.vertical * 2),
                                 floor(pageMargins.vertical),
                                 floor(pageMargins.horizontal),
                                 floor(pageMargins.vertical),
@@ -71,7 +71,7 @@
     if (![pageSizeScript isEqualToString:_pageSettingsString]) {
         _pageSettingsString = pageSizeScript;
         
-        [self.contentView evaluateScript:pageSizeScript withCompletion:^(id obj) {
+        [_webView evaluateJavaScript:pageSizeScript completionHandler:^(id _Nullable result, NSError * _Nullable error) {
             if (completion) {
                 completion();
             }
@@ -83,7 +83,7 @@
     }
 }
 
-- (void)setAlignment:(ReadingAlignment)alignment completion:(dispatch_block_t)completion {
+- (void)setAlignment:(int64_t)alignment completion:(dispatch_block_t)completion {
     if (_alignment == alignment) {
         if (completion) {
             completion();
@@ -96,13 +96,13 @@
     
     NSString *alignmentString = nil;
     
-    if (alignment == ReadingAlignmentLeft) {
+    if (alignment == ARGBookReadingSettingsAlignmentLeft) {
         alignmentString = @"left";
-    } else if (alignment == ReadingAlignmentJustify) {
+    } else if (alignment == ARGBookReadingSettingsAlignmentJustify) {
         alignmentString = @"justify";
     }
     
-    [self.contentView evaluateScript:[NSString stringWithFormat:@"setTextAlignment('%@')", alignmentString] withCompletion:^(id obj) {
+    [_webView evaluateJavaScript:[NSString stringWithFormat:@"setTextAlignment('%@')", alignmentString] completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         if (completion) {
             completion();
         }

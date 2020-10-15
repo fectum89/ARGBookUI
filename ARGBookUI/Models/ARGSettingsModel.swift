@@ -14,11 +14,17 @@ import UIKit.UIColor
     case paging
 }
 
+@objc public enum ARGBookReadingSettingsAlignment: Int64 {
+    case left
+    case justify
+}
+
+
 @objc public protocol ARGBookReadingSettings {
     
     var fontSize: Int64 {get}
     
-    var alignment: Int64 {get}
+    var alignment: ARGBookReadingSettingsAlignment {get}
     
     var fontFamily: String {get}
     

@@ -9,13 +9,16 @@ import Foundation
 
 @objc public protocol ARGBookNavigationPoint {
     
-    var document: ARGBookDocument {get}
+    @objc optional var document: ARGBookDocument {get}
     
-    var elementID: String {get}
+    @objc optional var elementID: String {get}
     
-    var pageNumber: Int {get}
+    @objc optional var pageNumber: Int {get}
     
 }
+
+public class ARGBookDocumentStartNavigationPoint: ARGBookNavigationPoint {}
+public class ARGBookDocumentEndNavigationPoint: ARGBookNavigationPoint {}
 
 @objc public protocol ARGBookDocument {
     

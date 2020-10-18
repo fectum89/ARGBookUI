@@ -11,15 +11,14 @@ import ARGView
 
 class ARGBookDocumentLayout: NSObject {
     var webView: WKWebView
-    var settingsProvider: ARGBookReadingSettingsController
+    var settingsController: ARGBookReadingSettingsController
     var isReady = false
     var documentPrepared: Bool = false
-    var documentStateManager: ARGBookDocumentStateManager?
-    var navigationPoint: ARGBookNavigationPoint?
     
     required init(webView: WKWebView) {
         self.webView = webView
-        self.settingsProvider = ARGBookReadingSettingsController(webView: webView)
+        let settingsControllerClass = Self.settingsControllerClass()
+        self.settingsController = settingsControllerClass.init(webView: webView)
     }
     
     func prepare(completionHandler: (() -> Void)? = nil) {
@@ -33,77 +32,24 @@ class ARGBookDocumentLayout: NSObject {
         }
     }
     
+    class func settingsControllerClass<T: ARGBookReadingSettingsController>() -> T.Type {
+        return ARGBookReadingSettingsController.self as! T.Type
+    }
+    
     func applyReadingSettings(_ settings:ARGBookReadingSettings?, completionHandler: (() -> Void)? = nil) {
-        guard settings != nil else {
-            return
-        }
+        isReady = false
         
-        let applySettingsClosure = {
-            self.settingsProvider.setSettings(settings) {
-                completionHandler?()
-            }
-        }
-        
-        if !documentPrepared {
-            prepare {
-                applySettingsClosure()
-            }
-        } else {
-            applySettingsClosure()
+        self.settingsController.setSettings(settings) {
+            completionHandler?()
         }
     }
     
-    func scroll(to navigationPoint: ARGBookNavigationPoint?, completionHandler: (() -> Void)? = nil) -> Bool {
-        guard isReady else {
-            self.navigationPoint = navigationPoint
-            return false
-        }
-        
-        if navigationPoint != nil {
-            
-        } else {
-            scroll(to: .begin)
-        }
-        
-        return true
-    }
-    
-    func scroll(to position: ARGContinuousScrollPosition) {
+    func scroll(to navigationPoint: ARGBookNavigationPoint, completionHandler: (() -> Void)? = nil) {
         
     }
     
-    func waitForDOMReady(measuredSize: CGSize, completionHandler: (() -> Void)? = nil) {
-        documentStateManager = ARGBookDocumentStateManager(webView: self.webView, measuredSize: measuredSize)
-            
-        documentStateManager!.waitForDOMReady { (size) in
-            self.isReady = true
-            self.documentStateManager = nil
-            
-            DispatchQueue.main.async {
-                completionHandler?()
-            }
-        }
-    }
-    
-    func measureContentSize(completionHandler: (() -> Void)? = nil) {
+    func measureContentSize(completionHandler: ((CGSize?) -> Void)? = nil) {
 
-    }
-    
-}
-
-extension ARGBookDocumentLayout {
-    
-    static func documentLayoutClass<Layout: ARGBookDocumentLayout>(for document: ARGBookDocument, scrollType: ARGBookScrollType) -> Layout.Type {
-        if document.hasFixedLayout {
-            return ARGBookDocumentFixedLayout.self as! Layout.Type
-        } else {
-            switch scrollType {
-            case .horizontal, .paging:
-                return ARGBookDocumentHorizontalLayout.self as! Layout.Type
-            case .vertical:
-                return ARGBookDocumentVerticalLayout.self as! Layout.Type
-            }
-        }
     }
     
 }

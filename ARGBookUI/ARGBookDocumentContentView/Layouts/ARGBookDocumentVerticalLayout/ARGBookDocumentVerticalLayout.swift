@@ -9,28 +9,37 @@ import UIKit
 import ARGView
 
 class ARGBookDocumentVerticalLayout: ARGBookDocumentLayout {
-    override func applyReadingSettings(_ settings: ARGBookReadingSettings?, completionHandler: (() -> Void)? = nil) {
-        super.applyReadingSettings(settings) {
-            //
-            self.measureContentSize() {
-                completionHandler?()
-            }
-        }
-    }
     
-    override func measureContentSize(completionHandler: (() -> Void)? = nil) {
+    override func prepare(completionHandler: (() -> Void)? = nil) {
+        webView.scrollView.bounces = false
+        super.prepare(completionHandler: completionHandler)
+    }
+//    override func applyReadingSettings(_ settings: ARGBookReadingSettings?, completionHandler: (() -> Void)? = nil) {
+//        super.applyReadingSettings(settings) {
+//            //
+////            self.measureContentSize() {
+////                completionHandler?()
+////            }
+//        }
+//    }
+//
+    
+    override func measureContentSize(completionHandler: ((CGSize?) -> Void)? = nil) {
         webView.arg_measure(.height) { measuredHeight, error in
             if let height = measuredHeight {
-                self.waitForDOMReady(measuredSize: CGSize(width: self.webView.bounds.size.width, height: height), completionHandler: completionHandler)
+                completionHandler?(CGSize(width: self.webView.bounds.size.width, height: height))
+            } else {
+                completionHandler?(nil)
             }
         }
     }
     
-    override func scrollToStart() {
-        self.webView.scrollView.contentOffset = CGPoint(x: self.webView.scrollView.contentOffset.x, y: 0)
-    }
     
-    override func scrollToEnd() {
-        webView.scrollView.contentOffset = CGPoint(x: webView.scrollView.contentOffset.x, y: webView.scrollView.contentSize.height - webView.scrollView.bounds.size.height)
-    }
+//    override func scrollToStart() {
+//        self.webView.scrollView.contentOffset = CGPoint(x: self.webView.scrollView.contentOffset.x, y: 0)
+//    }
+//    
+//    override func scrollToEnd() {
+//        webView.scrollView.contentOffset = CGPoint(x: webView.scrollView.contentOffset.x, y: webView.scrollView.contentSize.height - webView.scrollView.bounds.size.height)
+//    }
 }

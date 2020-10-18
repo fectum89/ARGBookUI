@@ -1,6 +1,6 @@
 var mySheet;
 
-function onLoadSetup(disableCallout) {
+function onLoadSetup() {
     setCSSRule('body', 'margin', '0px');
 
     setCSSRule('h1', 'word-wrap', 'break-word');
@@ -12,10 +12,6 @@ function onLoadSetup(disableCallout) {
     setCSSRule('li', 'line-height', 'normal');
     
     setCSSRule('body', 'background-color', 'transparent');
-    
-    if (disableCallout) {
-        setCSSRule('body', '-webkit-touch-callout', 'none');
-    }
 }
 
 function setViewportWidth(viewportWidth) {

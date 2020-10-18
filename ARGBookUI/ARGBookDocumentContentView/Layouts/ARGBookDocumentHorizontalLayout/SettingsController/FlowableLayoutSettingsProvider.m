@@ -17,36 +17,29 @@
 
 @implementation ARGFlowableLayoutSettingsProvider
 
-- (instancetype)initWithWebView:(WKWebView *)webView {
-    self = [super init];
-    if (self) {
-        _webView = webView;
-    }
-    return self;
-}
-
 
 - (void)setSettings:(id<ARGBookReadingSettings>)settings completion:(dispatch_block_t)completion {
     __weak typeof (self) wself = self;
     
-    dispatch_group_t settingsGroup = dispatch_group_create();
-    
-    dispatch_group_notify(settingsGroup, dispatch_get_main_queue(), ^{
-        if (completion) {
-            completion();
-        }
-    });
-    
-    dispatch_group_enter(settingsGroup);
-    [wself setRelativePageMargins:UIOffsetMake(settings.horizontalMargin, settings.verticalMargin) completion:^{
-        dispatch_group_leave(settingsGroup);
+    [super setSettings:settings completion:^{
+        dispatch_group_t settingsGroup = dispatch_group_create();
+        
+        dispatch_group_notify(settingsGroup, dispatch_get_main_queue(), ^{
+            if (completion) {
+                completion();
+            }
+        });
+        
+        dispatch_group_enter(settingsGroup);
+        [wself setRelativePageMargins:UIOffsetMake(settings.horizontalMargin, settings.verticalMargin) completion:^{
+            dispatch_group_leave(settingsGroup);
+        }];
+        
+        dispatch_group_enter(settingsGroup);
+        [wself setAlignment:settings.alignment completion:^{
+            dispatch_group_leave(settingsGroup);
+        }];
     }];
-    
-    dispatch_group_enter(settingsGroup);
-    [wself setAlignment:settings.alignment completion:^{
-        dispatch_group_leave(settingsGroup);
-    }];
-    
 }
 
 - (void)setRelativePageMargins:(UIOffset)pageMargins completion:(dispatch_block_t)completion {
@@ -71,7 +64,7 @@
     if (![pageSizeScript isEqualToString:_pageSettingsString]) {
         _pageSettingsString = pageSizeScript;
         
-        [_webView evaluateJavaScript:pageSizeScript completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        [self.webView evaluateJavaScript:pageSizeScript completionHandler:^(id _Nullable result, NSError * _Nullable error) {
             if (completion) {
                 completion();
             }
@@ -102,7 +95,7 @@
         alignmentString = @"justify";
     }
     
-    [_webView evaluateJavaScript:[NSString stringWithFormat:@"setTextAlignment('%@')", alignmentString] completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+    [self.webView evaluateJavaScript:[NSString stringWithFormat:@"setTextAlignment('%@')", alignmentString] completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         if (completion) {
             completion();
         }

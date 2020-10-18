@@ -6,48 +6,45 @@
 //
 
 import UIKit
-import ARGView
 
 class ARGBookDocumentHorizontalLayout: ARGBookDocumentLayout {
-    var settingsController: ARGFlowableLayoutSettingsProvider!
     
-    required init(webView: WKWebView) {
-        super.init(webView: webView)
+    override func prepare(completionHandler: (() -> Void)? = nil) {
         webView.scrollView.isPagingEnabled = true
         webView.scrollView.bounces = false
-        self.settingsController = ARGFlowableLayoutSettingsProvider(webView: webView)
-    }
-
-    override func applyReadingSettings(_ settings: ARGBookReadingSettings?, completionHandler: (() -> Void)? = nil) {
-        super.applyReadingSettings(settings) {
-            self.settingsController.setSettings(settings) {
-                self.measureContentSize() {
-                    completionHandler?()
-                }
-            }
-        }
+        super.prepare(completionHandler: completionHandler)
     }
     
-    override func measureContentSize(completionHandler: (() -> Void)? = nil) {
+    override class func settingsControllerClass<T: ARGBookReadingSettingsController>() -> T.Type {
+        return ARGFlowableLayoutSettingsProvider.self as! T.Type
+    }
+    
+    override func measureContentSize(completionHandler: ((CGSize?) -> Void)? = nil) {
         webView.arg_measure(.width) { measuredWidth, error in
             if let width = measuredWidth {
                 if width > self.webView.bounds.size.width {
-                    self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: self.settingsController.absolutePageMargins.horizontal)
+                    self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: (self.settingsController as! ARGFlowableLayoutSettingsProvider).absolutePageMargins.horizontal)
                 } else {
                     self.webView.scrollView.contentInset = UIEdgeInsets()
                 }
                 
-                self.waitForDOMReady(measuredSize: CGSize(width: width, height: self.webView.bounds.size.height), completionHandler: completionHandler)
+                completionHandler?(CGSize(width: width, height: self.webView.bounds.size.height))
+            } else {
+                completionHandler?(nil)
             }
         }
     }
     
-    override func scroll(to position: ARGContinuousScrollPosition) {
-        switch position {
-        case .begin:
+    override func scroll(to navigationPoint: ARGBookNavigationPoint, completionHandler: (() -> Void)?){
+        switch navigationPoint {
+        case is ARGBookDocumentStartNavigationPoint:
             self.webView.scrollView.contentOffset = CGPoint(x: 0, y: self.webView.scrollView.contentOffset.y)
-        case .end:
-            webView.scrollView.contentOffset = CGPoint(x: webView.scrollView.contentSize.width - webView.scrollView.bounds.size.width, y: webView.scrollView.contentOffset.y)
+        case is ARGBookDocumentEndNavigationPoint:
+            webView.scrollView.contentOffset = CGPoint(x: webView.scrollView.contentSize.width + self.webView.scrollView.contentInset.right - webView.scrollView.bounds.size.width, y: webView.scrollView.contentOffset.y)
+        default:
+            webView.evaluateJavaScript("scrollByHorizontalToElementID(\(navigationPoint.elementID)") { (result, error) in
+                completionHandler?()
+            }
         }
     }
     

@@ -44,7 +44,18 @@ import ARGView
         collectionView.register(nib, forCellWithReuseIdentifier: identifier)
         collectionView.contentInsetAdjustmentBehavior = .never
         
-        self.scrollController = ARGContiniousScrollController(scrollView: collectionView, delegate: self, scrollDirection: .horizontal)
+        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        
+        switch settings.scrollType {
+        case .vertical:
+            layout.scrollDirection = .vertical
+            collectionView.isPagingEnabled = false
+        default:
+            layout.scrollDirection = .horizontal
+            collectionView.isPagingEnabled = true
+        }
+        
+        self.scrollController = ARGContiniousScrollController(scrollView: collectionView, delegate: self, scrollDirection: .vertical)
     }
     
     public override func viewDidLayoutSubviews() {
@@ -67,11 +78,11 @@ import ARGView
                 cell.documentView.scroll(to: navigationPoint)
             }
         }
-        
     }
     
     func applyReadingSettings(_ settings: ARGBookReadingSettings) {
         if collectionView != nil {
+            
             let visibleCells = collectionView.visibleCells
             
             for cell in visibleCells {
@@ -97,6 +108,8 @@ extension ARGBookViewController: UICollectionViewDataSource {
         cell.documentView.reloadIfNeeded(document: document,
                                          settings: settings)
         
+        scrollController.addNestedScrollView(cell.documentView.contentView.webView.scrollView)
+        
         return cell
     }
     
@@ -112,6 +125,5 @@ extension ARGBookViewController: ARGContiniousScrollDelegate {
         
         return views
     }
-    
     
 }

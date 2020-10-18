@@ -55,11 +55,16 @@ extension ARGBookDocumentView: ARGNestedContiniousScrollContainer {
     }
     
     func nestedScrollViewContentReady(for scrollController: ARGContiniousScrollController) -> Bool {
-        return contentView.layout?.isReady ?? false
+        return contentView.layoutManager.layout?.isReady ?? false
     }
     
     func nestedScrollViewDesiredScrollPosition(_ position: ARGContinuousScrollPosition) {
-        
+        switch position {
+        case .begin:
+            contentView.scroll(to: ARGBookDocumentStartNavigationPoint())
+        case .end:
+            contentView.scroll(to: ARGBookDocumentEndNavigationPoint())
+        }
     }
     
 }

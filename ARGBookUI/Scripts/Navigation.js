@@ -16,6 +16,16 @@ function scrollByVerticalToElementID(elementID) {
     return offsetY;
 }
 
+function scrollByHorizontalToElementID(elementID) {
+    var elem = document.getElementById(elementID);
+    var elemRect = elem.getBoundingClientRect();
+    var offsetX = elemRect.width > window.innerWidth ? 0.0 : elemRect.left;
+    
+    window.scrollTo(0, offsetX);
+
+    return offsetY;
+}
+
 function setHorizontalOffset(offsetX) {
     window.scrollTo(offsetX, 0);
 

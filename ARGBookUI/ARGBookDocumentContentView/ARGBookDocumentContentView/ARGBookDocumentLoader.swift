@@ -34,7 +34,7 @@ class ARGBookDocumentLoader: NSObject {
         
         self.document = document
         
-        let allowedURL = URL(fileURLWithPath: document.bookFilePath)
+        let allowedURL = URL(fileURLWithPath: document.book?.contentDirectoryPath ?? "")
         webView.loadFileURL(URL(fileURLWithPath: document.filePath), allowingReadAccessTo: allowedURL)
     }
     

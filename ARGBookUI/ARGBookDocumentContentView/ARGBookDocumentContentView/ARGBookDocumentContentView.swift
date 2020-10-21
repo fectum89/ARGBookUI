@@ -13,7 +13,7 @@ class ARGBookDocumentContentView: UIView {
     var webView: WKWebView!
     
     var documentLoader: ARGBookDocumentLoader!
-    var layoutManager: ARGBookDocumentLayoutManager!
+    var layoutManager: ARGBookDocumentLayoutManager?
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,16 +28,9 @@ class ARGBookDocumentContentView: UIView {
         webView.clipsToBounds = true
         webView.navigationDelegate = self
         webView.scrollView.contentInsetAdjustmentBehavior = .never
-        
         addSubview(webView)
         
         documentLoader = ARGBookDocumentLoader(webView: webView)
-        
-        self.layoutManager = ARGBookDocumentLayoutManager(webView: self.webView, layoutTypeChangedHandler: { documentReadyHandler in
-            self.documentLoader.reloadDocument { (error) in
-                documentReadyHandler()
-            }
-        })
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -45,26 +38,29 @@ class ARGBookDocumentContentView: UIView {
     }
     
     func reloadIfNeeded(document: ARGBookDocument, settings: ARGBookReadingSettings, completion: (() -> Void)? = nil) {
-       
         let newDocument = documentLoader.loadDocumentIfNeeded(document) { newDocument, error in
-            self.layoutManager.document = document
+            self.layoutManager?.document = document
             
-            self.layoutManager.applyReadingSettings(settings) {
+            self.layoutManager?.applyReadingSettings(settings) {
                 completion?()
             }
         }
         
         if newDocument {
-            //reset layoutmanager
+            self.layoutManager = ARGBookDocumentLayoutManager(webView: self.webView, layoutTypeChangedHandler: { documentReadyHandler in
+                self.documentLoader.reloadDocument { (error) in
+                    documentReadyHandler()
+                }
+            })
         }
     }
     
     func scroll(to navigationPoint: ARGBookNavigationPoint) {
-        layoutManager.scroll(to: navigationPoint)
+        layoutManager?.scroll(to: navigationPoint)
     }
     
     func applyReadingSettings(_ settings: ARGBookReadingSettings, completionHandler: (() -> Void)? = nil) {
-        layoutManager.applyReadingSettings(settings, completionHandler: completionHandler)
+        layoutManager?.applyReadingSettings(settings, completionHandler: completionHandler)
     }
     
 }

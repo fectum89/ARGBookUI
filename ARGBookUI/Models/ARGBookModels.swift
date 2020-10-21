@@ -24,9 +24,9 @@ public class ARGBookDocumentEndNavigationPoint: ARGBookNavigationPoint {}
     
     var filePath: String {get}
     
-    var bookFilePath: String {get}
-    
     var hasFixedLayout: Bool {get}
+    
+    var book: ARGBook? {get}
     
 }
 
@@ -41,9 +41,11 @@ extension ARGBookDocument {
     
     var documents: [ARGBookDocument] {get}
     
+    var contentDirectoryPath: String {get}
+    
 }
 
-@objc public protocol ARGBookNavigationInteractor {
+@objc public protocol ARGBookNavigationDelegate {
     
     func currentNavigationPointDidChange(_ navigationPoint: ARGBookNavigationPoint)
     

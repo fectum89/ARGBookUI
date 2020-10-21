@@ -31,7 +31,7 @@ class ARGBookDocumentStateManager: NSObject {
         
         let size = webView.scrollView.contentSize
         
-        print("size of webView \(String(describing: webView.url?.lastPathComponent)) changed: " + NSCoder.string(for: size))
+        //print("size of webView \(String(describing: webView.url?.lastPathComponent)) changed: " + NSCoder.string(for: size))
         
         if measuredSize == size {
             self.completionHandler?(size)

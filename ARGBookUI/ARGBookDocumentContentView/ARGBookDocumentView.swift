@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import ARGView
+import ARGContinuousScroll
 
 class ARGBookDocumentView: UIView {
     var cacheView: ARGBookDocumentCacheView
@@ -33,9 +33,12 @@ class ARGBookDocumentView: UIView {
     }
     
     func reloadIfNeeded(document: ARGBookDocument, settings: ARGBookReadingSettings, completion: (() -> Void)? = nil) {
+        contentView.isHidden = true
         contentView.reloadIfNeeded(document: document,
-                                   settings: settings,
-                                   completion: completion)
+                                   settings: settings) {
+            self.contentView.isHidden = false
+            completion?()
+        }
     }
     
     func scroll(to navigationPoint: ARGBookNavigationPoint) {
@@ -44,6 +47,11 @@ class ARGBookDocumentView: UIView {
     
     func applyReadingSettings(_ settings: ARGBookReadingSettings, completionHandler: (() -> Void)? = nil) {
         contentView.applyReadingSettings(settings, completionHandler: completionHandler)
+    }
+    
+    override var description: String {
+        let url = URL(fileURLWithPath: contentView.documentLoader.document!.filePath)
+        return url.lastPathComponent
     }
     
 }
@@ -55,7 +63,7 @@ extension ARGBookDocumentView: ARGNestedContiniousScrollContainer {
     }
     
     func nestedScrollViewContentReady(for scrollController: ARGContiniousScrollController) -> Bool {
-        return contentView.layoutManager.layout?.isReady ?? false
+        return contentView.layoutManager?.layout?.isReady ?? false
     }
     
     func nestedScrollViewDesiredScrollPosition(_ position: ARGContinuousScrollPosition) {
@@ -67,4 +75,5 @@ extension ARGBookDocumentView: ARGNestedContiniousScrollContainer {
         }
     }
     
+
 }

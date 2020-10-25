@@ -23,13 +23,13 @@ function scrollByHorizontalToElementID(elementID) {
     
     window.scrollTo(0, offsetX);
 
-    return offsetY;
+    return offsetX;
 }
 
 function setHorizontalOffset(offsetX) {
     window.scrollTo(offsetX, 0);
 
-    var spans = document.getElementsByClassName("auri_word_span");
+    var spans = document.getElementsByClassName("arg_word_span");
 
     for (var i = 0; i < spans.length ; i++) {
         var span = spans[i];
@@ -43,13 +43,13 @@ function setHorizontalOffset(offsetX) {
 }
 
 function firstVisibleSpanElement() {
-    var spans = document.getElementsByClassName("auri_word_span");
+    var spans = document.getElementsByClassName("arg_word_span");
 
     for (var i = 0; i < spans.length ; i++) {
         var span = spans[i];
 
-        if (span.getBoundingClientRect().left >= 0) {
-            return {"id": span.id, "word": span.textContent, "offset" : window.scrollX};
+        if (span.getBoundingClientRect().left >= 0 && span.getBoundingClientRect().top >= 0) {
+            return {"id": span.id, "word": span.textContent, "rect" : span.getBoundingClientRect().toJSON()};
         };
     };
 

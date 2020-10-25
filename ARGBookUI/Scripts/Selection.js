@@ -152,7 +152,7 @@ function highlightAllOccurencesOfStringForElement(element,keyword) {
                 if (idx < 0) break;             // not found, abort
                 
                 var span = document.createElement("highlight");
-                span.className = "AuriHighlight";
+                span.className = "ARGHighlight";
                 var text = document.createTextNode(value.substr(idx,keyword.length));
                 span.appendChild(text);
                 
@@ -197,7 +197,7 @@ function getPos(el) {
 function removeAllHighlightsForElement(element) {
     if (element) {
         if (element.nodeType == 1) {
-            if (element.getAttribute("class") == "AuriHighlight") {
+            if (element.getAttribute("class") == "ARGHighlight") {
                 var text = element.removeChild(element.firstChild);
                 element.parentNode.insertBefore(text,element);
                 element.parentNode.removeChild(element);

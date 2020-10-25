@@ -12,7 +12,9 @@ import ARGContinuousScroll
 
     var collectionView: UICollectionView!
     
-    var scrollController: ARGContiniousScrollController!
+    var scrollController: ARGContiniousScrollController?
+    
+    var sizeManager: ARGBookDocumentSizeManager!
     
     @objc public var book: ARGBook? {
         didSet {
@@ -26,9 +28,13 @@ import ARGContinuousScroll
         }
     }
     
-    @objc public var navigationPoint: ARGBookNavigationPoint?
+    @objc public var navigationPoint: ARGBookNavigationPoint? {
+        didSet {
+            scrollTo(navigationPoint)
+        }
+    }
     
-    @objc public  var navigationDelegate: ARGBookNavigationDelegate?
+    @objc public var navigationDelegate: ARGBookNavigationDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -54,34 +60,47 @@ import ARGContinuousScroll
         collectionView.register(nib, forCellWithReuseIdentifier: identifier)
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.dataSource = self
+       
         collectionView.backgroundColor = .clear
+        sizeManager = ARGBookDocumentSizeManager(with: collectionView.bounds.size)
     }
     
     public override var frame: CGRect {
         didSet {
-            refreshView()
+            if frame != oldValue {
+                refreshView()
+            }
         }
     }
     
     public override var bounds: CGRect {
         didSet {
-            refreshView()
+            if bounds != oldValue {
+                refreshView()
+            }
         }
     }
     
-    func refreshView () {
-        guard book != nil, settings != nil else {
+    @objc func refreshView () {
+        guard book != nil, settings != nil, collectionView != nil else {
             return
         }
         
+        sizeManager = ARGBookDocumentSizeManager(with: collectionView.bounds.size)
+        
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.itemSize = self.bounds.size
-        collectionView.collectionViewLayout.invalidateLayout()
-        collectionView.reloadData()
+        
+        collectionView.performBatchUpdates {
+            collectionView.collectionViewLayout.invalidateLayout()
+        } completion: { (ready) in
+            self.collectionView.reloadData()
+            self.scrollTo(self.navigationPoint)
+        }
     }
     
     func applySettings() {
-        guard book != nil, settings != nil else {
+        guard book != nil, settings != nil, collectionView != nil else {
             return
         }
         
@@ -107,6 +126,7 @@ import ARGContinuousScroll
         if self.scrollController == nil || layout.scrollDirection != collectionViewLayoutDirection {
             layout.scrollDirection = collectionViewLayoutDirection
             self.scrollController = ARGContiniousScrollController(scrollView: collectionView, delegate: self, scrollDirection: continiousScrollControllerDirection)
+            scrollController?.proxyDelegate.addDelegate(self)
             refreshView()
         } else {
             refreshView()
@@ -119,11 +139,11 @@ import ARGContinuousScroll
 //            }
         }
         
-        scrollTo(navigationPoint)
+        
     }
     
     func scrollTo(_ navigationPoint: ARGBookNavigationPoint?) {
-        guard book != nil, settings != nil else {
+        guard book != nil, settings != nil, collectionView != nil else {
             return
         }
         
@@ -132,16 +152,20 @@ import ARGContinuousScroll
                 return document === navigationPoint.document
             }) {
                 let targetIndexPath = IndexPath(item: documentIndex, section: 0)
-                collectionView.scrollToItem(at: targetIndexPath, at: .top, animated: false)
-                //let cell = collectionView.cellForItem(at: targetIndexPath) as! ARGDocumentCollectionViewCell
-                //cell.documentView.scroll(to: navigationPoint)
+                
+                //collectionView.scrollToItem(at: targetIndexPath, at: .top, animated: false)
+                if let visibleViews = (scrollController?.sortedContainers() ?? nil) as? [ARGBookDocumentView], let documentView = visibleViews.first {
+                    //documentView.scroll(to: navigationPoint)
+                }
+//                let cell = collectionView.cellForItem(at: targetIndexPath) as! ARGDocumentCollectionViewCell
+//                cell.documentView.scroll(to: navigationPoint)
             }
         }
     }
 
 }
 
-extension ARGBookView: UICollectionViewDataSource, UICollectionViewDelegate {
+extension ARGBookView: UICollectionViewDataSource {
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return book?.documents.count ?? 0
@@ -152,9 +176,15 @@ extension ARGBookView: UICollectionViewDataSource, UICollectionViewDelegate {
 
         if let document = book?.documents[indexPath.item], let settings = self.settings {
             cell.documentView.reloadIfNeeded(document: document,
-                                             settings: settings)
+                                             settings: settings) {
+                
+            }
             
-            scrollController.addNestedScrollView(cell.documentView.contentView.webView.scrollView)
+            if self.navigationPoint?.document?.filePath == document.filePath {
+                cell.documentView.scroll(to: self.navigationPoint!)
+            }
+            
+            scrollController?.addNestedScrollView(cell.documentView.contentView.webView.scrollView)
         }
         
         return cell
@@ -178,3 +208,34 @@ extension ARGBookView: ARGContiniousScrollDelegate {
     }
     
 }
+
+extension ARGBookView: UIScrollViewDelegate {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        scrollDidFinish()
+    }
+
+    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        scrollDidFinish()
+    }
+
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            scrollDidFinish()
+        }
+    }
+
+    func scrollDidFinish() {
+        if let visibleViews = (scrollController?.sortedContainers() ?? nil) as? [ARGBookDocumentView] {
+            if let documentView = visibleViews.first, let navigationDelegate = navigationDelegate {
+                documentView.contentView.obtainCurrentNavigationPoint { (navigationPoint) in
+                    if navigationPoint != nil {
+                        self.navigationPoint = navigationPoint
+                        navigationDelegate.currentNavigationPointDidChange(navigationPoint!)
+                    }
+                }
+            }
+        }
+    }
+
+}
+

@@ -8,18 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		5D2C8BFE253C5E4C0034D6CC /* ARGContinuousScroll.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D2C8BFC253C5E4C0034D6CC /* ARGContinuousScroll.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5D2C8C08253C5E6C0034D6CC /* ARGScrollViewDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D2C8C05253C5E6C0034D6CC /* ARGScrollViewDelegateProxy.m */; };
 		5D2C8C09253C5E6C0034D6CC /* ARGContiniousScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2C8C06253C5E6C0034D6CC /* ARGContiniousScrollController.swift */; };
-		5D2C8C0A253C5E6C0034D6CC /* ARGScrollViewDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D2C8C07253C5E6C0034D6CC /* ARGScrollViewDelegateProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5D2C8C4A25401B3C0034D6CC /* ARGScrollViewDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2C8C4925401B3C0034D6CC /* ARGScrollViewDelegateProxy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5D2C8BF9253C5E4C0034D6CC /* ARGContinuousScroll.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ARGContinuousScroll.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D2C8BFC253C5E4C0034D6CC /* ARGContinuousScroll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARGContinuousScroll.h; sourceTree = "<group>"; };
 		5D2C8BFD253C5E4C0034D6CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5D2C8C05253C5E6C0034D6CC /* ARGScrollViewDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARGScrollViewDelegateProxy.m; sourceTree = "<group>"; };
 		5D2C8C06253C5E6C0034D6CC /* ARGContiniousScrollController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARGContiniousScrollController.swift; sourceTree = "<group>"; };
-		5D2C8C07253C5E6C0034D6CC /* ARGScrollViewDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARGScrollViewDelegateProxy.h; sourceTree = "<group>"; };
+		5D2C8C4925401B3C0034D6CC /* ARGScrollViewDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGScrollViewDelegateProxy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,8 +51,7 @@
 			isa = PBXGroup;
 			children = (
 				5D2C8C06253C5E6C0034D6CC /* ARGContiniousScrollController.swift */,
-				5D2C8C07253C5E6C0034D6CC /* ARGScrollViewDelegateProxy.h */,
-				5D2C8C05253C5E6C0034D6CC /* ARGScrollViewDelegateProxy.m */,
+				5D2C8C4925401B3C0034D6CC /* ARGScrollViewDelegateProxy.swift */,
 				5D2C8BFC253C5E4C0034D6CC /* ARGContinuousScroll.h */,
 				5D2C8BFD253C5E4C0034D6CC /* Info.plist */,
 			);
@@ -69,7 +66,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D2C8BFE253C5E4C0034D6CC /* ARGContinuousScroll.h in Headers */,
-				5D2C8C0A253C5E6C0034D6CC /* ARGScrollViewDelegateProxy.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,8 +137,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D2C8C4A25401B3C0034D6CC /* ARGScrollViewDelegateProxy.swift in Sources */,
 				5D2C8C09253C5E6C0034D6CC /* ARGContiniousScrollController.swift in Sources */,
-				5D2C8C08253C5E6C0034D6CC /* ARGScrollViewDelegateProxy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

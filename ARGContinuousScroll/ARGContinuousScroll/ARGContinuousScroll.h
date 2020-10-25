@@ -14,5 +14,3 @@ FOUNDATION_EXPORT double ARGContinuousScrollVersionNumber;
 FOUNDATION_EXPORT const unsigned char ARGContinuousScrollVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <ARGContinuousScroll/PublicHeader.h>
-
-#import <ARGContinuousScroll/ARGSCrollViewDelegateProxy.h>

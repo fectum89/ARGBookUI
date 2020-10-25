@@ -45,7 +45,6 @@ class ARGBookDocumentSettingsCommonLogic {
                     }
                 }
             }
-            
         }
         
         if let layout = self.layout {

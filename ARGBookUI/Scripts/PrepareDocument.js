@@ -25,7 +25,7 @@ function splitWords(top) {
                     } else {
                         newNode = document.createElement("span");
                         newNode.id = "word" + idCntr++;
-                        newNode.className = "auri_word_span";
+                        newNode.className = "arg_word_span";
 
                         if (words[i] == "&") {
                             newNode.innerHTML = "&amp;";

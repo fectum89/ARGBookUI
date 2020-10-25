@@ -26,6 +26,8 @@ class ARGBookDocumentLayoutManager: NSObject {
             if document?.filePath != oldValue?.filePath {
                 self.layout = nil
             }
+            
+            navigationLogic.document = document
         }
     }
     
@@ -87,7 +89,6 @@ class ARGBookDocumentLayoutManager: NSObject {
                         self.settingsLogic.pendingSettings = nil
                     } else {
                         completionHandler?()
-                        
                         self.navigationLogic.scrollToProperPoint()
                     }
                 }
@@ -97,6 +98,10 @@ class ARGBookDocumentLayoutManager: NSObject {
     
     func scroll(to navigationPoint: ARGBookNavigationPoint, completionHandler: (() -> Void)? = nil) {
         navigationLogic.scroll(to: navigationPoint, completionHandler: completionHandler)
+    }
+    
+    func obtainCurrentNavigationPoint(completionHandler: ((ARGBookNavigationPoint?) -> Void)? = nil) {
+        navigationLogic.obtainCurrentNavigationPoint(completionHandler: completionHandler)
     }
     
 }

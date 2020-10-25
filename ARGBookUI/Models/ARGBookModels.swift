@@ -20,6 +20,19 @@ import Foundation
 public class ARGBookDocumentStartNavigationPoint: ARGBookNavigationPoint {}
 public class ARGBookDocumentEndNavigationPoint: ARGBookNavigationPoint {}
 
+class ARGBookNavigationPointInternal: ARGBookNavigationPoint{
+    
+    var document: ARGBookDocument
+    
+    var elementID: String
+    
+    init(document: ARGBookDocument, elementID: String) {
+        self.document = document
+        self.elementID = elementID
+    }
+    
+}
+
 @objc public protocol ARGBookDocument {
     
     var filePath: String {get}
@@ -48,7 +61,5 @@ extension ARGBookDocument {
 @objc public protocol ARGBookNavigationDelegate {
     
     func currentNavigationPointDidChange(_ navigationPoint: ARGBookNavigationPoint)
-    
-    func currentNavigationPoint() -> ARGBookNavigationPoint?
     
 }

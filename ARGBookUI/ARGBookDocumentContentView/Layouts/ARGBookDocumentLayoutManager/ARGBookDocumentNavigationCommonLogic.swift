@@ -10,24 +10,64 @@ import Foundation
 class ARGBookDocumentNavigationCommonLogic {
     
     var layout: ARGBookDocumentLayout?
+    var document: ARGBookDocument?
     
-    var navigationPoint: ARGBookNavigationPoint?
+    var pendingNavigationPoint: ARGBookNavigationPoint?
+    var currentNavigationPoint: ARGBookNavigationPoint? {
+        didSet {
+            obtainCurrentNavigationPointCompletionHandler?(currentNavigationPoint)
+            obtainCurrentNavigationPointCompletionHandler = nil
+        }
+    }
+    
+    var scrollCompletionHandler: (() -> Void)?
+    var obtainCurrentNavigationPointCompletionHandler: ((ARGBookNavigationPoint?) -> Void)?
     
     func scrollToProperPoint () {
-        if let navigationPoint = self.navigationPoint {
-            self.scroll(to: navigationPoint)
+        if let navigationPoint = self.pendingNavigationPoint {
+            self.scroll(to: navigationPoint, completionHandler: scrollCompletionHandler)
         } else {
-            self.scroll(to: ARGBookDocumentStartNavigationPoint())
+            self.scroll(to: ARGBookDocumentStartNavigationPoint(), completionHandler: scrollCompletionHandler)
         }
     }
     
     func scroll(to navigationPoint: ARGBookNavigationPoint, completionHandler: (() -> Void)? = nil) {
+        self.pendingNavigationPoint = navigationPoint
+        
         guard layout?.isReady ?? false else {
-            self.navigationPoint = navigationPoint
+            self.scrollCompletionHandler = completionHandler
             return
         }
         
-        layout?.scroll(to: navigationPoint)
+        layout?.scroll(to: navigationPoint, completionHandler: {
+            self.updateCurrentNavigationPoint {
+                completionHandler?()
+                self.pendingNavigationPoint = nil
+                self.scrollCompletionHandler = nil
+            }
+        })
+    }
+    
+    func updateCurrentNavigationPoint (completionHandler: (() -> Void)? = nil) {
+        self.layout?.webView.evaluateJavaScript("firstVisibleSpanElement()", completionHandler: { (result, error) in
+            if let dictionary = result as? NSDictionary,
+               let wordId = dictionary["id"] as? String,
+               let document = self.document {
+                self.currentNavigationPoint = ARGBookNavigationPointInternal(document: document, elementID: wordId)
+            }
+            
+            completionHandler?()
+        })
+    }
+    
+    func obtainCurrentNavigationPoint(completionHandler: ((ARGBookNavigationPoint?) -> Void)? = nil) {
+        if layout?.isReady ?? false {
+            updateCurrentNavigationPoint {
+                completionHandler?(self.currentNavigationPoint)
+            }
+        } else {
+            obtainCurrentNavigationPointCompletionHandler = completionHandler
+        }
     }
     
 }

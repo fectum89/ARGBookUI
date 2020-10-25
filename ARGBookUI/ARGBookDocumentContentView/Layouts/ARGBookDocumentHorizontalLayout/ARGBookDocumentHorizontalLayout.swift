@@ -39,12 +39,25 @@ class ARGBookDocumentHorizontalLayout: ARGBookDocumentLayout {
         switch navigationPoint {
         case is ARGBookDocumentStartNavigationPoint:
             self.webView.scrollView.contentOffset = CGPoint(x: 0, y: self.webView.scrollView.contentOffset.y)
+            completionHandler?()
         case is ARGBookDocumentEndNavigationPoint:
             webView.scrollView.contentOffset = CGPoint(x: webView.scrollView.contentSize.width + self.webView.scrollView.contentInset.right - webView.scrollView.bounds.size.width, y: webView.scrollView.contentOffset.y)
+            completionHandler?()
         default:
-            webView.evaluateJavaScript("scrollByHorizontalToElementID(\(navigationPoint.elementID)") { (result, error) in
+            if let elementID = navigationPoint.elementID {
+                let script = "getHorizontalOffsetForElementID('\(elementID)')"
+                webView.evaluateJavaScript(script) { (result, error) in
+                    if let offset = result as? CGFloat {
+                        let page = floor(offset / self.webView.bounds.size.width)
+                        self.webView.scrollView.contentOffset = CGPoint(x: page * self.webView.bounds.size.width,
+                                                                        y: self.webView.scrollView.contentOffset.y)
+                    }
+                    completionHandler?()
+                }
+            } else {
                 completionHandler?()
             }
+            
         }
     }
     

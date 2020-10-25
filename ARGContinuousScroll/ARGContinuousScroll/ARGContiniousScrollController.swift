@@ -53,16 +53,16 @@ import UIKit
     
     @objc public weak var delegate: ARGContiniousScrollDelegate?
     
-    var proxyDelegate: ARGScrollViewDelegateProxy!
+    @objc public var proxyDelegate: ARGScrollViewDelegateProxy!
     
     @objc public init(scrollView: UIScrollView, delegate: ARGContiniousScrollDelegate, scrollDirection: ARGContinuousScrollDirection) {
         super.init()
         
         mainScrollView = scrollView
-        //proxyDelegate = ARGScrollViewDelegateProxy()
-        mainScrollView.delegate = self
-        //proxyDelegate.add(self)
-        
+        proxyDelegate = ARGScrollViewDelegateProxy()
+        proxyDelegate.addDelegate(self)
+        mainScrollView.delegate = proxyDelegate
+                
         self.delegate = delegate
         
         self.scrollDirection = scrollDirection
@@ -75,7 +75,7 @@ import UIKit
     @objc public func addNestedScrollView(_ scrollView: UIScrollView) {
 //        if !nestedScrollViews.contains(scrollView) {
 //            nestedScrollViews.append(scrollView)
-            scrollView.delegate = self
+            scrollView.delegate = proxyDelegate
     }
     
     @objc func panGesture(_ recognizer: UIPanGestureRecognizer) {
@@ -114,41 +114,13 @@ extension ARGContiniousScrollController: UIGestureRecognizerDelegate {
 
 extension ARGContiniousScrollController: UIScrollViewDelegate {
     
-    func sortedContainers(isForwardDirection: Bool) -> [UIView & ARGNestedContiniousScrollContainer]? {
+   public func sortedContainers() -> [UIView & ARGNestedContiniousScrollContainer]? {
         //sort containers in ascending order (left to right or up to down)
         let nestedScrollContainers = delegate?.visibleNestedScrollContainers(for: self)?.sorted(by: { (container1, container2) -> Bool in
             let point1 = container1.convert(container1.frame.origin, to: mainScrollView)
             let point2 = container2.convert(container2.frame.origin, to: mainScrollView)
             return pointCoordinate(point1) < pointCoordinate(point2)
         })
-        
-        //check are all containers really visible
-//        if let firstContainer = nestedScrollContainers?.first, let lastContainer = nestedScrollContainers?.last {
-//            let frame1 = firstContainer.convert(firstContainer.frame, to: mainScrollView)
-//            let frame2 = lastContainer.convert(lastContainer.frame, to: mainScrollView)
-//            let viewPortRect = CGRect(origin: mainScrollView.contentOffset, size: mainScrollView.frame.size)
-//
-//            if !frame1.intersects(viewPortRect) || !frame2.intersects(viewPortRect) {
-//                print(" \(firstContainer) and \(lastContainer) are not visible \(nestedScrollContainers?.count)")
-//                return nil
-//            }
-            
-//            if isForwardDirection {
-//                if !frame2.intersects(viewPortRect) {
-//                    return nil
-//                }
-////                if pointCoordinate(point2) <= 0 || pointCoordinate(point2) >= sizeDimension(viewPortRect.size) {
-////                    return nil
-////                }
-//            } else {
-//                if !frame1.intersects(viewPortRect) {
-//                    return nil
-//                }
-////                if pointCoordinate(point1) + sizeDimension(firstContainer.frame.size) <= 0 || pointCoordinate(point1) + sizeDimension(firstContainer.frame.size) >= sizeDimension(viewPortRect.size) {
-////                    return nil
-////                }
-//            }
-//        }
         
         let viewPortRect = CGRect(origin: mainScrollView.contentOffset, size: mainScrollView.frame.size)
         
@@ -163,7 +135,7 @@ extension ARGContiniousScrollController: UIScrollViewDelegate {
             let forwardDirection = pointCoordinate(scrollView.contentOffset) - previousOffset > 0
             previousOffset = pointCoordinate(scrollView.contentOffset)
             
-            if let nestedScrollContainers = sortedContainers(isForwardDirection: forwardDirection) {
+            if let nestedScrollContainers = sortedContainers() {
                 print("visible now: \(nestedScrollContainers)")
                 
                 let offsetRemainder = Int(pointCoordinate(scrollView.contentOffset)) % Int(sizeDimension(scrollView.bounds.size))

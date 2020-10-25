@@ -49,3 +49,23 @@ import UIKit.UIColor
     var scrollType: ARGBookScrollType {get}
     
 }
+
+extension ARGBookReadingSettings {
+    func stringRepresentationForPageCache() -> String {
+        return String(fontSize) + "."
+            + String(alignment.rawValue) + "."
+            + String(horizontalMargin) + "."
+            + String(verticalMargin) + "."
+            + String(hyphenation) + "."
+            + String(lineSpacing) + "."
+            + String(paragraphIndent) + "."
+            + String(paragraphSpacing) + "."
+            + String(scrollType.rawValue)
+    }
+    
+    func stringRepresentationForSnapshotsCache() -> String {
+        return stringRepresentationForPageCache() + "."
+            + textColor.htmlRGBaColor + "."
+            + highlightColor.htmlRGBaColor + "."
+    }
+}

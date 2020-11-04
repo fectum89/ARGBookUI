@@ -8,18 +8,12 @@
 import UIKit
 import ARGContinuousScroll
 
-class ARGBookScrollDelegate: NSObject, UIScrollViewDelegate {
+class ARGBookScrollDelegate: ARGContiniousScrollController {
     
-    var scrollController: ARGContiniousScrollController
-    weak var navigationDelegate: ARGBookNavigationDelegate?
-    
-    init(scrollController: ARGContiniousScrollController, navigationDelegate: ARGBookNavigationDelegate?) {
-        self.scrollController = scrollController
-        self.navigationDelegate = navigationDelegate
-        
-    }
+    weak var bookView: ARGBookView?
 
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        super.scrollViewDidEndDecelerating(scrollView)
         scrollDidFinish()
     }
     

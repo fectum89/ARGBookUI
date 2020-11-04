@@ -15,7 +15,5 @@
 
 @property (nonatomic, assign, readonly) UIOffset         relativePageMargins;
 @property (nonatomic, assign, readonly) UIOffset         absolutePageMargins;
-@property (nonatomic, assign, readonly) int64_t alignment;
-
 
 @end

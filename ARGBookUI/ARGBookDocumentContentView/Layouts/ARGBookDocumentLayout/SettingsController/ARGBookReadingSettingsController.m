@@ -15,6 +15,7 @@
     self = [super init];
     if (self) {
         _webView = webView;
+        _alignment = -1;
     }
     return self;
 }
@@ -46,16 +47,22 @@
     [wself setFontFamily:settings.fontFamily completion:^{
         dispatch_group_leave(settingsGroup);
     }];
+ 
+    dispatch_group_enter(settingsGroup);
+    [wself setHighlightColor:settings.highlightColor completion:^{
+        dispatch_group_leave(settingsGroup);
+    }];
+    
+    dispatch_group_enter(settingsGroup);
+    [wself setAlignment:settings.alignment completion:^{
+        dispatch_group_leave(settingsGroup);
+    }];
     
     dispatch_group_enter(settingsGroup);
     [wself setHyphenation:settings.hyphenation completion:^{
         dispatch_group_leave(settingsGroup);
     }];
     
-    dispatch_group_enter(settingsGroup);
-    [wself setHighlightColor:settings.highlightColor completion:^{
-        dispatch_group_leave(settingsGroup);
-    }];
 }
 
 - (void)setHighlightColor:(UIColor *)highlightColor completion:(dispatch_block_t)completion {
@@ -192,6 +199,32 @@
                           completion();
                       }
                   }];
+}
+
+- (void)setAlignment:(int64_t)alignment completion:(dispatch_block_t)completion {
+    if (_alignment == alignment) {
+        if (completion) {
+            completion();
+        }
+        
+        return;
+    }
+    
+    _alignment = alignment;
+    
+    NSString *alignmentString = nil;
+    
+    if (alignment == ARGBookReadingSettingsAlignmentLeft) {
+        alignmentString = @"left";
+    } else if (alignment == ARGBookReadingSettingsAlignmentJustify) {
+        alignmentString = @"justify";
+    }
+    
+    [self.webView evaluateJavaScript:[NSString stringWithFormat:@"setTextAlignment('%@')", alignmentString] completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (completion) {
+            completion();
+        }
+    }];
 }
 
 @end

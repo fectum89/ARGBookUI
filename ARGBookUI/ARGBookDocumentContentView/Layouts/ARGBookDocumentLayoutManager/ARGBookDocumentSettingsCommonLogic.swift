@@ -11,7 +11,7 @@ class ARGBookDocumentSettingsCommonLogic {
     
     var layout: ARGBookDocumentLayout?
     
-    var webView: WKWebView
+    var document: ARGBookDocument
     
     var documentStateManager: ARGBookDocumentStateManager?
     
@@ -19,29 +19,28 @@ class ARGBookDocumentSettingsCommonLogic {
     
     var applyingInProgress = false
     
-    init(webView: WKWebView) {
-        self.webView = webView
-    }
+    var cache: ARGBookCache
     
-    func settingsCanBeApplied(_ settings: ARGBookReadingSettings?) -> Bool {
-        if webView.isLoading || applyingInProgress {
-            pendingSettings = settings
-            return false
-        } else {
-            applyingInProgress = true
-            return true
-        }
+    init(document: ARGBookDocument, cache: ARGBookCache) {
+        self.document = document
+        self.cache = cache
     }
     
     func applyReadingSettings(_ settings: ARGBookReadingSettings?, completionHandler: (() -> Void)? = nil) {
         let applySettingsClosure = {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.layout?.applyReadingSettings(settings) {
+            self.layout?.applyReadingSettings(settings) {
+                let waitForDom = { size in
+                    self.waitForDOMReady(measuredSize: size) {
+                        self.applyingInProgress = false
+                        completionHandler?()
+                    }
+                }
+                
+                if let size = self.cache.contentSize(for: self.document, settings: settings!, viewPort: self.layout!.webView.bounds.size) {
+                    waitForDom(size)
+                } else {
                     self.layout?.measureContentSize { (size) in
-                        self.waitForDOMReady(measuredSize: size) {
-                            self.applyingInProgress = false
-                            completionHandler?()
-                        }
+                        waitForDom(size)
                     }
                 }
             }
@@ -60,7 +59,7 @@ class ARGBookDocumentSettingsCommonLogic {
     
     func waitForDOMReady(measuredSize: CGSize?, completionHandler: (() -> Void)? = nil) {
         if let measuredSize = measuredSize {
-            documentStateManager = ARGBookDocumentStateManager(webView: self.webView, measuredSize: measuredSize)
+            documentStateManager = ARGBookDocumentStateManager(webView: self.layout!.webView, measuredSize: measuredSize)
             
             documentStateManager!.waitForDOMReady { (size) in
                 self.documentStateManager = nil

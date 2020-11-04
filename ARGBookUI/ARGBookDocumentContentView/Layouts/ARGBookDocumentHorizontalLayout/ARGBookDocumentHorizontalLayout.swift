@@ -9,6 +9,16 @@ import UIKit
 
 class ARGBookDocumentHorizontalLayout: ARGBookDocumentLayout {
     
+    override var isReady: Bool {
+        didSet {
+            if self.webView.scrollView.contentSize.width > self.webView.bounds.size.width {
+                self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: (self.settingsController as! ARGFlowableLayoutSettingsProvider).absolutePageMargins.horizontal)
+            } else {
+                self.webView.scrollView.contentInset = UIEdgeInsets()
+            }
+        }
+    }
+    
     override func prepare(completionHandler: (() -> Void)? = nil) {
         webView.scrollView.isPagingEnabled = true
         webView.scrollView.bounces = false
@@ -22,12 +32,6 @@ class ARGBookDocumentHorizontalLayout: ARGBookDocumentLayout {
     override func measureContentSize(completionHandler: ((CGSize?) -> Void)? = nil) {
         webView.arg_measure(.width) { measuredWidth, error in
             if let width = measuredWidth {
-                if width > self.webView.bounds.size.width {
-                    self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: (self.settingsController as! ARGFlowableLayoutSettingsProvider).absolutePageMargins.horizontal)
-                } else {
-                    self.webView.scrollView.contentInset = UIEdgeInsets()
-                }
-                
                 completionHandler?(CGSize(width: width, height: self.webView.bounds.size.height))
             } else {
                 completionHandler?(nil)
@@ -46,6 +50,7 @@ class ARGBookDocumentHorizontalLayout: ARGBookDocumentLayout {
         default:
             if let elementID = navigationPoint.elementID {
                 let script = "getHorizontalOffsetForElementID('\(elementID)')"
+               // print("scroll to: \(URL(fileURLWithPath: navigationPoint.document!.filePath).lastPathComponent) - \(navigationPoint.elementID)")
                 webView.evaluateJavaScript(script) { (result, error) in
                     if let offset = result as? CGFloat {
                         let page = floor(offset / self.webView.bounds.size.width)

@@ -148,7 +148,7 @@ function hyphenate(enabled) {
 
 function setTextAlignment(alignment) {
     setCSSRule('p', 'text-align', alignment);
-    setCSSRule('div', 'text-align', alignment);
+    //setCSSRule('div', 'text-align', alignment);
 }
 
 function setTextColor(color) {

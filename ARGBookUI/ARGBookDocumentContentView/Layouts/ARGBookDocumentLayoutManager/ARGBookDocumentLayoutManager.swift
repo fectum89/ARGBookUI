@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ARGBookDocumentLayoutManager: NSObject {
+class ARGBookDocumentLayoutManager {
     
     var layout: ARGBookDocumentLayout? {
         didSet {
@@ -21,29 +21,30 @@ class ARGBookDocumentLayoutManager: NSObject {
     
     var webView: WKWebView
     
-    var document: ARGBookDocument? {
+    var document: ARGBookDocument
+    
+    var documentLoaded: Bool = false {
         didSet {
-            if document?.filePath != oldValue?.filePath {
-                self.layout = nil
+            if documentLoaded {
+                let _ = self.conditionallyApplyPendingSettings()
             }
-            
-            navigationLogic.document = document
         }
     }
     
     var layoutTypeChangedHandler: ((@escaping () -> Void)) -> Void
     
-    init(webView: WKWebView, layoutTypeChangedHandler: @escaping ((@escaping () -> Void)) -> Void) {
+    init(webView: WKWebView, document: ARGBookDocument, cache: ARGBookCache, layoutTypeChangedHandler: @escaping ((@escaping () -> Void)) -> Void) {
         self.webView = webView
+        self.document = document
         self.layoutTypeChangedHandler = layoutTypeChangedHandler
-        self.settingsLogic = ARGBookDocumentSettingsCommonLogic(webView: webView)
-        self.navigationLogic = ARGBookDocumentNavigationCommonLogic()
+        self.settingsLogic = ARGBookDocumentSettingsCommonLogic(document: document, cache: cache)
+        self.navigationLogic = ARGBookDocumentNavigationCommonLogic(document: document)
     }
     
     func updateLayout(with document: ARGBookDocument, settings: ARGBookReadingSettings,  completionHander: @escaping () -> Void) {
         let LayoutClass = Self.documentLayoutClass(for: document, scrollType: settings.scrollType)
         
-        if self.layout == nil || type(of: self.layout) != LayoutClass {
+        if self.layout == nil || !(self.layout?.isKind(of: LayoutClass) ?? false)  {
             let shouldCallClosure = self.layout != nil
             
             self.layout = LayoutClass.init(webView: self.webView) as ARGBookDocumentLayout
@@ -73,26 +74,41 @@ class ARGBookDocumentLayoutManager: NSObject {
         }
     }
     
+    func settingsCanBeApplied(_ settings: ARGBookReadingSettings?) -> Bool {
+        if !documentLoaded || settingsLogic.applyingInProgress {
+            settingsLogic.pendingSettings = settings
+            return false
+        } else {
+            settingsLogic.applyingInProgress = true
+            return true
+        }
+    }
+    
     func applyReadingSettings(_ settings: ARGBookReadingSettings, completionHandler: (() -> Void)? = nil) {
-        let allowed = settingsLogic.settingsCanBeApplied(settings)
+        let allowed = self.settingsCanBeApplied(settings)
         
         guard allowed else {
             completionHandler?()
             return
         }
         
-        if let document = self.document {
-            updateLayout(with: document, settings: settings) {
-                self.settingsLogic.applyReadingSettings(settings) {
-                    if self.settingsLogic.pendingSettings != nil {
-                        self.applyReadingSettings(self.settingsLogic.pendingSettings!, completionHandler: completionHandler)
-                        self.settingsLogic.pendingSettings = nil
-                    } else {
-                        completionHandler?()
-                        self.navigationLogic.scrollToProperPoint()
-                    }
+        updateLayout(with: document, settings: settings) {
+            self.settingsLogic.applyReadingSettings(settings) {
+                if !self.conditionallyApplyPendingSettings(completionHandler: completionHandler) {
+                    completionHandler?()
+                    self.navigationLogic.scrollToProperPoint()
                 }
             }
+        }
+    }
+    
+    func conditionallyApplyPendingSettings(completionHandler: (() -> Void)? = nil) -> Bool {
+        if let pendingSettings = settingsLogic.pendingSettings {
+            self.settingsLogic.pendingSettings = nil
+            self.applyReadingSettings(pendingSettings, completionHandler: completionHandler)
+            return true
+        } else {
+            return false
         }
     }
     

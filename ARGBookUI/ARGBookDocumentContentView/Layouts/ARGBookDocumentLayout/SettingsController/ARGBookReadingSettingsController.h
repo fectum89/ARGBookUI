@@ -23,6 +23,7 @@
 @property (nonatomic, assign, readonly) CGFloat  viewPortWidth;
 @property (nonatomic, strong, readonly) NSString *fontFamily;
 @property (nonatomic, assign, readonly) BOOL     hyphenation;
+@property (nonatomic, assign, readonly) int64_t alignment;
 
 @property (nonatomic, strong, readonly) UIColor *textColor;
 

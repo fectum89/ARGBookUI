@@ -23,7 +23,10 @@ class ARGBookDocumentLoader: NSObject {
             loadDocument(document, completionHandler: completionHandler)
             return true
         } else {
-            completionHandler?(false, nil)
+            if isDocumentLoaded {
+                completionHandler?(false, nil)
+            }
+            
             return false
         }
     }
@@ -36,6 +39,8 @@ class ARGBookDocumentLoader: NSObject {
         
         let allowedURL = URL(fileURLWithPath: document.book?.contentDirectoryPath ?? "")
         webView.loadFileURL(URL(fileURLWithPath: document.filePath), allowingReadAccessTo: allowedURL)
+//        webView.load(URLRequest(url: URL(string: "https://www.youtube.com/watch?v=SKfzZ6RRndo")!))
+        webView.addObserver(self, forKeyPath: "estimatedProgress", options: .initial, context: nil)
     }
     
     func reloadDocument(completionHandler: ((Error?) -> Void)?) {
@@ -46,12 +51,24 @@ class ARGBookDocumentLoader: NSObject {
         }
     }
     
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "estimatedProgress" {
+            webView.evaluateJavaScript("document.readyState == \"interactive\"") { (result, error) in
+                if let loaded = result as? Bool {
+                    if loaded {
+                        
+                    }
+                }
+            }
+            
+        }
+    }
 }
 
 extension ARGBookDocumentLoader: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        isDocumentLoaded = true
-        completionHandler?(true, nil)
+        self.isDocumentLoaded = true
+        self.completionHandler?(true, nil)
     }
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {

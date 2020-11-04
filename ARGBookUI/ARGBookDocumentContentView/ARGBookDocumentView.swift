@@ -32,12 +32,11 @@ class ARGBookDocumentView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func reloadIfNeeded(document: ARGBookDocument, settings: ARGBookReadingSettings, completion: (() -> Void)? = nil) {
+    func load(document: ARGBookDocument, cache: ARGBookCache, completionHandler: (() -> Void)? = nil) {
         contentView.isHidden = true
-        contentView.reloadIfNeeded(document: document,
-                                   settings: settings) {
+        contentView.load(document: document, cache: cache) {
             self.contentView.isHidden = false
-            completion?()
+            completionHandler?()
         }
     }
     
@@ -46,7 +45,9 @@ class ARGBookDocumentView: UIView {
     }
     
     func applyReadingSettings(_ settings: ARGBookReadingSettings, completionHandler: (() -> Void)? = nil) {
-        contentView.applyReadingSettings(settings, completionHandler: completionHandler)
+        contentView.applyReadingSettings(settings) {
+            self.contentView.isHidden = false
+        }
     }
     
     override var description: String {

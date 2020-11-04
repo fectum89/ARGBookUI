@@ -17,10 +17,14 @@ import Foundation
     
 }
 
+@objc public protocol ARGBookPagePoint: ARGBookNavigationPoint {
+    @objc var offset: Int {get}
+}
+
 public class ARGBookDocumentStartNavigationPoint: ARGBookNavigationPoint {}
 public class ARGBookDocumentEndNavigationPoint: ARGBookNavigationPoint {}
 
-class ARGBookNavigationPointInternal: ARGBookNavigationPoint{
+class ARGBookNavigationPointInternal: ARGBookNavigationPoint {
     
     var document: ARGBookDocument
     
@@ -33,7 +37,9 @@ class ARGBookNavigationPointInternal: ARGBookNavigationPoint{
     
 }
 
-@objc public protocol ARGBookDocument {
+@objc public protocol ARGBookDocument: class {
+    
+    var uid: String {get}
     
     var filePath: String {get}
     
@@ -43,14 +49,9 @@ class ARGBookNavigationPointInternal: ARGBookNavigationPoint{
     
 }
 
-extension ARGBookDocument {
-    public
-    static func == (lhs: ARGBookDocument, rhs: ARGBookDocument) -> Bool {
-        return lhs.filePath == rhs.filePath
-    }
-}
-
 @objc public protocol ARGBook {
+    
+    var uid: String {get}
     
     var documents: [ARGBookDocument] {get}
     

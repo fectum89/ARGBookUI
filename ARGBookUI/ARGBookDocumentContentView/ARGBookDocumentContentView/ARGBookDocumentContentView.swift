@@ -62,17 +62,16 @@ class ARGBookDocumentContentView: UIView {
             //print("\(images)")
        // }
     
-    func reloadIfNeeded(document: ARGBookDocument, settings: ARGBookReadingSettings, completion: (() -> Void)? = nil) {
+    func load(document: ARGBookDocument, cache: ARGBookCache, completionHandler: (() -> Void)? = nil) {
+        self.layoutManager?.documentLoaded = false
+        
         let newDocument = documentLoader.loadDocumentIfNeeded(document) { newDocument, error in
-            self.layoutManager?.document = document
-            
-            self.layoutManager?.applyReadingSettings(settings) {
-                completion?()
-            }
+            self.layoutManager?.documentLoaded = true
+            completionHandler?()
         }
         
         if newDocument {
-            self.layoutManager = ARGBookDocumentLayoutManager(webView: self.webView, layoutTypeChangedHandler: { documentReadyHandler in
+            self.layoutManager = ARGBookDocumentLayoutManager(webView: self.webView, document: document, cache: cache, layoutTypeChangedHandler: { documentReadyHandler in
                 self.documentLoader.reloadDocument { (error) in
                     documentReadyHandler()
                 }
@@ -94,7 +93,7 @@ class ARGBookDocumentContentView: UIView {
     
     func contentSize() -> CGSize {
         return CGSize(width: webView.scrollView.contentSize.width + webView.scrollView.contentInset.right,
-                      height:  webView.scrollView.contentSize.height + webView.scrollView.contentInset.bottom)
+                      height: webView.scrollView.contentSize.height + webView.scrollView.contentInset.bottom)
     }
     
 }

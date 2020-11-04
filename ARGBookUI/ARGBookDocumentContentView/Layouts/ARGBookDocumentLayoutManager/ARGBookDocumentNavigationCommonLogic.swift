@@ -10,9 +10,11 @@ import Foundation
 class ARGBookDocumentNavigationCommonLogic {
     
     var layout: ARGBookDocumentLayout?
-    var document: ARGBookDocument?
+    
+    var document: ARGBookDocument
     
     var pendingNavigationPoint: ARGBookNavigationPoint?
+    
     var currentNavigationPoint: ARGBookNavigationPoint? {
         didSet {
             obtainCurrentNavigationPointCompletionHandler?(currentNavigationPoint)
@@ -21,11 +23,16 @@ class ARGBookDocumentNavigationCommonLogic {
     }
     
     var scrollCompletionHandler: (() -> Void)?
+    
     var obtainCurrentNavigationPointCompletionHandler: ((ARGBookNavigationPoint?) -> Void)?
+    
+    init(document: ARGBookDocument) {
+        self.document = document
+    }
     
     func scrollToProperPoint () {
         if let navigationPoint = self.pendingNavigationPoint {
-            self.scroll(to: navigationPoint, completionHandler: scrollCompletionHandler)
+            self.scroll(to: navigationPoint, completionHandler: self.scrollCompletionHandler)
         } else {
             self.scroll(to: ARGBookDocumentStartNavigationPoint(), completionHandler: scrollCompletionHandler)
         }
@@ -51,9 +58,8 @@ class ARGBookDocumentNavigationCommonLogic {
     func updateCurrentNavigationPoint (completionHandler: (() -> Void)? = nil) {
         self.layout?.webView.evaluateJavaScript("firstVisibleSpanElement()", completionHandler: { (result, error) in
             if let dictionary = result as? NSDictionary,
-               let wordId = dictionary["id"] as? String,
-               let document = self.document {
-                self.currentNavigationPoint = ARGBookNavigationPointInternal(document: document, elementID: wordId)
+               let wordId = dictionary["id"] as? String {
+                self.currentNavigationPoint = ARGBookNavigationPointInternal(document: self.document, elementID: wordId)
             }
             
             completionHandler?()

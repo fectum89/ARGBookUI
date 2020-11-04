@@ -8,5 +8,5 @@
 import UIKit
 
 class ARGBookDocumentFixedLayout: ARGBookDocumentLayout {
-
+    //TBD
 }

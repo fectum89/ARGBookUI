@@ -11,8 +11,10 @@ public class ARGScrollViewDelegateProxy: NSObject, UIScrollViewDelegate {
     
     var delegates: [NSObject & UIScrollViewDelegate] = [NSObject & UIScrollViewDelegate]()
     
-    public func addDelegate(_ delegate: NSObject & UIScrollViewDelegate) {
-        delegates.append(delegate)
+    public func addDelegate(_ delegate: (NSObject & UIScrollViewDelegate)?) {
+        if delegate != nil {
+            delegates.append(delegate!)
+        }
     }
     
     public func removeDelegate(_ delegate: UIScrollViewDelegate) {
@@ -30,12 +32,14 @@ public class ARGScrollViewDelegateProxy: NSObject, UIScrollViewDelegate {
     }
     
     public override func responds(to aSelector: Selector!) -> Bool {
+       // return true
+
         for delegate in delegates {
             if delegate.responds(to: aSelector) {
                 return true
             }
         }
-        
+
         return false
     }
     

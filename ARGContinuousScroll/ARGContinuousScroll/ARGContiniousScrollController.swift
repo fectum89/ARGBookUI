@@ -53,16 +53,19 @@ import UIKit
     
     @objc public weak var delegate: ARGContiniousScrollDelegate?
     
-    @objc public var proxyDelegate: ARGScrollViewDelegateProxy!
+    var proxyDelegate: ARGScrollViewDelegateProxy!
     
-    @objc public init(scrollView: UIScrollView, delegate: ARGContiniousScrollDelegate, scrollDirection: ARGContinuousScrollDirection) {
+    @objc public init(scrollView: UIScrollView, delegate: ARGContiniousScrollDelegate, scrollDirection: ARGContinuousScrollDirection, proxyConfigurationHandler: ((ARGScrollViewDelegateProxy) -> Void)? = nil) {
         super.init()
         
         mainScrollView = scrollView
         proxyDelegate = ARGScrollViewDelegateProxy()
         proxyDelegate.addDelegate(self)
+        
+        proxyConfigurationHandler?(proxyDelegate)
+        
         mainScrollView.delegate = proxyDelegate
-                
+        
         self.delegate = delegate
         
         self.scrollDirection = scrollDirection
@@ -192,6 +195,10 @@ extension ARGContiniousScrollController: UIScrollViewDelegate {
 //            mainScrollView.setContentOffset(mainScrollFixedOffset, animated: false)
 //        }
     }
+    
+//    open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        
+//    }
 }
 
 extension UIScrollView {
@@ -200,6 +207,6 @@ extension UIScrollView {
     }
     
     func arg_onEnd(direction: ARGContinuousScrollDirection) -> Bool {
-        return direction == .horizontal ? contentOffset.x >= contentSize.width - bounds.size.width : contentOffset.y >= contentSize.height - bounds.size.height
+        return direction == .horizontal ? contentOffset.x >= contentSize.width + contentInset.right - bounds.size.width : contentOffset.y >= contentSize.height + contentInset.bottom - bounds.size.height
     }
 }

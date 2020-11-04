@@ -34,11 +34,6 @@
         [wself setRelativePageMargins:UIOffsetMake(settings.horizontalMargin, settings.verticalMargin) completion:^{
             dispatch_group_leave(settingsGroup);
         }];
-        
-        dispatch_group_enter(settingsGroup);
-        [wself setAlignment:settings.alignment completion:^{
-            dispatch_group_leave(settingsGroup);
-        }];
     }];
 }
 
@@ -74,32 +69,6 @@
             completion();
         }
     }
-}
-
-- (void)setAlignment:(int64_t)alignment completion:(dispatch_block_t)completion {
-    if (_alignment == alignment) {
-        if (completion) {
-            completion();
-        }
-        
-        return;
-    }
-    
-    _alignment = alignment;
-    
-    NSString *alignmentString = nil;
-    
-    if (alignment == ARGBookReadingSettingsAlignmentLeft) {
-        alignmentString = @"left";
-    } else if (alignment == ARGBookReadingSettingsAlignmentJustify) {
-        alignmentString = @"justify";
-    }
-    
-    [self.webView evaluateJavaScript:[NSString stringWithFormat:@"setTextAlignment('%@')", alignmentString] completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-        if (completion) {
-            completion();
-        }
-    }];
 }
 
 @end

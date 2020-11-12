@@ -51,6 +51,7 @@ import UIKit.UIColor
 }
 
 extension ARGBookReadingSettings {
+    
     func stringRepresentationForPageCache() -> String {
         return String(fontSize) + "."
             + String(alignment.rawValue) + "."
@@ -68,4 +69,5 @@ extension ARGBookReadingSettings {
             + textColor.htmlRGBaColor + "."
             + highlightColor.htmlRGBaColor + "."
     }
+    
 }

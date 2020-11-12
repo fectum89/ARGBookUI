@@ -9,35 +9,59 @@ import Foundation
 
 @objc public protocol ARGBookNavigationPoint {
     
-    @objc optional var document: ARGBookDocument {get}
+    @objc var document: ARGBookDocument {get}
     
-    @objc optional var elementID: String {get}
-    
-    @objc optional var pageNumber: Int {get}
+    @objc var position: CGFloat {get}
     
 }
 
-@objc public protocol ARGBookPagePoint: ARGBookNavigationPoint {
-    @objc var offset: Int {get}
+@objc public protocol ARGBookAnchorNavigationPoint: ARGBookNavigationPoint {
+
+    @objc var elementID: String {get}
+
 }
 
-public class ARGBookDocumentStartNavigationPoint: ARGBookNavigationPoint {}
-public class ARGBookDocumentEndNavigationPoint: ARGBookNavigationPoint {}
+@objc public protocol ARGBookRangeNavigationPoint: ARGBookAnchorNavigationPoint {
+
+    @objc var lastElement: String? {get}
+
+}
+
+@objc public protocol ARGBookmark {
+
+    @objc var navigationPoint: ARGBookNavigationPoint {get}
+
+    @objc var name: String {get}
+
+}
+
+@objc public protocol ARGBookHighlight {
+
+    @objc var navigationPoint: ARGBookRangeNavigationPoint {get}
+
+    @objc var note: String? {get}
+
+    @objc var color: UIColor {get}
+
+}
 
 class ARGBookNavigationPointInternal: ARGBookNavigationPoint {
-    
+
     var document: ARGBookDocument
-    
-    var elementID: String
-    
-    init(document: ARGBookDocument, elementID: String) {
+
+    var elementID: String?
+
+    var position: CGFloat
+
+    init(document: ARGBookDocument, elementID: String? = nil, position: CGFloat) {
         self.document = document
         self.elementID = elementID
+        self.position = position
     }
-    
+
 }
 
-@objc public protocol ARGBookDocument: class {
+@objc public protocol ARGBookDocument {
     
     var uid: String {get}
     
@@ -45,7 +69,28 @@ class ARGBookNavigationPointInternal: ARGBookNavigationPoint {
     
     var hasFixedLayout: Bool {get}
     
+    var highlights: [ARGBookHighlight]? {get}
+    
+    var bookmarks: [ARGBookmark]? {get}
+    
     var book: ARGBook? {get}
+    
+}
+
+extension ARGBookDocument {
+        
+    func layoutClass<Layout: ARGBookDocumentLayout>(for scrollType: ARGBookScrollType) -> Layout.Type {
+        if self.hasFixedLayout {
+            return ARGBookDocumentFixedLayout.self as! Layout.Type
+        } else {
+            switch scrollType {
+            case .horizontal, .paging:
+                return ARGBookDocumentHorizontalLayout.self as! Layout.Type
+            case .vertical:
+                return ARGBookDocumentVerticalLayout.self as! Layout.Type
+            }
+        }
+    }
     
 }
 

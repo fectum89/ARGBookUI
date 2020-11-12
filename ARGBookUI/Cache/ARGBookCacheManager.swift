@@ -7,7 +7,11 @@
 
 import UIKit
 
-protocol ARGBookCache {
+protocol ARGBookCache: NSObject {
+    
+    var progress: CGFloat {get}
+    
+    var book: ARGBook {get}
     
     func contentSize(for document: ARGBookDocument, settings: ARGBookReadingSettings, viewPort: CGSize) -> CGSize?
     
@@ -84,45 +88,65 @@ class ARGBookCacheFileManager {
 }
 
 class ARGBookCacheManager: NSObject, ARGBookCache {
+    var book: ARGBook {
+        get {
+            fileManager.book
+        }
+    }
+    
+    @objc dynamic var progress: CGFloat = 0
+    
     weak var containerView: UIView?
-    var book: ARGBook
     var contentSizeDictionary = [String : CGSize]()
     var fileManager: ARGBookCacheFileManager
     
-    init(book: ARGBook, containerView: UIView) {
+    //var contentView: ARGBookDocumentContentView
+    
+    init(containerView: UIView, fileManager: ARGBookCacheFileManager) {
         self.containerView = containerView
-        self.book = book
-        fileManager = ARGBookCacheFileManager(book: book)
+        self.fileManager = fileManager
     }
     
-    func updateCache(for documents: [ARGBookDocument], with settings: ARGBookReadingSettings, viewPort: CGSize) {
+    func startCacheUpdating(for documents: [ARGBookDocument], with settings: ARGBookReadingSettings, viewPort: CGSize) {
+        progress = 0.0
+        updateCache(for: documents, with: settings, viewPort: viewPort) {
+            print("cache is ready")
+            self.progress = 1.0
+        }
+    }
+    
+    func updateCache(for documents: [ARGBookDocument], with settings: ARGBookReadingSettings, viewPort: CGSize, completionHandler: (() -> Void)? = nil) {
         if let containerView = self.containerView {
             if let document = documents.first {
                 let item = ARGPresentationItem(document: document, settings: settings, viewPort: viewPort)
                 
                 readContentSize(for: item) { (contentSize) in
                     if contentSize != nil {
-                        self.updateCache(for: documents.filter {$0.uid != document.uid}, with: settings, viewPort: viewPort)
+                        self.updateCache(for: documents.filter {$0.uid != document.uid},
+                                         with: settings,
+                                         viewPort: viewPort,
+                                         completionHandler: completionHandler)
                     } else {
                         let contentView = ARGBookDocumentContentView(frame: containerView.bounds)
                         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                         containerView.addSubview(contentView)
                         contentView.isHidden = true
                         
-                        contentView.load(document: document, cache: self) {
-                            contentView.applyReadingSettings(settings) {
-                                contentView.removeFromSuperview()
-                                
-                                let contentSize = contentView.webView.scrollView.contentSize
-                                self.saveContentSize(contentSize, for: item)
-                                
-                                self.updateCache(for: documents.filter {$0.uid != document.uid}, with: settings, viewPort: viewPort)
-                            }
+                        contentView.load(document: document, layoutClass: document.layoutClass(for: settings.scrollType), settings: settings, cache: self) {
+                            contentView.removeFromSuperview()
+                            
+                            let contentSize = contentView.webView.scrollView.contentSize
+                            self.saveContentSize(contentSize, for: item)
+                            self.progress += 1 / CGFloat(self.fileManager.book.documents.count)
+                            self.updateCache(for: documents.filter {$0.uid != document.uid},
+                                             with: settings,
+                                             viewPort: viewPort,
+                                             completionHandler: completionHandler)
                         }
                     }
                 }
             } else {
-                print("cache is ready")
+                completionHandler?()
             }
         }
     }

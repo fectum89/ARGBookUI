@@ -43,12 +43,24 @@ class ARGBookDocumentLayout: NSObject {
         }
     }
     
-    func scroll(to navigationPoint: ARGBookNavigationPoint, completionHandler: (() -> Void)? = nil) {
+    func scroll(to position: CGFloat, completionHandler: (() -> Void)? = nil) {
+        
+    }
+    
+    func scroll(to element: String, completionHandler: (() -> Void)? = nil) {
         
     }
     
     func measureContentSize(completionHandler: ((CGSize?) -> Void)? = nil) {
 
+    }
+    
+    func currentScrollPosition() -> CGFloat {
+        return 0
+    }
+    
+    class func pageCount(for contentSize: CGSize, viewPort: CGSize) -> UInt {
+        return 0
     }
     
 }

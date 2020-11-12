@@ -62,20 +62,17 @@ class ARGBookDocumentContentView: UIView {
             //print("\(images)")
        // }
     
-    func load(document: ARGBookDocument, cache: ARGBookCache, completionHandler: (() -> Void)? = nil) {
-        self.layoutManager?.documentLoaded = false
-        
-        let newDocument = documentLoader.loadDocumentIfNeeded(document) { newDocument, error in
-            self.layoutManager?.documentLoaded = true
-            completionHandler?()
-        }
-        
-        if newDocument {
-            self.layoutManager = ARGBookDocumentLayoutManager(webView: self.webView, document: document, cache: cache, layoutTypeChangedHandler: { documentReadyHandler in
-                self.documentLoader.reloadDocument { (error) in
-                    documentReadyHandler()
-                }
-            })
+    func load<LayoutClass: ARGBookDocumentLayout>(document: ARGBookDocument, layoutClass: LayoutClass.Type, settings: ARGBookReadingSettings, cache: ARGBookCache, completionHandler: (() -> Void)? = nil) {
+        if layoutManager == nil || !(layoutManager?.layout.isKind(of: layoutClass) ?? false) || layoutManager?.document.uid != document.uid {
+            let layout = layoutClass.init(webView: webView)
+            layoutManager = ARGBookDocumentLayoutManager(layout: layout, document: document, cache: cache)
+            
+            documentLoader.loadDocument(document) { (newDocument, error) in
+                self.layoutManager?.documentLoaded = true
+                self.layoutManager?.applyReadingSettings(settings, completionHandler: completionHandler)
+            }
+        } else {
+            layoutManager?.applyReadingSettings(settings, completionHandler: completionHandler)
         }
     }
     
@@ -83,11 +80,11 @@ class ARGBookDocumentContentView: UIView {
         layoutManager?.scroll(to: navigationPoint)
     }
     
-    func applyReadingSettings(_ settings: ARGBookReadingSettings, completionHandler: (() -> Void)? = nil) {
-        layoutManager?.applyReadingSettings(settings, completionHandler: completionHandler)
-    }
+//    func applyReadingSettings(_ settings: ARGBookReadingSettings, completionHandler: (() -> Void)? = nil) {
+//        layoutManager?.applyReadingSettings(settings, completionHandler: completionHandler)
+//    }
     
-    func obtainCurrentNavigationPoint(completionHandler: ((ARGBookNavigationPoint?) -> Void)? = nil) {
+    func obtainCurrentNavigationPoint(completionHandler: ((ARGBookNavigationPoint) -> Void)? = nil) {
         layoutManager?.obtainCurrentNavigationPoint(completionHandler: completionHandler)
     }
     

@@ -15,16 +15,16 @@ class ARGBookDocumentNavigationCommonLogic {
     
     var pendingNavigationPoint: ARGBookNavigationPoint?
     
-    var currentNavigationPoint: ARGBookNavigationPoint? {
-        didSet {
-            obtainCurrentNavigationPointCompletionHandler?(currentNavigationPoint)
-            obtainCurrentNavigationPointCompletionHandler = nil
-        }
-    }
+//    var currentNavigationPoint: ARGBookNavigationPoint? {
+//        didSet {
+//            obtainCurrentNavigationPointCompletionHandler?(currentNavigationPoint)
+//            obtainCurrentNavigationPointCompletionHandler = nil
+//        }
+//    }
     
-    var scrollCompletionHandler: (() -> Void)?
+    //var scrollCompletionHandler: (() -> Void)?
     
-    var obtainCurrentNavigationPointCompletionHandler: ((ARGBookNavigationPoint?) -> Void)?
+    var obtainCurrentNavigationPointCompletionHandler: ((ARGBookNavigationPoint) -> Void)?
     
     init(document: ARGBookDocument) {
         self.document = document
@@ -32,9 +32,9 @@ class ARGBookDocumentNavigationCommonLogic {
     
     func scrollToProperPoint () {
         if let navigationPoint = self.pendingNavigationPoint {
-            self.scroll(to: navigationPoint, completionHandler: self.scrollCompletionHandler)
+            self.scroll(to: navigationPoint)
         } else {
-            self.scroll(to: ARGBookDocumentStartNavigationPoint(), completionHandler: scrollCompletionHandler)
+            self.scroll(to: ARGBookNavigationPointInternal(document: document, position: 0))
         }
     }
     
@@ -42,35 +42,40 @@ class ARGBookDocumentNavigationCommonLogic {
         self.pendingNavigationPoint = navigationPoint
         
         guard layout?.isReady ?? false else {
-            self.scrollCompletionHandler = completionHandler
+            //self.scrollCompletionHandler = completionHandler
             return
         }
         
-        layout?.scroll(to: navigationPoint, completionHandler: {
-            self.updateCurrentNavigationPoint {
-                completionHandler?()
-                self.pendingNavigationPoint = nil
-                self.scrollCompletionHandler = nil
-            }
-        })
-    }
-    
-    func updateCurrentNavigationPoint (completionHandler: (() -> Void)? = nil) {
-        self.layout?.webView.evaluateJavaScript("firstVisibleSpanElement()", completionHandler: { (result, error) in
-            if let dictionary = result as? NSDictionary,
-               let wordId = dictionary["id"] as? String {
-                self.currentNavigationPoint = ARGBookNavigationPointInternal(document: self.document, elementID: wordId)
-            }
-            
+        let scrollCompletion = {
+            //self.updateCurrentNavigationPoint {
             completionHandler?()
-        })
+            self.pendingNavigationPoint = nil
+            
+            self.obtainCurrentNavigationPointCompletionHandler?(self.currentNavigationPoint())
+            self.obtainCurrentNavigationPointCompletionHandler = nil
+            
+            //self.scrollCompletionHandler = nil
+           // }
+        }
+        
+        if let navigationPoint = navigationPoint as? ARGBookAnchorNavigationPoint {
+            layout?.scroll(to: navigationPoint.elementID) {
+                scrollCompletion()
+            }
+        } else {
+            layout?.scroll(to: navigationPoint.position) {
+                scrollCompletion()
+            }
+        }
     }
     
-    func obtainCurrentNavigationPoint(completionHandler: ((ARGBookNavigationPoint?) -> Void)? = nil) {
+    func currentNavigationPoint () -> ARGBookNavigationPoint {
+        return ARGBookNavigationPointInternal(document: self.document, position: layout?.currentScrollPosition() ?? 0)
+    }
+    
+    func obtainCurrentNavigationPoint(completionHandler: ((ARGBookNavigationPoint) -> Void)? = nil) {
         if layout?.isReady ?? false {
-            updateCurrentNavigationPoint {
-                completionHandler?(self.currentNavigationPoint)
-            }
+            completionHandler?(currentNavigationPoint())
         } else {
             obtainCurrentNavigationPointCompletionHandler = completionHandler
         }

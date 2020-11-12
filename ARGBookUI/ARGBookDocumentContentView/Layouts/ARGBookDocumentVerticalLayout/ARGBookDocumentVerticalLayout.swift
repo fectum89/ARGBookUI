@@ -13,7 +13,6 @@ class ARGBookDocumentVerticalLayout: ARGBookDocumentLayout {
         didSet {
             let pages = Int(ceil(self.webView.scrollView.contentSize.height / self.webView.bounds.size.height))
             let inset = pages * Int(self.webView.bounds.size.height) % Int(self.webView.scrollView.contentSize.height)
-            //self.webView.scrollView.contentSize = CGSize(width: self.webView.scrollView.contentSize.width, height: pages * self.webView.bounds.size.height)
             self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: CGFloat(inset), right: 0)
         }
     }
@@ -39,27 +38,33 @@ class ARGBookDocumentVerticalLayout: ARGBookDocumentLayout {
         }
     }
     
-    override func scroll(to navigationPoint: ARGBookNavigationPoint, completionHandler: (() -> Void)?){
-        switch navigationPoint {
-        case is ARGBookDocumentStartNavigationPoint:
-            self.webView.scrollView.contentOffset = CGPoint(x: self.webView.scrollView.contentOffset.x, y: 0)
-        case is ARGBookDocumentEndNavigationPoint:
-            webView.scrollView.contentOffset = CGPoint(x: webView.scrollView.contentOffset.x, y: webView.scrollView.contentSize.height + webView.scrollView.contentInset.bottom - webView.scrollView.bounds.size.height)
-        default:
-            if let elementID = navigationPoint.elementID {
-                let script = "getVerticalOffsetForElementID('\(elementID)')"
-               // print("scroll to: \(URL(fileURLWithPath: navigationPoint.document!.filePath).lastPathComponent) - \(navigationPoint.elementID)")
-                webView.evaluateJavaScript(script) { (result, error) in
-                    if let offset = result as? CGFloat {
-                        self.webView.scrollView.contentOffset = CGPoint(x: self.webView.scrollView.contentOffset.x,
-                                                                        y: offset)
-                    }
-                    completionHandler?()
-                }
-            } else {
-                completionHandler?()
+    override func scroll(to element: String, completionHandler: (() -> Void)? = nil) {
+        let script = "getHorizontalOffsetForElementID('\(element)')"
+        
+        webView.evaluateJavaScript(script) { (result, error) in
+            if let offset = result as? CGFloat {
+                self.webView.scrollView.contentOffset = CGPoint(x: self.webView.scrollView.contentOffset.x,
+                                                                y: offset)
             }
+            
+            completionHandler?()
         }
+    }
+    
+    override func scroll(to position: CGFloat, completionHandler: (() -> Void)?) {
+        let offset = position * (webView.scrollView.contentSize.height + webView.scrollView.contentInset.bottom - webView.scrollView.bounds.height)
+
+        self.webView.scrollView.contentOffset = CGPoint(x: self.webView.scrollView.contentOffset.x,
+                                                        y: offset)
+        completionHandler?()
+    }
+    
+    override func currentScrollPosition() -> CGFloat {
+        return webView.scrollView.contentOffset.y / (webView.scrollView.contentSize.height + webView.scrollView.contentInset.bottom - webView.scrollView.bounds.height)
+    }
+    
+    override class func pageCount(for contentSize: CGSize, viewPort: CGSize) -> UInt {
+        return UInt(ceil(contentSize.height / viewPort.height))
     }
 
 }

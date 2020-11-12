@@ -9,17 +9,10 @@ import UIKit
 
 class ARGBookDocumentLayoutManager {
     
-    var layout: ARGBookDocumentLayout? {
-        didSet {
-            settingsLogic.layout = layout
-            navigationLogic.layout = layout
-        }
-    }
+    var layout: ARGBookDocumentLayout
     
     var settingsLogic: ARGBookDocumentSettingsCommonLogic
     var navigationLogic: ARGBookDocumentNavigationCommonLogic
-    
-    var webView: WKWebView
     
     var document: ARGBookDocument
     
@@ -31,47 +24,15 @@ class ARGBookDocumentLayoutManager {
         }
     }
     
-    var layoutTypeChangedHandler: ((@escaping () -> Void)) -> Void
+    //var layoutTypeChangedHandler: ((@escaping () -> Void)) -> Void
     
-    init(webView: WKWebView, document: ARGBookDocument, cache: ARGBookCache, layoutTypeChangedHandler: @escaping ((@escaping () -> Void)) -> Void) {
-        self.webView = webView
+    init(layout: ARGBookDocumentLayout, document: ARGBookDocument, cache: ARGBookCache) {
+        self.layout = layout
         self.document = document
-        self.layoutTypeChangedHandler = layoutTypeChangedHandler
         self.settingsLogic = ARGBookDocumentSettingsCommonLogic(document: document, cache: cache)
         self.navigationLogic = ARGBookDocumentNavigationCommonLogic(document: document)
-    }
-    
-    func updateLayout(with document: ARGBookDocument, settings: ARGBookReadingSettings,  completionHander: @escaping () -> Void) {
-        let LayoutClass = Self.documentLayoutClass(for: document, scrollType: settings.scrollType)
-        
-        if self.layout == nil || !(self.layout?.isKind(of: LayoutClass) ?? false)  {
-            let shouldCallClosure = self.layout != nil
-            
-            self.layout = LayoutClass.init(webView: self.webView) as ARGBookDocumentLayout
-            
-            if shouldCallClosure {
-                layoutTypeChangedHandler {
-                    completionHander()
-                }
-            } else {
-                completionHander()
-            }
-        } else {
-            completionHander()
-        }
-    }
-    
-    class func documentLayoutClass<Layout: ARGBookDocumentLayout>(for document: ARGBookDocument, scrollType: ARGBookScrollType) -> Layout.Type {
-        if document.hasFixedLayout {
-            return ARGBookDocumentFixedLayout.self as! Layout.Type
-        } else {
-            switch scrollType {
-            case .horizontal, .paging:
-                return ARGBookDocumentHorizontalLayout.self as! Layout.Type
-            case .vertical:
-                return ARGBookDocumentVerticalLayout.self as! Layout.Type
-            }
-        }
+        settingsLogic.layout = layout
+        navigationLogic.layout = layout
     }
     
     func settingsCanBeApplied(_ settings: ARGBookReadingSettings?) -> Bool {
@@ -92,12 +53,10 @@ class ARGBookDocumentLayoutManager {
             return
         }
         
-        updateLayout(with: document, settings: settings) {
-            self.settingsLogic.applyReadingSettings(settings) {
-                if !self.conditionallyApplyPendingSettings(completionHandler: completionHandler) {
-                    completionHandler?()
-                    self.navigationLogic.scrollToProperPoint()
-                }
+        self.settingsLogic.applyReadingSettings(settings) {
+            if !self.conditionallyApplyPendingSettings(completionHandler: completionHandler) {
+                completionHandler?()
+                self.navigationLogic.scrollToProperPoint()
             }
         }
     }
@@ -116,7 +75,7 @@ class ARGBookDocumentLayoutManager {
         navigationLogic.scroll(to: navigationPoint, completionHandler: completionHandler)
     }
     
-    func obtainCurrentNavigationPoint(completionHandler: ((ARGBookNavigationPoint?) -> Void)? = nil) {
+    func obtainCurrentNavigationPoint(completionHandler: ((ARGBookNavigationPoint) -> Void)? = nil) {
         navigationLogic.obtainCurrentNavigationPoint(completionHandler: completionHandler)
     }
     

@@ -7,17 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D0B0531255BCF8700BC0698 /* ARGBookPageConverterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0B0530255BCF8700BC0698 /* ARGBookPageConverterTest.swift */; };
+		5D0B053A255BDA5300BC0698 /* CommonMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0B0539255BDA5300BC0698 /* CommonMocks.swift */; };
 		5D2C8C2D253C66A70034D6CC /* ARGBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2C8C2C253C66A70034D6CC /* ARGBookView.swift */; };
-		5D2C8C5325406D410034D6CC /* ARGBookDocumentSizeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2C8C5225406D410034D6CC /* ARGBookDocumentSizeManager.swift */; };
 		5D2C8C5925415EB50034D6CC /* UIColor+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2C8C5825415EB50034D6CC /* UIColor+String.swift */; };
-		5D2C8C6125416F9F0034D6CC /* ARGBookScrollDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2C8C6025416F9F0034D6CC /* ARGBookScrollDelegate.swift */; };
 		5D43215D253C2DDB0086FED9 /* ARGBookDocumentSettingsCommonLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D43215C253C2DDB0086FED9 /* ARGBookDocumentSettingsCommonLogic.swift */; };
 		5D432163253C2DE70086FED9 /* ARGBookDocumentNavigationCommonLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D432162253C2DE70086FED9 /* ARGBookDocumentNavigationCommonLogic.swift */; };
 		5D58B9CE2536B51500062144 /* ARGBookDocumentStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D58B9CD2536B51500062144 /* ARGBookDocumentStateManager.swift */; };
 		5D58B9D62536EB5500062144 /* WKWebView+Measuring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D58B9D52536EB5500062144 /* WKWebView+Measuring.swift */; };
 		5D58B9DE25376D0400062144 /* ARGBookDocumentLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D58B9DD25376D0400062144 /* ARGBookDocumentLayoutManager.swift */; };
 		5D9693B825306A9000C3FB71 /* ARGBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D9693AE25306A9000C3FB71 /* ARGBookUI.framework */; };
-		5D9693BD25306A9000C3FB71 /* ARGBookUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9693BC25306A9000C3FB71 /* ARGBookUITests.swift */; };
 		5D9693BF25306A9000C3FB71 /* ARGBookUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D9693B125306A9000C3FB71 /* ARGBookUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5D9693EA25306BE800C3FB71 /* BookContentPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9693E425306BE800C3FB71 /* BookContentPresenter.swift */; };
 		5D9693EB25306BE800C3FB71 /* BookContentWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9693E525306BE800C3FB71 /* BookContentWorker.swift */; };
@@ -25,9 +24,7 @@
 		5D9693ED25306BE800C3FB71 /* BookContentModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9693E725306BE800C3FB71 /* BookContentModels.swift */; };
 		5D9693EE25306BE800C3FB71 /* BookContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9693E825306BE800C3FB71 /* BookContentViewController.swift */; };
 		5D9693EF25306BE800C3FB71 /* BookContentInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9693E925306BE800C3FB71 /* BookContentInteractor.swift */; };
-		5D9693F6253072E100C3FB71 /* ARGBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9693F5253072E100C3FB71 /* ARGBookViewController.swift */; };
 		5D9693FE2530756100C3FB71 /* ARGDocumentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9693FD2530756100C3FB71 /* ARGDocumentCollectionViewCell.swift */; };
-		5D96940D25318C3600C3FB71 /* ARGBookDocumentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D96940C25318C3600C3FB71 /* ARGBookDocumentViewController.swift */; };
 		5D96941225318CE200C3FB71 /* ARGBookDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D96941125318CE200C3FB71 /* ARGBookDocumentView.swift */; };
 		5D96942025318E0500C3FB71 /* ARGBookDocumentCacheView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D96941F25318E0500C3FB71 /* ARGBookDocumentCacheView.swift */; };
 		5D96942625318E3B00C3FB71 /* ARGBookDocumentContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D96942525318E3B00C3FB71 /* ARGBookDocumentContentView.swift */; };
@@ -36,9 +33,12 @@
 		5D969439253194F300C3FB71 /* ARGBookDocumentFixedLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D969438253194F300C3FB71 /* ARGBookDocumentFixedLayout.swift */; };
 		5D96943D2531950100C3FB71 /* ARGBookDocumentVerticalLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D96943C2531950100C3FB71 /* ARGBookDocumentVerticalLayout.swift */; };
 		5D96944225319BE500C3FB71 /* ARGBookModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D96944125319BE500C3FB71 /* ARGBookModels.swift */; };
-		5D9694492531A8B800C3FB71 /* ARGBookViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D9694482531A8B800C3FB71 /* ARGBookViewController.xib */; };
 		5D9694512531A93200C3FB71 /* ARGDocumentCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D9694502531A93200C3FB71 /* ARGDocumentCollectionViewCell.xib */; };
 		5DAD701725385FFD003A8BE6 /* FlowableLayoutSettingsProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DD920412532339B0023E58C /* FlowableLayoutSettingsProvider.m */; };
+		5DB598192556EE1700DF1E36 /* ARGDocumentPageOverlayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB598182556EE1700DF1E36 /* ARGDocumentPageOverlayCollectionViewCell.swift */; };
+		5DB5981D2556EE8700DF1E36 /* ARGDocumentPageOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5981C2556EE8700DF1E36 /* ARGDocumentPageOverlayView.swift */; };
+		5DB598272556F05C00DF1E36 /* ARGDocumentPageOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DB598262556F05C00DF1E36 /* ARGDocumentPageOverlayView.xib */; };
+		5DB598362557E4BF00DF1E36 /* ARGDocumentPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB598352557E4BF00DF1E36 /* ARGDocumentPage.swift */; };
 		5DBC0A932531E7F0004DE451 /* Settings.js in Resources */ = {isa = PBXBuildFile; fileRef = 5DBC0A8F2531E7F0004DE451 /* Settings.js */; };
 		5DBC0A942531E7F0004DE451 /* Selection.js in Resources */ = {isa = PBXBuildFile; fileRef = 5DBC0A902531E7F0004DE451 /* Selection.js */; };
 		5DBC0A952531E7F0004DE451 /* PrepareDocument.js in Resources */ = {isa = PBXBuildFile; fileRef = 5DBC0A912531E7F0004DE451 /* PrepareDocument.js */; };
@@ -54,6 +54,7 @@
 		5DD999E72549614B00F5E1EC /* ARGBookCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD999E62549614B00F5E1EC /* ARGBookCacheManager.swift */; };
 		5DD999ED2549D59C00F5E1EC /* ARGFileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD999EC2549D59C00F5E1EC /* ARGFileUtils.swift */; };
 		5DD999FA2551575C00F5E1EC /* ARGBookPageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD999F92551575C00F5E1EC /* ARGBookPageManager.swift */; };
+		5DE61CDB2556AB6D0058F0FC /* ARGDocumentOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE61CDA2556AB6D0058F0FC /* ARGDocumentOverlayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,10 +68,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5D0B0530255BCF8700BC0698 /* ARGBookPageConverterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookPageConverterTest.swift; sourceTree = "<group>"; };
+		5D0B0539255BDA5300BC0698 /* CommonMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonMocks.swift; sourceTree = "<group>"; };
 		5D2C8C2C253C66A70034D6CC /* ARGBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookView.swift; sourceTree = "<group>"; };
-		5D2C8C5225406D410034D6CC /* ARGBookDocumentSizeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentSizeManager.swift; sourceTree = "<group>"; };
 		5D2C8C5825415EB50034D6CC /* UIColor+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+String.swift"; sourceTree = "<group>"; };
-		5D2C8C6025416F9F0034D6CC /* ARGBookScrollDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookScrollDelegate.swift; sourceTree = "<group>"; };
 		5D43215C253C2DDB0086FED9 /* ARGBookDocumentSettingsCommonLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentSettingsCommonLogic.swift; sourceTree = "<group>"; };
 		5D432162253C2DE70086FED9 /* ARGBookDocumentNavigationCommonLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentNavigationCommonLogic.swift; sourceTree = "<group>"; };
 		5D58B9CD2536B51500062144 /* ARGBookDocumentStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentStateManager.swift; sourceTree = "<group>"; };
@@ -80,7 +81,6 @@
 		5D9693B125306A9000C3FB71 /* ARGBookUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARGBookUI.h; sourceTree = "<group>"; };
 		5D9693B225306A9000C3FB71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5D9693B725306A9000C3FB71 /* ARGBookUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ARGBookUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5D9693BC25306A9000C3FB71 /* ARGBookUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookUITests.swift; sourceTree = "<group>"; };
 		5D9693BE25306A9000C3FB71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5D9693E425306BE800C3FB71 /* BookContentPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookContentPresenter.swift; sourceTree = "<group>"; };
 		5D9693E525306BE800C3FB71 /* BookContentWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookContentWorker.swift; sourceTree = "<group>"; };
@@ -88,9 +88,7 @@
 		5D9693E725306BE800C3FB71 /* BookContentModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookContentModels.swift; sourceTree = "<group>"; };
 		5D9693E825306BE800C3FB71 /* BookContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookContentViewController.swift; sourceTree = "<group>"; };
 		5D9693E925306BE800C3FB71 /* BookContentInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookContentInteractor.swift; sourceTree = "<group>"; };
-		5D9693F5253072E100C3FB71 /* ARGBookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookViewController.swift; sourceTree = "<group>"; };
 		5D9693FD2530756100C3FB71 /* ARGDocumentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGDocumentCollectionViewCell.swift; sourceTree = "<group>"; };
-		5D96940C25318C3600C3FB71 /* ARGBookDocumentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentViewController.swift; sourceTree = "<group>"; };
 		5D96941125318CE200C3FB71 /* ARGBookDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentView.swift; sourceTree = "<group>"; };
 		5D96941F25318E0500C3FB71 /* ARGBookDocumentCacheView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentCacheView.swift; sourceTree = "<group>"; };
 		5D96942525318E3B00C3FB71 /* ARGBookDocumentContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentContentView.swift; sourceTree = "<group>"; };
@@ -99,8 +97,11 @@
 		5D969438253194F300C3FB71 /* ARGBookDocumentFixedLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentFixedLayout.swift; sourceTree = "<group>"; };
 		5D96943C2531950100C3FB71 /* ARGBookDocumentVerticalLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentVerticalLayout.swift; sourceTree = "<group>"; };
 		5D96944125319BE500C3FB71 /* ARGBookModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookModels.swift; sourceTree = "<group>"; };
-		5D9694482531A8B800C3FB71 /* ARGBookViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ARGBookViewController.xib; sourceTree = "<group>"; };
 		5D9694502531A93200C3FB71 /* ARGDocumentCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ARGDocumentCollectionViewCell.xib; sourceTree = "<group>"; };
+		5DB598182556EE1700DF1E36 /* ARGDocumentPageOverlayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGDocumentPageOverlayCollectionViewCell.swift; sourceTree = "<group>"; };
+		5DB5981C2556EE8700DF1E36 /* ARGDocumentPageOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGDocumentPageOverlayView.swift; sourceTree = "<group>"; };
+		5DB598262556F05C00DF1E36 /* ARGDocumentPageOverlayView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ARGDocumentPageOverlayView.xib; sourceTree = "<group>"; };
+		5DB598352557E4BF00DF1E36 /* ARGDocumentPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGDocumentPage.swift; sourceTree = "<group>"; };
 		5DBC0A8F2531E7F0004DE451 /* Settings.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Settings.js; sourceTree = "<group>"; };
 		5DBC0A902531E7F0004DE451 /* Selection.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Selection.js; sourceTree = "<group>"; };
 		5DBC0A912531E7F0004DE451 /* PrepareDocument.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = PrepareDocument.js; sourceTree = "<group>"; };
@@ -118,6 +119,7 @@
 		5DD999E62549614B00F5E1EC /* ARGBookCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookCacheManager.swift; sourceTree = "<group>"; };
 		5DD999EC2549D59C00F5E1EC /* ARGFileUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGFileUtils.swift; sourceTree = "<group>"; };
 		5DD999F92551575C00F5E1EC /* ARGBookPageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookPageManager.swift; sourceTree = "<group>"; };
+		5DE61CDA2556AB6D0058F0FC /* ARGDocumentOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGDocumentOverlayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,10 +181,11 @@
 		5D9693B025306A9000C3FB71 /* ARGBookUI */ = {
 			isa = PBXGroup;
 			children = (
+				5DB598342557E48600DF1E36 /* Cache */,
 				5DD9202F253229CF0023E58C /* Extensions */,
 				5D96944025319BBE00C3FB71 /* Models */,
 				5D96940125318A4A00C3FB71 /* ARGBookDocumentContentView */,
-				5D9693F42530707500C3FB71 /* ARGHTMLBookViewController */,
+				5D9693F42530707500C3FB71 /* ARGBookView */,
 				5D9693E325306B6B00C3FB71 /* New Group */,
 				5DBC0A8E2531E7CF004DE451 /* Scripts */,
 				5D9693B125306A9000C3FB71 /* ARGBookUI.h */,
@@ -194,8 +197,9 @@
 		5D9693BB25306A9000C3FB71 /* ARGBookUITests */ = {
 			isa = PBXGroup;
 			children = (
-				5D9693BC25306A9000C3FB71 /* ARGBookUITests.swift */,
+				5D0B0530255BCF8700BC0698 /* ARGBookPageConverterTest.swift */,
 				5D9693BE25306A9000C3FB71 /* Info.plist */,
+				5D0B0539255BDA5300BC0698 /* CommonMocks.swift */,
 			);
 			path = ARGBookUITests;
 			sourceTree = "<group>";
@@ -213,34 +217,25 @@
 			path = "New Group";
 			sourceTree = "<group>";
 		};
-		5D9693F42530707500C3FB71 /* ARGHTMLBookViewController */ = {
+		5D9693F42530707500C3FB71 /* ARGBookView */ = {
 			isa = PBXGroup;
 			children = (
-				5D96944E2531A8FB00C3FB71 /* ARGBookViewController */,
-				5D2C8C6025416F9F0034D6CC /* ARGBookScrollDelegate.swift */,
-				5D2C8C5225406D410034D6CC /* ARGBookDocumentSizeManager.swift */,
+				5D96944F2531A91C00C3FB71 /* ARGDocumentCollectionViewCell */,
 				5D2C8C2C253C66A70034D6CC /* ARGBookView.swift */,
 			);
-			path = ARGHTMLBookViewController;
+			path = ARGBookView;
 			sourceTree = "<group>";
 		};
 		5D96940125318A4A00C3FB71 /* ARGBookDocumentContentView */ = {
 			isa = PBXGroup;
 			children = (
 				5D96942B2531945300C3FB71 /* Layouts */,
+				5DE61CD92556AB420058F0FC /* ARGBookDocumentOverlayView */,
 				5DBC0AA72531F5F0004DE451 /* ARGBookDocumentContentView */,
 				5DBC0AA82531F5FD004DE451 /* ARGBookDocumentCacheView */,
 				5D96941125318CE200C3FB71 /* ARGBookDocumentView.swift */,
 			);
 			path = ARGBookDocumentContentView;
-			sourceTree = "<group>";
-		};
-		5D96941025318C4100C3FB71 /* ARGBookDocumentViewController */ = {
-			isa = PBXGroup;
-			children = (
-				5D96940C25318C3600C3FB71 /* ARGBookDocumentViewController.swift */,
-			);
-			path = ARGBookDocumentViewController;
 			sourceTree = "<group>";
 		};
 		5D96942B2531945300C3FB71 /* Layouts */ = {
@@ -260,22 +255,9 @@
 			children = (
 				5D96944125319BE500C3FB71 /* ARGBookModels.swift */,
 				5DD92047253235E50023E58C /* ARGSettingsModel.swift */,
-				5DD999E62549614B00F5E1EC /* ARGBookCacheManager.swift */,
-				5DD999EC2549D59C00F5E1EC /* ARGFileUtils.swift */,
-				5DD999F92551575C00F5E1EC /* ARGBookPageManager.swift */,
+				5DB598352557E4BF00DF1E36 /* ARGDocumentPage.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		5D96944E2531A8FB00C3FB71 /* ARGBookViewController */ = {
-			isa = PBXGroup;
-			children = (
-				5D96944F2531A91C00C3FB71 /* ARGDocumentCollectionViewCell */,
-				5D96941025318C4100C3FB71 /* ARGBookDocumentViewController */,
-				5D9693F5253072E100C3FB71 /* ARGBookViewController.swift */,
-				5D9694482531A8B800C3FB71 /* ARGBookViewController.xib */,
-			);
-			path = ARGBookViewController;
 			sourceTree = "<group>";
 		};
 		5D96944F2531A91C00C3FB71 /* ARGDocumentCollectionViewCell */ = {
@@ -285,6 +267,25 @@
 				5D9694502531A93200C3FB71 /* ARGDocumentCollectionViewCell.xib */,
 			);
 			path = ARGDocumentCollectionViewCell;
+			sourceTree = "<group>";
+		};
+		5DB5982A2556F06500DF1E36 /* ARGDocumentPageOverlayView */ = {
+			isa = PBXGroup;
+			children = (
+				5DB5981C2556EE8700DF1E36 /* ARGDocumentPageOverlayView.swift */,
+				5DB598262556F05C00DF1E36 /* ARGDocumentPageOverlayView.xib */,
+			);
+			path = ARGDocumentPageOverlayView;
+			sourceTree = "<group>";
+		};
+		5DB598342557E48600DF1E36 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				5DD999E62549614B00F5E1EC /* ARGBookCacheManager.swift */,
+				5DD999EC2549D59C00F5E1EC /* ARGFileUtils.swift */,
+				5DD999F92551575C00F5E1EC /* ARGBookPageManager.swift */,
+			);
+			path = Cache;
 			sourceTree = "<group>";
 		};
 		5DBC0A8E2531E7CF004DE451 /* Scripts */ = {
@@ -396,6 +397,16 @@
 			path = SettingsController;
 			sourceTree = "<group>";
 		};
+		5DE61CD92556AB420058F0FC /* ARGBookDocumentOverlayView */ = {
+			isa = PBXGroup;
+			children = (
+				5DB5982A2556F06500DF1E36 /* ARGDocumentPageOverlayView */,
+				5DB598182556EE1700DF1E36 /* ARGDocumentPageOverlayCollectionViewCell.swift */,
+				5DE61CDA2556AB6D0058F0FC /* ARGDocumentOverlayView.swift */,
+			);
+			path = ARGBookDocumentOverlayView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -490,10 +501,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5D9694492531A8B800C3FB71 /* ARGBookViewController.xib in Resources */,
 				5DBC0A942531E7F0004DE451 /* Selection.js in Resources */,
 				5DBC0A962531E7F0004DE451 /* Navigation.js in Resources */,
 				5DBC0A932531E7F0004DE451 /* Settings.js in Resources */,
+				5DB598272556F05C00DF1E36 /* ARGDocumentPageOverlayView.xib in Resources */,
 				5D9694512531A93200C3FB71 /* ARGDocumentCollectionViewCell.xib in Resources */,
 				5DBC0A952531E7F0004DE451 /* PrepareDocument.js in Resources */,
 			);
@@ -515,7 +526,6 @@
 			files = (
 				5D432163253C2DE70086FED9 /* ARGBookDocumentNavigationCommonLogic.swift in Sources */,
 				5D9693ED25306BE800C3FB71 /* BookContentModels.swift in Sources */,
-				5D2C8C5325406D410034D6CC /* ARGBookDocumentSizeManager.swift in Sources */,
 				5D58B9CE2536B51500062144 /* ARGBookDocumentStateManager.swift in Sources */,
 				5DD999ED2549D59C00F5E1EC /* ARGFileUtils.swift in Sources */,
 				5D9693EE25306BE800C3FB71 /* BookContentViewController.swift in Sources */,
@@ -524,19 +534,21 @@
 				5DD92031253229E60023E58C /* WKWebView+Scripts.swift in Sources */,
 				5D96941225318CE200C3FB71 /* ARGBookDocumentView.swift in Sources */,
 				5D9693EB25306BE800C3FB71 /* BookContentWorker.swift in Sources */,
-				5D9693F6253072E100C3FB71 /* ARGBookViewController.swift in Sources */,
+				5DB598362557E4BF00DF1E36 /* ARGDocumentPage.swift in Sources */,
 				5DD999FA2551575C00F5E1EC /* ARGBookPageManager.swift in Sources */,
 				5D2C8C2D253C66A70034D6CC /* ARGBookView.swift in Sources */,
+				5DB5981D2556EE8700DF1E36 /* ARGDocumentPageOverlayView.swift in Sources */,
 				5D9693EC25306BE800C3FB71 /* BookContentRouter.swift in Sources */,
 				5D2C8C5925415EB50034D6CC /* UIColor+String.swift in Sources */,
 				5DD999E72549614B00F5E1EC /* ARGBookCacheManager.swift in Sources */,
 				5DD92048253235E50023E58C /* ARGSettingsModel.swift in Sources */,
-				5D2C8C6125416F9F0034D6CC /* ARGBookScrollDelegate.swift in Sources */,
 				5D58B9DE25376D0400062144 /* ARGBookDocumentLayoutManager.swift in Sources */,
 				5D96942625318E3B00C3FB71 /* ARGBookDocumentContentView.swift in Sources */,
 				5DD920DC253449560023E58C /* ARGBookDocumentLoader.swift in Sources */,
 				5DD999E3254804BB00F5E1EC /* ARGBookVerticalLayoutSettingsController.swift in Sources */,
+				5DE61CDB2556AB6D0058F0FC /* ARGDocumentOverlayView.swift in Sources */,
 				5D96942025318E0500C3FB71 /* ARGBookDocumentCacheView.swift in Sources */,
+				5DB598192556EE1700DF1E36 /* ARGDocumentPageOverlayCollectionViewCell.swift in Sources */,
 				5D58B9D62536EB5500062144 /* WKWebView+Measuring.swift in Sources */,
 				5D9693EA25306BE800C3FB71 /* BookContentPresenter.swift in Sources */,
 				5DD9208725323A550023E58C /* ARGBookReadingSettingsController.m in Sources */,
@@ -544,7 +556,6 @@
 				5D9693FE2530756100C3FB71 /* ARGDocumentCollectionViewCell.swift in Sources */,
 				5D43215D253C2DDB0086FED9 /* ARGBookDocumentSettingsCommonLogic.swift in Sources */,
 				5D9693EF25306BE800C3FB71 /* BookContentInteractor.swift in Sources */,
-				5D96940D25318C3600C3FB71 /* ARGBookDocumentViewController.swift in Sources */,
 				5D969439253194F300C3FB71 /* ARGBookDocumentFixedLayout.swift in Sources */,
 				5D96942D2531946B00C3FB71 /* ARGBookDocumentLayout.swift in Sources */,
 				5DAD701725385FFD003A8BE6 /* FlowableLayoutSettingsProvider.m in Sources */,
@@ -556,7 +567,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5D9693BD25306A9000C3FB71 /* ARGBookUITests.swift in Sources */,
+				5D0B053A255BDA5300BC0698 /* CommonMocks.swift in Sources */,
+				5D0B0531255BCF8700BC0698 /* ARGBookPageConverterTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

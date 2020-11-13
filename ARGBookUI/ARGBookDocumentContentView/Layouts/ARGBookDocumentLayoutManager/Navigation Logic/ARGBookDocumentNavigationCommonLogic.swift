@@ -9,7 +9,7 @@ import Foundation
 
 class ARGBookDocumentNavigationCommonLogic {
     
-    var layout: ARGBookDocumentLayout?
+    var layout: ARGBookDocumentScrollBehavior
     
     var document: ARGBookDocument
     
@@ -26,8 +26,9 @@ class ARGBookDocumentNavigationCommonLogic {
     
     var obtainCurrentNavigationPointCompletionHandler: ((ARGBookNavigationPoint) -> Void)?
     
-    init(document: ARGBookDocument) {
+    init(document: ARGBookDocument, layout: ARGBookDocumentScrollBehavior) {
         self.document = document
+        self.layout = layout
     }
     
     func scrollToProperPoint () {
@@ -41,7 +42,7 @@ class ARGBookDocumentNavigationCommonLogic {
     func scroll(to navigationPoint: ARGBookNavigationPoint, completionHandler: (() -> Void)? = nil) {
         self.pendingNavigationPoint = navigationPoint
         
-        guard layout?.isReady ?? false else {
+        guard layout.isReady else {
             //self.scrollCompletionHandler = completionHandler
             return
         }
@@ -59,22 +60,22 @@ class ARGBookDocumentNavigationCommonLogic {
         }
         
         if let navigationPoint = navigationPoint as? ARGBookAnchorNavigationPoint {
-            layout?.scroll(to: navigationPoint.elementID) {
+            layout.scroll(to: navigationPoint.elementID) {
                 scrollCompletion()
             }
         } else {
-            layout?.scroll(to: navigationPoint.position) {
+            layout.scroll(to: navigationPoint.position) {
                 scrollCompletion()
             }
         }
     }
     
     func currentNavigationPoint () -> ARGBookNavigationPoint {
-        return ARGBookNavigationPointInternal(document: self.document, position: layout?.currentScrollPosition() ?? 0)
+        return ARGBookNavigationPointInternal(document: self.document, position: layout.currentScrollPosition())
     }
     
     func obtainCurrentNavigationPoint(completionHandler: ((ARGBookNavigationPoint) -> Void)? = nil) {
-        if layout?.isReady ?? false {
+        if layout.isReady {
             completionHandler?(currentNavigationPoint())
         } else {
             obtainCurrentNavigationPointCompletionHandler = completionHandler

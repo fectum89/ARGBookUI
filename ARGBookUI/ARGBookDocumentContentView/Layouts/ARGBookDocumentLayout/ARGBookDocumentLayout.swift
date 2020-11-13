@@ -1,70 +1,55 @@
 //
-//  ARGBookDocumentBaseLayout.swift
+//  ARGBookDocumentLayout.swift
 //  ARGBookUI
 //
-//  Created by Sergei Polshcha on 10.10.2020.
+//  Created by Sergei Polshcha on 13.11.2020.
 //
 
-import UIKit
-import WebKit
+import Foundation
 
-class ARGBookDocumentLayout: NSObject {
-    var webView: WKWebView
-    var settingsController: ARGBookReadingSettingsController
-    var isReady = false
-    var documentPrepared: Bool = false
+protocol ARGBookDocumentLayout {
     
-    required init(webView: WKWebView) {
-        self.webView = webView
-        let settingsControllerClass = Self.settingsControllerClass()
-        self.settingsController = settingsControllerClass.init(webView: webView)
-    }
+    var webView: WKWebView {get set}
     
-    func prepare(completionHandler: (() -> Void)? = nil) {
-        if #available(iOS 13, *) {} else {
-            webView.evaluateJavaScript("setCSSRule('body', '-webkit-touch-callout', 'none')")
-        }
-        
-        webView.evaluateJavaScript("prepareDocument()") { (result, error) in
-            self.documentPrepared = true
-            completionHandler?()
-        }
-    }
+    var isReady: Bool {get set}
     
-    class func settingsControllerClass<T: ARGBookReadingSettingsController>() -> T.Type {
-        return ARGBookReadingSettingsController.self as! T.Type
-    }
+    init(webView: WKWebView)
     
-    func applyReadingSettings(_ settings:ARGBookReadingSettings?, completionHandler: (() -> Void)? = nil) {
+}
+
+protocol ARGBookDocumentSettingsControllerContainer: ARGBookDocumentLayout {
+    
+    var settingsController: ARGBookReadingSettingsController {get set}
+    
+}
+
+extension ARGBookDocumentSettingsControllerContainer {
+    
+    mutating func apply(settings: ARGBookReadingSettings?, completionHandler: (() -> Void)? = nil) {
         isReady = false
         
-        self.settingsController.setSettings(settings) {
+        settingsController.setSettings(settings) {
             completionHandler?()
         }
-    }
-    
-    func scroll(to position: CGFloat, completionHandler: (() -> Void)? = nil) {
-        
-    }
-    
-    func scroll(to element: String, completionHandler: (() -> Void)? = nil) {
-        
-    }
-    
-    func measureContentSize(completionHandler: ((CGSize?) -> Void)? = nil) {
-
-    }
-    
-    func currentScrollPosition() -> CGFloat {
-        return 0
-    }
-    
-    class func pageCount(for contentSize: CGSize, viewPort: CGSize) -> UInt {
-        return 0
-    }
-    
-    deinit {
-        print("layout deinit")
     }
     
 }
+
+protocol ARGBookDocumentScrollBehavior: ARGBookDocumentLayout {
+    
+    func scroll(to position: CGFloat, completionHandler: (() -> Void)?)
+    
+    func scroll(to element: String, completionHandler: (() -> Void)?)
+    
+    func currentScrollPosition() -> CGFloat
+    
+}
+
+protocol ARGBookDocumentContentSizeContainer: ARGBookDocumentLayout {
+    
+    func measureContentSize(completionHandler: ((CGSize?) -> Void)?)
+    
+    static func pageCount(for contentSize: CGSize, viewPort: CGSize) -> Int
+    
+}
+

@@ -11,7 +11,7 @@
 @protocol ARGBookReadingSettings;
 #import <ARGBookUI/ARGBookReadingSettingsController.h>
 
-@interface ARGFlowableLayoutSettingsProvider : ARGBookReadingSettingsController
+@interface ARGFlowableLayoutSettingsController : ARGBookReadingSettingsController
 
 @property (nonatomic, assign, readonly) UIOffset         relativePageMargins;
 @property (nonatomic, assign, readonly) UIOffset         absolutePageMargins;

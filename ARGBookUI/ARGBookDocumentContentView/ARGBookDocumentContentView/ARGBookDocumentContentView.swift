@@ -63,9 +63,10 @@ class ARGBookDocumentContentView: UIView {
             //print("\(images)")
        // }
     
-    func load<LayoutClass: ARGBookDocumentLayout>(document: ARGBookDocument, layoutClass: LayoutClass.Type, settings: ARGBookReadingSettings, cache: ARGBookCache, completionHandler: (() -> Void)? = nil) {
-        if layoutManager == nil || !(layoutManager?.layout.isKind(of: layoutClass) ?? false) || layoutManager?.document.uid != document.uid {
-            let layout = layoutClass.init(webView: webView)
+    func load(document: ARGBookDocument, layoutType: (ARGBookDocumentLayout).Type, settings: ARGBookReadingSettings, cache: ARGBookCache, completionHandler: (() -> Void)? = nil) {
+
+        if layoutManager == nil || !(type(of:layoutManager!.layout) == layoutType) || layoutManager!.document.uid != document.uid {
+            let layout = layoutType.init(webView: webView)
             layoutManager = ARGBookDocumentLayoutManager(layout: layout, document: document, cache: cache)
             
             documentLoader.loadDocument(document) { [weak self] (newDocument, error) in
@@ -80,10 +81,6 @@ class ARGBookDocumentContentView: UIView {
     func scroll(to navigationPoint: ARGBookNavigationPoint) {
         layoutManager?.scroll(to: navigationPoint)
     }
-    
-//    func applyReadingSettings(_ settings: ARGBookReadingSettings, completionHandler: (() -> Void)? = nil) {
-//        layoutManager?.applyReadingSettings(settings, completionHandler: completionHandler)
-//    }
     
     func obtainCurrentNavigationPoint(completionHandler: ((ARGBookNavigationPoint) -> Void)? = nil) {
         layoutManager?.obtainCurrentNavigationPoint(completionHandler: completionHandler)

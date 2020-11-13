@@ -79,15 +79,15 @@ class ARGBookNavigationPointInternal: ARGBookNavigationPoint {
 
 extension ARGBookDocument {
         
-    func layoutClass<Layout: ARGBookDocumentLayout>(for scrollType: ARGBookScrollType) -> Layout.Type {
+    func layoutType(for scrollType: ARGBookScrollType) -> (ARGBookDocumentLayout).Type  {
         if self.hasFixedLayout {
-            return ARGBookDocumentFixedLayout.self as! Layout.Type
+            return ARGBookDocumentFixedLayout.self as (ARGBookDocumentLayout).Type
         } else {
             switch scrollType {
             case .horizontal, .paging:
-                return ARGBookDocumentHorizontalLayout.self as! Layout.Type
+                return ARGBookDocumentHorizontalLayout.self as (ARGBookDocumentLayout).Type
             case .vertical:
-                return ARGBookDocumentVerticalLayout.self as! Layout.Type
+                return ARGBookDocumentVerticalLayout.self as (ARGBookDocumentLayout).Type
             }
         }
     }

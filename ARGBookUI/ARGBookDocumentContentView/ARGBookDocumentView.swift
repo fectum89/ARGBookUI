@@ -48,11 +48,11 @@ class ARGBookDocumentView: UIView {
     
     func load(document: ARGBookDocument, settings: ARGBookReadingSettings, pageConverter: ARGBookPageConverter, completionHandler: (() -> Void)? = nil) {
         contentView.isHidden = true
-        let layoutClass = document.layoutClass(for: settings.scrollType)
+        let layoutType: (ARGBookDocumentLayout).Type = document.layoutType(for: settings.scrollType)
         
         overlayView.prepare(for: document, pageConverter: pageConverter)
-
-        contentView.load(document: document, layoutClass: layoutClass, settings: settings, cache: pageConverter.bookCache) { [weak self] in
+        
+        contentView.load(document: document, layoutType: layoutType, settings: settings, cache: pageConverter.bookCache) { [weak self] in
             self?.contentView.isHidden = false
             completionHandler?()
         }

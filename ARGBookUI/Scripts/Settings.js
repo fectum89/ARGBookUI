@@ -77,8 +77,6 @@ function setPageSettings(pageWidth, pageHeight, topInset, rightInset, bottomInse
     columnWidth = pageWidth;
     columnGap = (rightInset + leftInset);
     
-    setPadding(topInset, rightInset, bottomInset, leftInset);
-    
     setMaxMediaContentSize('img', pageWidth, pageHeight);
     setMaxMediaContentSize('svg', pageWidth, pageHeight);
     setMaxMediaContentSize('iframe', pageWidth, pageHeight);
@@ -90,6 +88,9 @@ function setPageSettings(pageWidth, pageHeight, topInset, rightInset, bottomInse
     setCSSRule(css, '-webkit-column-width', columnWidth + 'px');
     setCSSRule(css, '-webkit-column-gap', columnGap + 'px');
     setCSSRule(css, '-webkit-column-fill', 'auto');
+    //setCSSRule(css, 'vertical-align', 'bottom');
+    
+    setPadding(topInset, rightInset, bottomInset, leftInset);
 }
 
 function setPadding(top, right, bottom, left) {

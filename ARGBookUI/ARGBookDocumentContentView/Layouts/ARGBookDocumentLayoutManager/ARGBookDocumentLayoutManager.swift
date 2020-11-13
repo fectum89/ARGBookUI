@@ -27,10 +27,11 @@ class ARGBookDocumentLayoutManager {
     init(layout: ARGBookDocumentLayout, document: ARGBookDocument, cache: ARGBookCache) {
         self.layout = layout
         self.document = document
-        self.settingsLogic = ARGBookDocumentSettingsCommonLogic(document: document, cache: cache)
-        self.navigationLogic = ARGBookDocumentNavigationCommonLogic(document: document)
-        settingsLogic.layout = layout
-        navigationLogic.layout = layout
+        self.settingsLogic = ARGBookDocumentSettingsCommonLogic(document: document,
+                                                                layout: layout as! ARGBookDocumentContentSizeContainer & ARGBookDocumentSettingsControllerContainer,
+                                                                cache: cache)
+        self.navigationLogic = ARGBookDocumentNavigationCommonLogic(document: document,
+                                                                    layout: layout as! ARGBookDocumentScrollBehavior)
     }
     
     func settingsCanBeApplied(_ settings: ARGBookReadingSettings?) -> Bool {

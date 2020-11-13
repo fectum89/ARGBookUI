@@ -137,7 +137,7 @@ class ARGBookInternalPageManager: ARGBookPageConverter {
         if let documentSize = bookCache.contentSize(for: document,
                                                     settings: settings,
                                                     viewPort: viewPort) {
-            let LayoutClass = document.layoutClass(for: settings.scrollType)
+            let LayoutClass: ARGBookDocumentContentSizeContainer.Type = document.layoutType(for: settings.scrollType) as! ARGBookDocumentContentSizeContainer.Type
             let pageCount = LayoutClass.pageCount(for: documentSize,
                                                        viewPort: viewPort)
             var pages = [ARGDocumentPage]()

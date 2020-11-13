@@ -6,16 +6,16 @@
 //  Copyright © 2016 Argentum. All rights reserved.
 //
 
-#import "FlowableLayoutSettingsProvider.h"
+#import "ARGFlowableLayoutSettingsController.h"
 #import <ARGBookUI/ARGBookUI-Swift.h>
 
-@interface ARGFlowableLayoutSettingsProvider ()
+@interface ARGFlowableLayoutSettingsController ()
 
 @property (nonatomic, strong, readonly) NSString *pageSettingsString;
 
 @end
 
-@implementation ARGFlowableLayoutSettingsProvider
+@implementation ARGFlowableLayoutSettingsController
 
 
 - (void)setSettings:(id<ARGBookReadingSettings>)settings completion:(dispatch_block_t)completion {
@@ -40,7 +40,7 @@
 - (void)setRelativePageMargins:(UIOffset)pageMargins completion:(dispatch_block_t)completion {
     _relativePageMargins = pageMargins;
     
-    UIOffset absolutePageMargins = UIOffsetMake(floor(self.webView.bounds.size.width / 100 * pageMargins.horizontal), floor(self.webView.bounds.size.width / 100 * pageMargins.vertical));
+    UIOffset absolutePageMargins = UIOffsetMake(floor(self.webView.bounds.size.width / 100 * pageMargins.horizontal), floor(self.webView.bounds.size.height / 100 * pageMargins.vertical));
     
     [self setAbsolutePageMargins:absolutePageMargins completion:completion];
 }
@@ -49,8 +49,8 @@
     _absolutePageMargins = pageMargins;
     
     NSString *pageSizeScript = [NSString stringWithFormat:@"setPageSettings(%f, %f, %f, %f, %f, %f)",
-                                floor(self.webView.bounds.size.width - pageMargins.horizontal * 2),
-                                floor(self.webView.bounds.size.height - pageMargins.vertical * 2),
+                                floor(self.webView.safeAreaLayoutGuide.layoutFrame.size.width - pageMargins.horizontal * 2),
+                                floor(self.webView.safeAreaLayoutGuide.layoutFrame.size.height - pageMargins.vertical * 2),
                                 floor(pageMargins.vertical),
                                 floor(pageMargins.horizontal),
                                 floor(pageMargins.vertical),

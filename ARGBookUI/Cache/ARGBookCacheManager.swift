@@ -132,7 +132,7 @@ class ARGBookCacheManager: NSObject, ARGBookCache {
                         containerView.addSubview(contentView)
                         contentView.isHidden = true
                         
-                        contentView.load(document: document, layoutClass: document.layoutClass(for: settings.scrollType), settings: settings, cache: self) {
+                        contentView.load(document: document, layoutType: document.layoutType(for: settings.scrollType), settings: settings, cache: self) {
                             contentView.removeFromSuperview()
                             
                             let contentSize = contentView.webView.scrollView.contentSize

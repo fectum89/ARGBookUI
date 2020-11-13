@@ -20,7 +20,7 @@ class ARGBookDocumentContentView: UIView {
         
         let configuration = ARGBookWebViewConfigurator.configuration()
         
-        webView = WKWebView(frame: frame, configuration: configuration)
+        webView = ARGWebView(frame: frame, configuration: configuration)
         
         webView.frame = bounds
         webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -28,6 +28,7 @@ class ARGBookDocumentContentView: UIView {
         webView.clipsToBounds = true
         webView.navigationDelegate = self
         webView.scrollView.contentInsetAdjustmentBehavior = .never
+        webView.allowsLinkPreview = false
         addSubview(webView)
         
         documentLoader = ARGBookDocumentLoader(webView: webView)
@@ -67,9 +68,9 @@ class ARGBookDocumentContentView: UIView {
             let layout = layoutClass.init(webView: webView)
             layoutManager = ARGBookDocumentLayoutManager(layout: layout, document: document, cache: cache)
             
-            documentLoader.loadDocument(document) { (newDocument, error) in
-                self.layoutManager?.documentLoaded = true
-                self.layoutManager?.applyReadingSettings(settings, completionHandler: completionHandler)
+            documentLoader.loadDocument(document) { [weak self] (newDocument, error) in
+                self?.layoutManager?.documentLoaded = true
+                self?.layoutManager?.applyReadingSettings(settings, completionHandler: completionHandler)
             }
         } else {
             layoutManager?.applyReadingSettings(settings, completionHandler: completionHandler)
@@ -91,6 +92,10 @@ class ARGBookDocumentContentView: UIView {
     func contentSize() -> CGSize {
         return CGSize(width: webView.scrollView.contentSize.width + webView.scrollView.contentInset.right,
                       height: webView.scrollView.contentSize.height + webView.scrollView.contentInset.bottom)
+    }
+    
+    deinit {
+        print("contentView deallocated")
     }
     
 }

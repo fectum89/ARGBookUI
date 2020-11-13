@@ -11,9 +11,11 @@ class ARGBookDocumentVerticalLayout: ARGBookDocumentLayout {
     
     override var isReady: Bool {
         didSet {
-            let pages = Int(ceil(self.webView.scrollView.contentSize.height / self.webView.bounds.size.height))
-            let inset = pages * Int(self.webView.bounds.size.height) % Int(self.webView.scrollView.contentSize.height)
-            self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: CGFloat(inset), right: 0)
+            if isReady {
+                let pages = Int(ceil(self.webView.scrollView.contentSize.height / self.webView.bounds.size.height))
+                let inset = pages * Int(self.webView.bounds.size.height) % Int(self.webView.scrollView.contentSize.height)
+                self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: CGFloat(inset), right: 0)
+            }
         }
     }
     

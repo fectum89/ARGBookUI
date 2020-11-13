@@ -63,4 +63,8 @@ class ARGBookDocumentLayout: NSObject {
         return 0
     }
     
+    deinit {
+        print("layout deinit")
+    }
+    
 }

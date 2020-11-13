@@ -75,4 +75,8 @@ class ARGBookDocumentSettingsCommonLogic {
         
     }
     
+    deinit {
+        print("settings logic deallocated")
+    }
+    
 }

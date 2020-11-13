@@ -71,3 +71,25 @@ extension ARGBookReadingSettings {
     }
     
 }
+
+extension ARGBookReadingSettings {
+    
+    func configure(collectionView: UICollectionView) {
+        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        
+        switch scrollType {
+        case .vertical:
+            layout.scrollDirection = .vertical
+            collectionView.isPagingEnabled = false
+            collectionView.alwaysBounceHorizontal = false
+            collectionView.alwaysBounceVertical = true
+        default:
+            layout.scrollDirection = .horizontal
+            collectionView.isPagingEnabled = true
+            collectionView.alwaysBounceHorizontal = true
+            collectionView.alwaysBounceVertical = false
+        }
+    }
+    
+    
+}

@@ -24,8 +24,6 @@ class ARGBookDocumentLayoutManager {
         }
     }
     
-    //var layoutTypeChangedHandler: ((@escaping () -> Void)) -> Void
-    
     init(layout: ARGBookDocumentLayout, document: ARGBookDocument, cache: ARGBookCache) {
         self.layout = layout
         self.document = document
@@ -47,12 +45,12 @@ class ARGBookDocumentLayoutManager {
     
     func applyReadingSettings(_ settings: ARGBookReadingSettings, completionHandler: (() -> Void)? = nil) {
         let allowed = self.settingsCanBeApplied(settings)
-        
+
         guard allowed else {
             completionHandler?()
             return
         }
-        
+
         self.settingsLogic.applyReadingSettings(settings) {
             if !self.conditionallyApplyPendingSettings(completionHandler: completionHandler) {
                 completionHandler?()
@@ -77,6 +75,10 @@ class ARGBookDocumentLayoutManager {
     
     func obtainCurrentNavigationPoint(completionHandler: ((ARGBookNavigationPoint) -> Void)? = nil) {
         navigationLogic.obtainCurrentNavigationPoint(completionHandler: completionHandler)
+    }
+    
+    deinit {
+        print("layoutmanager deallocated")
     }
     
 }

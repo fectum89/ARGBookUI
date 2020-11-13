@@ -11,12 +11,12 @@ import ARGContinuousScroll
 class ARGBookDocumentView: UIView {
     var cacheView: ARGBookDocumentCacheView
     var contentView: ARGBookDocumentContentView
-    //var overlayView: ARGDocumentOverlayView
+    var overlayView: ARGDocumentOverlayView
     
     override init(frame: CGRect) {
         cacheView = ARGBookDocumentCacheView()
         contentView = ARGBookDocumentContentView()
-        //overlayView = ARGDocumentOverlayView()
+        overlayView = ARGDocumentOverlayView()
         
         super.init(frame: frame)
         
@@ -29,9 +29,9 @@ class ARGBookDocumentView: UIView {
         self.addSubview(cacheView)
         cacheView.isHidden = true
 
-//        overlayView.frame = bounds
-//        overlayView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//        self.addSubview(overlayView)
+        overlayView.frame = bounds
+        overlayView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.addSubview(overlayView)
         
         contentView.webView.scrollView.addObserver(self, forKeyPath: "contentOffset", options: .initial, context: nil)
     }
@@ -42,18 +42,18 @@ class ARGBookDocumentView: UIView {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentOffset" {
-            //overlayView.collectionView.contentOffset = contentView.webView.scrollView.contentOffset
+            overlayView.collectionView.contentOffset = contentView.webView.scrollView.contentOffset
         }
     }
     
     func load(document: ARGBookDocument, settings: ARGBookReadingSettings, pageConverter: ARGBookPageConverter, completionHandler: (() -> Void)? = nil) {
-        //contentView.isHidden = true
+        contentView.isHidden = true
         let layoutClass = document.layoutClass(for: settings.scrollType)
         
-        //overlayView.prepare(for: document, pageConverter: pageConverter)
+        overlayView.prepare(for: document, pageConverter: pageConverter)
 
-        contentView.load(document: document, layoutClass: layoutClass, settings: settings, cache: pageConverter.bookCache) {
-            self.contentView.isHidden = false
+        contentView.load(document: document, layoutClass: layoutClass, settings: settings, cache: pageConverter.bookCache) { [weak self] in
+            self?.contentView.isHidden = false
             completionHandler?()
         }
     }
@@ -69,6 +69,7 @@ class ARGBookDocumentView: UIView {
     
     deinit {
         contentView.webView.scrollView.removeObserver(self, forKeyPath: "contentOffset")
+        print("documentView deinit")
     }
     
 }

@@ -13,10 +13,10 @@ import UIKit
     case end
 }
 
-@objc public enum ARGContinuousScrollDirection: Int {
-    case horizontal
-    case vertical
-}
+//@objc public enum ARGContinuousScrollDirection: Int {
+//    case horizontal
+//    case vertical
+//}
 
 @objc public protocol ARGContiniousScrollDelegate: class {
     
@@ -34,8 +34,9 @@ import UIKit
 }
 
 @objc open class ARGContiniousScrollController: NSObject {
+    
     var mainScrollView: UIScrollView!
-    var scrollDirection: ARGContinuousScrollDirection!
+    var scrollDirection: UICollectionView.ScrollDirection!
     //var nestedScrollViews: [UIScrollView] = []
     var panGestureRecognizer: UIPanGestureRecognizer!
     var previousOffset: CGFloat = 0
@@ -55,7 +56,7 @@ import UIKit
     
     var proxyDelegate: ARGScrollViewDelegateProxy!
     
-    @objc public init(scrollView: UIScrollView, delegate: ARGContiniousScrollDelegate, scrollDirection: ARGContinuousScrollDirection, proxyConfigurationHandler: ((ARGScrollViewDelegateProxy) -> Void)? = nil) {
+    @objc public init(scrollView: UIScrollView, delegate: ARGContiniousScrollDelegate, scrollDirection: UICollectionView.ScrollDirection, proxyConfigurationHandler: ((ARGScrollViewDelegateProxy) -> Void)? = nil) {
         super.init()
         
         mainScrollView = scrollView
@@ -76,9 +77,7 @@ import UIKit
     }
     
     @objc public func addNestedScrollView(_ scrollView: UIScrollView) {
-//        if !nestedScrollViews.contains(scrollView) {
-//            nestedScrollViews.append(scrollView)
-            scrollView.delegate = proxyDelegate
+        scrollView.delegate = proxyDelegate
     }
     
     @objc func panGesture(_ recognizer: UIPanGestureRecognizer) {
@@ -105,6 +104,10 @@ import UIKit
         } else {
             return size.height
         }
+    }
+    
+    deinit {
+        print("scroll controller deinit")
     }
 
 }
@@ -202,11 +205,11 @@ extension ARGContiniousScrollController: UIScrollViewDelegate {
 }
 
 extension UIScrollView {
-    func arg_onBegin(direction: ARGContinuousScrollDirection) -> Bool {
+    func arg_onBegin(direction: UICollectionView.ScrollDirection) -> Bool {
         return direction == .horizontal ? contentOffset.x <= 0 : contentOffset.y <= 0
     }
     
-    func arg_onEnd(direction: ARGContinuousScrollDirection) -> Bool {
+    func arg_onEnd(direction: UICollectionView.ScrollDirection) -> Bool {
         return direction == .horizontal ? contentOffset.x >= contentSize.width + contentInset.right - bounds.size.width : contentOffset.y >= contentSize.height + contentInset.bottom - bounds.size.height
     }
 }

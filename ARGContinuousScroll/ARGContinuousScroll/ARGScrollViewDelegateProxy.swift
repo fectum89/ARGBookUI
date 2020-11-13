@@ -7,24 +7,44 @@
 
 import UIKit
 
+class Weak<T: AnyObject> {
+    
+    weak var value : T?
+    
+    init (_ value: T) {
+        self.value = value
+    }
+    
+}
+
+extension Array where Element: Weak<AnyObject> {
+    
+    mutating func clean () {
+        self = self.filter { nil != $0.value }
+    }
+    
+}
+
 public class ARGScrollViewDelegateProxy: NSObject, UIScrollViewDelegate {
     
-    var delegates: [NSObject & UIScrollViewDelegate] = [NSObject & UIScrollViewDelegate]()
+    var delegates: [Weak<NSObject & UIScrollViewDelegate>] = [Weak<NSObject & UIScrollViewDelegate>]()
     
     public func addDelegate(_ delegate: (NSObject & UIScrollViewDelegate)?) {
         if delegate != nil {
-            delegates.append(delegate!)
+            delegates.append(Weak(delegate!))
         }
     }
     
     public func removeDelegate(_ delegate: UIScrollViewDelegate) {
-        delegates = delegates.filter {!$0.isEqual(delegate)}
+        delegates = delegates.filter {!($0.value?.isEqual(delegate) ?? false)}
     }
     
     public override func forwardingTarget(for aSelector: Selector!) -> Any? {
         for delegate in delegates {
-            if delegate.responds(to: aSelector) {
-                return delegate
+            if let value = delegate.value {
+                if value.responds(to: aSelector) {
+                    return delegate.value
+                }
             }
         }
         
@@ -35,8 +55,10 @@ public class ARGScrollViewDelegateProxy: NSObject, UIScrollViewDelegate {
        // return true
 
         for delegate in delegates {
-            if delegate.responds(to: aSelector) {
-                return true
+            if let value = delegate.value {
+                if value.responds(to: aSelector) {
+                    return true
+                }
             }
         }
 

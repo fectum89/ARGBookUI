@@ -11,10 +11,13 @@ class ARGBookDocumentHorizontalLayout: ARGBookDocumentLayout {
     
     override var isReady: Bool {
         didSet {
-            if self.webView.scrollView.contentSize.width > self.webView.scrollView.bounds.size.width {
-                self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: (self.settingsController as! ARGFlowableLayoutSettingsProvider).absolutePageMargins.horizontal)
-            } else {
-                self.webView.scrollView.contentInset = UIEdgeInsets()
+            if isReady {
+                if self.webView.scrollView.contentSize.width > self.webView.scrollView.bounds.size.width {
+                    self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: (self.settingsController as! ARGFlowableLayoutSettingsProvider).absolutePageMargins.horizontal)
+                    webView.scrollView.isPagingEnabled = true
+                } else {
+                    self.webView.scrollView.contentInset = UIEdgeInsets()
+                }
             }
         }
     }

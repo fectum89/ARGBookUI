@@ -14,8 +14,8 @@
             <rect key="frame" x="0.0" y="0.0" width="338" height="472"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="101" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gJ7-Wp-2O7">
-                    <rect key="frame" x="159.5" y="437.5" width="19" height="14.5"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="101" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gJ7-Wp-2O7">
+                    <rect key="frame" x="309" y="10" width="19" height="14.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
@@ -24,14 +24,14 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="gJ7-Wp-2O7" secondAttribute="bottom" constant="20" id="VQt-mt-fYO"/>
-                <constraint firstItem="gJ7-Wp-2O7" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="WKx-C7-tUA"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="gJ7-Wp-2O7" secondAttribute="trailing" constant="10" id="O7D-eg-EZU"/>
+                <constraint firstItem="gJ7-Wp-2O7" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="Vjo-ls-dEa"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="pageNumberLabel" destination="gJ7-Wp-2O7" id="bMS-6V-ktl"/>
             </connections>
-            <point key="canvasLocation" x="60.869565217391312" y="-54.910714285714285"/>
+            <point key="canvasLocation" x="-235" y="-95"/>
         </view>
     </objects>
 </document>

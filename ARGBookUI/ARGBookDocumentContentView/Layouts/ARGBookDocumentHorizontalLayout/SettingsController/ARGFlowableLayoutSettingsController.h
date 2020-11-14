@@ -13,7 +13,7 @@
 
 @interface ARGFlowableLayoutSettingsController : ARGBookReadingSettingsController
 
-@property (nonatomic, assign, readonly) UIOffset         relativePageMargins;
-@property (nonatomic, assign, readonly) UIOffset         absolutePageMargins;
+@property (nonatomic, assign, readonly) UIOffset relativePageMargins;
+@property (nonatomic, assign, readonly) UIOffset absolutePageMargins;
 
 @end

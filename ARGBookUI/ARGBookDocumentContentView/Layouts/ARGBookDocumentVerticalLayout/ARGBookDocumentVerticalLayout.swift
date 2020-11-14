@@ -81,3 +81,16 @@ extension ARGBookDocumentVerticalLayout: ARGBookDocumentContentSizeContainer {
     }
     
 }
+
+extension ARGBookDocumentVerticalLayout: ARGBookDocumentPageOverlayCreator {
+    
+    static func overlayView(parentView: UIView) -> ARGDocumentPageOverlayView {
+        let nib = UINib(nibName: "ARGDocumentPageVerticalOverlayView", bundle: Bundle(for: Self.self))
+        let overlayView = nib.instantiate(withOwner: parentView, options: nil).first as! ARGDocumentPageOverlayView
+        overlayView.frame = parentView.bounds
+        overlayView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        parentView.addSubview(overlayView)
+        return overlayView
+    }
+    
+}

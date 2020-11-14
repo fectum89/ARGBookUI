@@ -16,20 +16,8 @@ class ARGDocumentOverlayView: UIView {
     var isObservingCache = false
     
     var document: ARGBookDocument?
-//        didSet {
-//            if document?.uid != oldValue?.uid {
-//                if !isObservingCache {
-//
-//                }
-//            }
-//        }
- //   }
     
-    var pageConverter: ARGBookPageConverter? {
-        didSet {
-            
-        }
-    }
+    var pageConverter: ARGBookPageConverter? 
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -55,6 +43,8 @@ class ARGDocumentOverlayView: UIView {
     func prepare(for document: ARGBookDocument, pageConverter: ARGBookPageConverter) {
         self.pageConverter = pageConverter
         self.document = document
+        
+        pageConverter.settings.configure(collectionView: collectionView)
         
         if !isObservingCache {
             pageConverter.bookCache.addObserver(self, forKeyPath: "progress", options: .initial, context: nil)
@@ -131,8 +121,8 @@ extension ARGDocumentOverlayView: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ARGBookDocumentPageCollectionViewCell.self), for: indexPath) as! ARGBookDocumentPageCollectionViewCell
         
-        if let page = pages?[indexPath.item] {
-            cell.overlayView.set(page: page, pageCount: pageConverter?.pageCount)
+        if let page = pages?[indexPath.item], let pageConverter = self.pageConverter {
+            cell.set(page: page, pageConverter: pageConverter)
         }
         
         return cell

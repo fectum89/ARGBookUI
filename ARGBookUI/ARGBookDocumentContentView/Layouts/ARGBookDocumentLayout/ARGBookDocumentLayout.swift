@@ -53,3 +53,9 @@ protocol ARGBookDocumentContentSizeContainer: ARGBookDocumentLayout {
     
 }
 
+protocol ARGBookDocumentPageOverlayCreator: ARGBookDocumentLayout {
+    
+    static func overlayView(parentView: UIView) -> ARGDocumentPageOverlayView
+    
+}
+

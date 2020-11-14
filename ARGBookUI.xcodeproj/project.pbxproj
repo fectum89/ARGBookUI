@@ -41,13 +41,14 @@
 		5DAD701725385FFD003A8BE6 /* ARGFlowableLayoutSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DD920412532339B0023E58C /* ARGFlowableLayoutSettingsController.m */; };
 		5DB598192556EE1700DF1E36 /* ARGDocumentPageOverlayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB598182556EE1700DF1E36 /* ARGDocumentPageOverlayCollectionViewCell.swift */; };
 		5DB5981D2556EE8700DF1E36 /* ARGDocumentPageOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5981C2556EE8700DF1E36 /* ARGDocumentPageOverlayView.swift */; };
-		5DB598272556F05C00DF1E36 /* ARGDocumentPageOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DB598262556F05C00DF1E36 /* ARGDocumentPageOverlayView.xib */; };
 		5DB598362557E4BF00DF1E36 /* ARGDocumentPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB598352557E4BF00DF1E36 /* ARGDocumentPage.swift */; };
 		5DBC0A932531E7F0004DE451 /* Settings.js in Resources */ = {isa = PBXBuildFile; fileRef = 5DBC0A8F2531E7F0004DE451 /* Settings.js */; };
 		5DBC0A942531E7F0004DE451 /* Selection.js in Resources */ = {isa = PBXBuildFile; fileRef = 5DBC0A902531E7F0004DE451 /* Selection.js */; };
 		5DBC0A952531E7F0004DE451 /* PrepareDocument.js in Resources */ = {isa = PBXBuildFile; fileRef = 5DBC0A912531E7F0004DE451 /* PrepareDocument.js */; };
 		5DBC0A962531E7F0004DE451 /* Navigation.js in Resources */ = {isa = PBXBuildFile; fileRef = 5DBC0A922531E7F0004DE451 /* Navigation.js */; };
 		5DBC0AAA2531F62B004DE451 /* ARGBookWebViewConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC0AA92531F62B004DE451 /* ARGBookWebViewConfigurator.swift */; };
+		5DC52AB0255F8C37001D3D36 /* ARGDocumentPageHorizontalOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DC52AAE255F8C37001D3D36 /* ARGDocumentPageHorizontalOverlayView.xib */; };
+		5DC52AB1255F8C37001D3D36 /* ARGDocumentPageVerticalOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DC52AAF255F8C37001D3D36 /* ARGDocumentPageVerticalOverlayView.xib */; };
 		5DD92031253229E60023E58C /* WKWebView+Scripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD92030253229E60023E58C /* WKWebView+Scripts.swift */; };
 		5DD9203E253233930023E58C /* ARGBookReadingSettingsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DD9203C253233930023E58C /* ARGBookReadingSettingsController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5DD920442532339B0023E58C /* ARGFlowableLayoutSettingsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DD920422532339B0023E58C /* ARGFlowableLayoutSettingsController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -108,13 +109,14 @@
 		5DA003C0255E621100DD4C85 /* ARGBookDocumentLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentLayout.swift; sourceTree = "<group>"; };
 		5DB598182556EE1700DF1E36 /* ARGDocumentPageOverlayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGDocumentPageOverlayCollectionViewCell.swift; sourceTree = "<group>"; };
 		5DB5981C2556EE8700DF1E36 /* ARGDocumentPageOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGDocumentPageOverlayView.swift; sourceTree = "<group>"; };
-		5DB598262556F05C00DF1E36 /* ARGDocumentPageOverlayView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ARGDocumentPageOverlayView.xib; sourceTree = "<group>"; };
 		5DB598352557E4BF00DF1E36 /* ARGDocumentPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGDocumentPage.swift; sourceTree = "<group>"; };
 		5DBC0A8F2531E7F0004DE451 /* Settings.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Settings.js; sourceTree = "<group>"; };
 		5DBC0A902531E7F0004DE451 /* Selection.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Selection.js; sourceTree = "<group>"; };
 		5DBC0A912531E7F0004DE451 /* PrepareDocument.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = PrepareDocument.js; sourceTree = "<group>"; };
 		5DBC0A922531E7F0004DE451 /* Navigation.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Navigation.js; sourceTree = "<group>"; };
 		5DBC0AA92531F62B004DE451 /* ARGBookWebViewConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookWebViewConfigurator.swift; sourceTree = "<group>"; };
+		5DC52AAE255F8C37001D3D36 /* ARGDocumentPageHorizontalOverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ARGDocumentPageHorizontalOverlayView.xib; sourceTree = "<group>"; };
+		5DC52AAF255F8C37001D3D36 /* ARGDocumentPageVerticalOverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ARGDocumentPageVerticalOverlayView.xib; sourceTree = "<group>"; };
 		5DD92030253229E60023E58C /* WKWebView+Scripts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKWebView+Scripts.swift"; sourceTree = "<group>"; };
 		5DD9203B253233930023E58C /* ARGBookReadingSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARGBookReadingSettingsController.m; sourceTree = "<group>"; };
 		5DD9203C253233930023E58C /* ARGBookReadingSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARGBookReadingSettingsController.h; sourceTree = "<group>"; };
@@ -309,7 +311,8 @@
 			isa = PBXGroup;
 			children = (
 				5DB5981C2556EE8700DF1E36 /* ARGDocumentPageOverlayView.swift */,
-				5DB598262556F05C00DF1E36 /* ARGDocumentPageOverlayView.xib */,
+				5DC52AAE255F8C37001D3D36 /* ARGDocumentPageHorizontalOverlayView.xib */,
+				5DC52AAF255F8C37001D3D36 /* ARGDocumentPageVerticalOverlayView.xib */,
 			);
 			path = ARGDocumentPageOverlayView;
 			sourceTree = "<group>";
@@ -537,12 +540,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DC52AB0255F8C37001D3D36 /* ARGDocumentPageHorizontalOverlayView.xib in Resources */,
 				5DBC0A942531E7F0004DE451 /* Selection.js in Resources */,
 				5DBC0A962531E7F0004DE451 /* Navigation.js in Resources */,
 				5DBC0A932531E7F0004DE451 /* Settings.js in Resources */,
-				5DB598272556F05C00DF1E36 /* ARGDocumentPageOverlayView.xib in Resources */,
 				5D9694512531A93200C3FB71 /* ARGDocumentCollectionViewCell.xib in Resources */,
 				5DBC0A952531E7F0004DE451 /* PrepareDocument.js in Resources */,
+				5DC52AB1255F8C37001D3D36 /* ARGDocumentPageVerticalOverlayView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

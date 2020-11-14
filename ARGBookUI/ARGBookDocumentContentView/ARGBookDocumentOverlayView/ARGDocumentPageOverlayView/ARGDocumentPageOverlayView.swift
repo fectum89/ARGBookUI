@@ -11,8 +11,10 @@ class ARGDocumentPageOverlayView: UIView {
 
     @IBOutlet weak var pageNumberLabel: UILabel!
     
-    func set(page: ARGDocumentPage, pageCount: Int?) {
-        pageNumberLabel.text = (page.pageNumber != nil) ? String(page.pageNumber!) : ""
+    var page: ARGDocumentPage? {
+        didSet {
+            pageNumberLabel.text = (page?.pageNumber != nil) ? String(page?.pageNumber! ?? 0) : ""
+        }
     }
-
+    
 }

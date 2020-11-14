@@ -49,8 +49,8 @@
     _absolutePageMargins = pageMargins;
     
     NSString *pageSizeScript = [NSString stringWithFormat:@"setPageSettings(%f, %f, %f, %f, %f, %f)",
-                                floor(self.webView.safeAreaLayoutGuide.layoutFrame.size.width - pageMargins.horizontal * 2),
-                                floor(self.webView.safeAreaLayoutGuide.layoutFrame.size.height - pageMargins.vertical * 2),
+                                floor(self.webView.bounds.size.width - pageMargins.horizontal * 2),
+                                floor(self.webView.bounds.size.height - pageMargins.vertical * 2),
                                 floor(pageMargins.vertical),
                                 floor(pageMargins.horizontal),
                                 floor(pageMargins.vertical),

@@ -35,6 +35,10 @@ class ARGBookDocumentHorizontalLayout: ARGBookDocumentSettingsControllerContaine
         self.settingsController = ARGFlowableLayoutSettingsController(webView: webView)
     }
     
+    deinit {
+        print("layout deinit")
+    }
+    
 }
 
 extension ARGBookDocumentHorizontalLayout: ARGBookDocumentScrollBehavior {
@@ -54,15 +58,17 @@ extension ARGBookDocumentHorizontalLayout: ARGBookDocumentScrollBehavior {
     }
     
     func scroll(to position: CGFloat, completionHandler: (() -> Void)?) {
-        let offset = position * (webView.scrollView.contentSize.width + webView.scrollView.contentInset.right - webView.scrollView.bounds.width)
+        let contentSize = webView.scrollView.contentSize.width + webView.scrollView.contentInset.right
+        let lastPageOffset = contentSize - webView.scrollView.bounds.width
+        let offset = position * contentSize
         let page = floor(offset / self.webView.scrollView.bounds.width)
-        self.webView.scrollView.contentOffset = CGPoint(x: page * self.webView.scrollView.bounds.width,
+        self.webView.scrollView.contentOffset = CGPoint(x: min(page * self.webView.scrollView.bounds.width, lastPageOffset),
                                                         y: self.webView.scrollView.contentOffset.y)
         completionHandler?()
     }
     
     func currentScrollPosition() -> CGFloat {
-        return webView.scrollView.contentOffset.x / (webView.scrollView.contentSize.width + webView.scrollView.contentInset.right - webView.scrollView.bounds.width)
+        return webView.scrollView.contentOffset.x / (webView.scrollView.contentSize.width + webView.scrollView.contentInset.right)
     }
     
 }

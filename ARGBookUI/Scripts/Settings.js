@@ -2,10 +2,8 @@ var mySheet;
 
 function onLoadSetup() {
     setCSSRule('body', 'margin', '0px');
-
-    setCSSRule('h1', 'word-wrap', 'break-word');
-    setCSSRule('h2', 'word-wrap', 'break-word');
     setCSSRule('a', 'word-wrap', 'break-word');
+    setCSSRule('span', 'word-wrap', 'break-word');
     setCSSRule('a:link', 'color', 'rgb(33, 150, 243)');
     setCSSRule('a', 'text-decoration', 'none');
     setCSSRule('p', 'line-height', 'normal');
@@ -77,6 +75,8 @@ function setPageSettings(pageWidth, pageHeight, topInset, rightInset, bottomInse
     columnWidth = pageWidth;
     columnGap = (rightInset + leftInset);
     
+    setPadding(topInset, rightInset, bottomInset, leftInset);
+    
     setMaxMediaContentSize('img', pageWidth, pageHeight);
     setMaxMediaContentSize('svg', pageWidth, pageHeight);
     setMaxMediaContentSize('iframe', pageWidth, pageHeight);
@@ -88,9 +88,6 @@ function setPageSettings(pageWidth, pageHeight, topInset, rightInset, bottomInse
     setCSSRule(css, '-webkit-column-width', columnWidth + 'px');
     setCSSRule(css, '-webkit-column-gap', columnGap + 'px');
     setCSSRule(css, '-webkit-column-fill', 'auto');
-    //setCSSRule(css, 'vertical-align', 'bottom');
-    
-    setPadding(topInset, rightInset, bottomInset, leftInset);
 }
 
 function setPadding(top, right, bottom, left) {

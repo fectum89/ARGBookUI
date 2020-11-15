@@ -71,7 +71,9 @@ class ARGBookDocumentContentView: UIView {
             
             documentLoader.loadDocument(document) { [weak self] (newDocument, error) in
                 self?.layoutManager?.documentLoaded = true
-                self?.layoutManager?.applyReadingSettings(settings, completionHandler: completionHandler)
+                self?.layoutManager?.applyReadingSettings(settings, completionHandler: {
+                    completionHandler?()
+                })
             }
         } else {
             layoutManager?.applyReadingSettings(settings, completionHandler: completionHandler)

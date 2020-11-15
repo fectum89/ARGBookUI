@@ -13,7 +13,7 @@ class ARGDocumentPageOverlayView: UIView {
     
     var page: ARGDocumentPage? {
         didSet {
-            pageNumberLabel.text = (page?.pageNumber != nil) ? String(page?.pageNumber! ?? 0) : ""
+            pageNumberLabel.text = (page?.pageNumber ?? 0 > 0) ? String(page?.pageNumber ?? 0) : ""
         }
     }
     

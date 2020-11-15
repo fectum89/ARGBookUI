@@ -7,13 +7,13 @@
 
 import UIKit
 
-protocol ARGBookPageConverter {
+@objc public protocol ARGBookPageConverter {
     
     var bookCache: ARGBookCache {get}
     
     var settings: ARGBookReadingSettings {get}
     
-    var pageCount: Int? {get}
+    var pageCount: Int {get}
     
     func page(for point: ARGBookNavigationPoint) -> ARGDocumentPage?
     
@@ -23,7 +23,7 @@ protocol ARGBookPageConverter {
     
 }
 
-class ARGBookInternalPageManager: ARGBookPageConverter {
+class ARGBookInternalPageManager: NSObject, ARGBookPageConverter {
     
     var bookCache: ARGBookCache
     
@@ -35,10 +35,10 @@ class ARGBookInternalPageManager: ARGBookPageConverter {
     
     var cachedPageCount: Int?
     
-    var pageCount: Int? {
+    var pageCount: Int {
         get {
             if cachedPageCount != nil {
-                return cachedPageCount
+                return cachedPageCount!
             }
             
             if let lastDocument = bookCache.book.documents.last {
@@ -52,7 +52,7 @@ class ARGBookInternalPageManager: ARGBookPageConverter {
                 }
             }
             
-            return nil
+            return 0
         }
     }
     
@@ -134,12 +134,12 @@ class ARGBookInternalPageManager: ARGBookPageConverter {
     }
     
     func unnumberedPages(for document: ARGBookDocument) -> [ARGDocumentPage]? {
-        if let documentSize = bookCache.contentSize(for: document,
-                                                    settings: settings,
-                                                    viewPort: viewPort) {
-            let LayoutClass: ARGBookDocumentContentSizeContainer.Type = document.layoutType(for: settings.scrollType) as! ARGBookDocumentContentSizeContainer.Type
-            let pageCount = LayoutClass.pageCount(for: documentSize,
-                                                       viewPort: viewPort)
+        let documentSize = bookCache.contentSize(for: document,
+                                                 settings: settings,
+                                                 viewPort: viewPort)
+        if documentSize != .zero {
+            let LayoutClass = document.layoutType(for: settings.scrollType) as! ARGBookDocumentContentSizeContainer.Type
+            let pageCount = LayoutClass.pageCount(for: documentSize, viewPort: viewPort)
             var pages = [ARGDocumentPage]()
             
             for pageNumber in 0..<pageCount {

@@ -2,8 +2,7 @@
 //  BookContentViewSettings.m
 //  Auri
 //
-//  Created by Fectum on 16/04/16.
-//  Copyright © 2016 Argentum. All rights reserved.
+//  Created by Sergei Polshcha on 16/04/16.
 //
 
 #import "ARGFlowableLayoutSettingsController.h"

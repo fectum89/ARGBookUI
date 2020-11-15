@@ -9,9 +9,9 @@ import Foundation
 
 @objc public class ARGDocumentPage: NSObject {
     
-    var startNavigationPoint: ARGBookNavigationPoint
+    @objc public var startNavigationPoint: ARGBookNavigationPoint
     
-    var pageNumber: Int?
+    @objc public var pageNumber: Int = 0
     
     init(startNavigationPoint: ARGBookNavigationPoint) {
         self.startNavigationPoint = startNavigationPoint

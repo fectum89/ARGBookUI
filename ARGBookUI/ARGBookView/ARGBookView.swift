@@ -15,13 +15,13 @@ import ARGContinuousScroll
     var scrollController: ARGContiniousScrollController?
     
     var cacheManager: ARGBookCacheManager!
-    var pageManager: ARGBookPageConverter!
+    @objc public var pageManager: ARGBookPageConverter!
     
     var book: ARGBook?
     
     var settings: ARGBookReadingSettings?
     
-    var currentNavigationPoint: ARGBookNavigationPoint?
+    @objc public var currentNavigationPoint: ARGBookNavigationPoint?
     
     @objc public weak var navigationDelegate: ARGBookNavigationDelegate?
     
@@ -97,16 +97,15 @@ import ARGContinuousScroll
         let previousScrollDirection = layout.scrollDirection
         
         settings.configure(collectionView: collectionView)
-        
         if self.scrollController == nil || layout.scrollDirection != previousScrollDirection {
             self.scrollController = ARGContiniousScrollController(scrollView: collectionView, delegate: self, scrollDirection: layout.scrollDirection, proxyConfigurationHandler: { [weak self] (proxy: ARGScrollViewDelegateProxy) in
                 if let view = self {
                     proxy.addDelegate(view)
                 }
             })
-            
+
         }
-        
+
         refreshView()
     }
     
@@ -137,11 +136,21 @@ extension ARGBookView {
             return
         }
         
+        navigationDelegate?.currentNavigationPointDidChange(navigationPoint)
+        
         if let documentIndex = book!.documents.firstIndex(where: { (document) -> Bool in
             return document === navigationPoint.document
         }) {
             let targetIndexPath = IndexPath(item: documentIndex, section: 0)
             collectionView.scrollToItem(at: targetIndexPath, at: .top, animated: false)
+            
+            if let visibleViews = scrollController?.sortedContainers() as? [ARGBookDocumentView] {
+                if !visibleViews.isEmpty, let visibleView = visibleViews.first {
+                    if visibleView.contentView.documentLoader.document?.uid == navigationPoint.document.uid {
+                        visibleView.scroll(to: navigationPoint)
+                    }
+                }
+            }
         }
     }
     

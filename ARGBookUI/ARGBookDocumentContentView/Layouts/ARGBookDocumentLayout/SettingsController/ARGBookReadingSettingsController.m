@@ -2,8 +2,7 @@
 //  BaseBookContentViewSettingsProvider.m
 //  Auri
 //
-//  Created by Fectum on 09/05/16.
-//  Copyright © 2016 Argentum. All rights reserved.
+//  Created by Sergei Polshcha on 09/05/16.
 //
 
 #import "ARGBookReadingSettingsController.h"

@@ -17,23 +17,24 @@ class ARGDocumentOverlayView: UIView {
     
     var document: ARGBookDocument?
     
-    var pageConverter: ARGBookPageConverter? 
+    var pageConverter: ARGBookPageConverter?
+    
+    var cacheObserver: NSObjectProtocol?
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        layout.scrollDirection = .horizontal
+        let layout = ARGBookCollectionViewLayout()
         collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: layout)
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.backgroundColor = .clear
+        collectionView.dataSource = self
+        
         self.addSubview(collectionView)
         
         let identifier = String(describing: ARGBookDocumentPageCollectionViewCell.self)
         collectionView.register(ARGBookDocumentPageCollectionViewCell.self, forCellWithReuseIdentifier: identifier)
-        collectionView.contentInsetAdjustmentBehavior = .never
-        collectionView.backgroundColor = .clear
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -47,18 +48,16 @@ class ARGDocumentOverlayView: UIView {
         pageConverter.settings.configure(collectionView: collectionView)
         
         if !isObservingCache {
-            pageConverter.bookCache.addObserver(self, forKeyPath: "progress", options: .initial, context: nil)
+            cacheObserver = NotificationCenter.default.addObserver(forName: ARGBookCache.progressDidChangeNotification, object: nil, queue: .main) { [weak self] (_) in
+                self?.preparePages()
+            }
+            
             isObservingCache = true
-        } else {
-            preparePages()
         }
+        
+        preparePages()
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "progress" {
-            preparePages()
-        }
-    }
     
     func preparePages() {
         if let document = self.document, let pageConverter = self.pageConverter {
@@ -88,18 +87,11 @@ class ARGDocumentOverlayView: UIView {
     }
 
     func refreshView () {
-        collectionView.dataSource = self
-
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.itemSize = self.bounds.size
         
-        collectionView.performBatchUpdates {
-            collectionView.collectionViewLayout.invalidateLayout()
-        } completion: { (ready) in
-            self.collectionView.reloadData()
-        }
-        
-        self.collectionView.isHidden = false
+        collectionView.reloadData()
+        collectionView.isHidden = false
     }
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -107,7 +99,11 @@ class ARGDocumentOverlayView: UIView {
     }
     
     deinit {
-        pageConverter?.bookCache.removeObserver(self, forKeyPath: "progress")
+        if cacheObserver != nil {
+            NotificationCenter.default.removeObserver(cacheObserver!)
+        }
+        
+        print("overlay deinit")
     }
     
 }
@@ -129,4 +125,5 @@ extension ARGDocumentOverlayView: UICollectionViewDataSource {
     }
     
 }
+
 

@@ -3,7 +3,6 @@
 //  ARGView
 //
 //  Created by Sergei Polshcha on 08.10.2020.
-//  Copyright © 2020 Argentum. All rights reserved.
 //
 
 import UIKit

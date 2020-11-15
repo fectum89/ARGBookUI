@@ -7,13 +7,29 @@
 
 import UIKit
 
-protocol ARGBookCache: NSObject {
+@objc public class ARGBookCache: NSObject {
     
-    var progress: CGFloat {get}
+    @objc public static var progressDidChangeNotification: NSNotification.Name {
+        NSNotification.Name(rawValue: "ARGBookCacheManagerProgressDidChangeNotification")
+    }
     
-    var book: ARGBook {get}
+    @objc public var book: ARGBook {
+        get {
+            fileManager.book
+        }
+    }
     
-    func contentSize(for document: ARGBookDocument, settings: ARGBookReadingSettings, viewPort: CGSize) -> CGSize?
+    @objc public var progress: CGFloat = 0 {
+        didSet {
+            NotificationCenter.default.post(name: Self.progressDidChangeNotification, object: self)
+        }
+    }
+    
+    func contentSize(for document: ARGBookDocument, settings: ARGBookReadingSettings, viewPort: CGSize) -> CGSize {
+        return .zero
+    }
+    
+    fileprivate var fileManager: ARGBookCacheFileManager!
     
 }
 
@@ -87,32 +103,14 @@ class ARGBookCacheFileManager {
     }
 }
 
-class ARGBookCacheManager: NSObject, ARGBookCache {
-    var book: ARGBook {
-        get {
-            fileManager.book
-        }
-    }
-    
-    @objc dynamic var progress: CGFloat = 0
+class ARGBookCacheUpdater {
     
     weak var containerView: UIView?
-    var contentSizeDictionary = [String : CGSize]()
-    var fileManager: ARGBookCacheFileManager
-    
-    //var contentView: ARGBookDocumentContentView
-    
-    init(containerView: UIView, fileManager: ARGBookCacheFileManager) {
+    weak var cacheManager: ARGBookCacheManager?
+
+    init(containerView: UIView, cacheManager: ARGBookCacheManager) {
         self.containerView = containerView
-        self.fileManager = fileManager
-    }
-    
-    func startCacheUpdating(for documents: [ARGBookDocument], with settings: ARGBookReadingSettings, viewPort: CGSize) {
-        progress = 0.0
-        updateCache(for: documents, with: settings, viewPort: viewPort) {
-            print("cache is ready")
-            self.progress = 1.0
-        }
+        self.cacheManager = cacheManager
     }
     
     func updateCache(for documents: [ARGBookDocument], with settings: ARGBookReadingSettings, viewPort: CGSize, completionHandler: (() -> Void)? = nil) {
@@ -120,8 +118,12 @@ class ARGBookCacheManager: NSObject, ARGBookCache {
             if let document = documents.first {
                 let item = ARGPresentationItem(document: document, settings: settings, viewPort: viewPort)
                 
-                readContentSize(for: item) { (contentSize) in
+                cacheManager?.readContentSize(for: item) { (contentSize) in
                     if contentSize != nil {
+                        if let cacheManager = self.cacheManager {
+                            cacheManager.progress += 1 / CGFloat(cacheManager.fileManager.book.documents.count)
+                        }
+                        
                         self.updateCache(for: documents.filter {$0.uid != document.uid},
                                          with: settings,
                                          viewPort: viewPort,
@@ -132,13 +134,17 @@ class ARGBookCacheManager: NSObject, ARGBookCache {
                         containerView.addSubview(contentView)
                         contentView.isHidden = true
                         
-                        contentView.load(document: document, layoutType: document.layoutType(for: settings.scrollType), settings: settings, cache: self) {
+                        contentView.load(document: document, layoutType: document.layoutType(for: settings.scrollType), settings: settings, cache: self.cacheManager!) { [weak self] in
                             contentView.removeFromSuperview()
                             
                             let contentSize = contentView.webView.scrollView.contentSize
-                            self.saveContentSize(contentSize, for: item)
-                            self.progress += 1 / CGFloat(self.fileManager.book.documents.count)
-                            self.updateCache(for: documents.filter {$0.uid != document.uid},
+                            self?.cacheManager?.saveContentSize(contentSize, for: item)
+                            
+                            if let cacheManager = self?.cacheManager {
+                                cacheManager.progress += 1 / CGFloat(cacheManager.fileManager.book.documents.count)
+                            }
+                            
+                            self?.updateCache(for: documents.filter {$0.uid != document.uid},
                                              with: settings,
                                              viewPort: viewPort,
                                              completionHandler: completionHandler)
@@ -147,6 +153,33 @@ class ARGBookCacheManager: NSObject, ARGBookCache {
                 }
             } else {
                 completionHandler?()
+            }
+        }
+    }
+    
+}
+
+class ARGBookCacheManager: ARGBookCache {
+    
+    weak var containerView: UIView?
+    var contentSizeDictionary = [String : CGSize]()
+    var cacheUpdater: ARGBookCacheUpdater?
+    
+    init(containerView: UIView, fileManager: ARGBookCacheFileManager) {
+        super.init()
+        self.containerView = containerView
+        self.fileManager = fileManager
+    }
+    
+    func startCacheUpdating(for documents: [ARGBookDocument], with settings: ARGBookReadingSettings, viewPort: CGSize) {
+        progress = 0.0
+        
+        if containerView != nil {
+            self.cacheUpdater = ARGBookCacheUpdater(containerView: containerView!, cacheManager: self)
+            cacheUpdater?.updateCache(for: documents, with: settings, viewPort: viewPort) { [weak self] in
+                print("cache is ready")
+                self?.progress = 1.0
+                self?.cacheUpdater = nil
             }
         }
     }
@@ -170,9 +203,13 @@ class ARGBookCacheManager: NSObject, ARGBookCache {
         fileManager.writeContentSize(contentSize, for: item, completionHandler: completionHandler)
     }
     
-    func contentSize(for document: ARGBookDocument, settings: ARGBookReadingSettings, viewPort: CGSize) -> CGSize? {
+    override func contentSize(for document: ARGBookDocument, settings: ARGBookReadingSettings, viewPort: CGSize) -> CGSize {
         let item = ARGPresentationItem(document: document, settings: settings, viewPort: viewPort)
-        return contentSizeDictionary[item.key()]
+        if let size = contentSizeDictionary[item.key()] {
+            return size
+        } else {
+            return .zero
+        }
     }
 
 }

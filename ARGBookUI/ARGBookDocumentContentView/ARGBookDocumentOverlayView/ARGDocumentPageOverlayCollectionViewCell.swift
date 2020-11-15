@@ -21,9 +21,13 @@ class ARGBookDocumentPageCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    override init(frame: CGRect) {
+//        super.init()
+//    }
+//    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     func set(page: ARGDocumentPage, pageConverter: ARGBookPageConverter) {
         let overlayCreator = page.startNavigationPoint.document.layoutType(for: pageConverter.settings.scrollType) as! ARGBookDocumentPageOverlayCreator.Type

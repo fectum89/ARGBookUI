@@ -39,7 +39,9 @@ class ARGBookDocumentSettingsCommonLogic {
                     }
                 }
                 
-                if let size = self.cache.contentSize(for: self.document, settings: settings!, viewPort: self.layout.webView.bounds.size) {
+                let size = self.cache.contentSize(for: self.document, settings: settings!, viewPort: self.layout.webView.bounds.size)
+                
+                if size != .zero {
                     waitForDom(size)
                 } else {
                     self.layout.measureContentSize { (size) in
@@ -65,8 +67,10 @@ class ARGBookDocumentSettingsCommonLogic {
         }
         
         layout.webView.evaluateJavaScript("prepareDocument()") { (result, error) in
-            self.documentPrepared = true
-            completionHandler?()
+            self.layout.webView.evaluateJavaScript("onLoadSetup()") { (result, error) in
+                self.documentPrepared = true
+                completionHandler?()
+            }
         }
     }
     

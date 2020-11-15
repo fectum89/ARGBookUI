@@ -51,15 +51,19 @@ extension ARGBookDocumentVerticalLayout: ARGBookDocumentScrollBehavior {
     }
     
     func scroll(to position: CGFloat, completionHandler: (() -> Void)?) {
-        let offset = position * (webView.scrollView.contentSize.height + webView.scrollView.contentInset.bottom - webView.scrollView.bounds.height)
-
+        let contentSize = webView.scrollView.contentSize.height + webView.scrollView.contentInset.bottom
+        let lastPageOffset = contentSize - webView.scrollView.bounds.height
+        let offset = position * contentSize
+        let page = floor(offset / self.webView.scrollView.bounds.height)
+        
         self.webView.scrollView.contentOffset = CGPoint(x: self.webView.scrollView.contentOffset.x,
-                                                        y: offset)
+                                                        y: min(page * self.webView.scrollView.bounds.height, lastPageOffset))
+        
         completionHandler?()
     }
     
     func currentScrollPosition() -> CGFloat {
-        return webView.scrollView.contentOffset.y / (webView.scrollView.contentSize.height + webView.scrollView.contentInset.bottom - webView.scrollView.bounds.height)
+        return webView.scrollView.contentOffset.y / (webView.scrollView.contentSize.height + webView.scrollView.contentInset.bottom)
     }
     
 }

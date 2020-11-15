@@ -22,6 +22,13 @@ class ARGBookDocumentStateManager: NSObject {
     func waitForDOMReady(completionHandler: ((CGSize) -> Void)? = nil) {
         self.completionHandler = completionHandler
         self.webView.scrollView.addObserver(self, forKeyPath: "contentSize", options: .initial, context: nil)
+        
+        self.perform(#selector(stopWaiting), with: webView.scrollView.contentSize, afterDelay: 2.0)
+    }
+    
+    @objc func stopWaiting(with size: CGSize) {
+        self.completionHandler?(size)
+        observingStopped = true
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -34,17 +41,13 @@ class ARGBookDocumentStateManager: NSObject {
         //print("size of webView \(String(describing: webView.url?.lastPathComponent)) changed: " + NSCoder.string(for: size))
         
         if measuredSize == size {
-            self.completionHandler?(size)
-            observingStopped = true
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
+            stopWaiting(with: size)
         }
     }
     
-    func stopObserving() {
-        webView.scrollView.removeObserver(self, forKeyPath: "contentSize")
-    }
-    
     deinit {
-        stopObserving()
+        webView.scrollView.removeObserver(self, forKeyPath: "contentSize")
     }
     
 }

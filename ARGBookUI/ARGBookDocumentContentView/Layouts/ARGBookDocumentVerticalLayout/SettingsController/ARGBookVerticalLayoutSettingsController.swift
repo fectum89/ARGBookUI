@@ -30,7 +30,7 @@ class ARGBookVerticalLayoutSettingsController: ARGBookReadingSettingsController 
     func setRelativeHorizontalMargins(_ margins: Int64, completion: (() -> Void)?) {
         relativeHorizontalMargins = margins
         
-        let absoluteMargins = Int64(floor(self.webView.bounds.size.width / 100 * CGFloat(margins)))
+        let absoluteMargins = Int64(floor(self.pageSize.width / 100 * CGFloat(margins)))
         
         setAbsoluteHorizontalMargins(absoluteMargins, completion: completion)
     }
@@ -38,7 +38,7 @@ class ARGBookVerticalLayoutSettingsController: ARGBookReadingSettingsController 
     func setAbsoluteHorizontalMargins(_ margins: Int64, completion: (() -> Void)?) {
         absoluteHorizontalMargins = margins
         
-        let marginsScript = "setPadding(0, \(margins), 0, \(margins))"
+        let marginsScript = "setPaddings(\(self.pageSize.width), \(self.pageSize.height), 0, \(margins), 0, \(margins))"
         
         guard self.marginsScript != nil || self.marginsScript != marginsScript else {
             completion?()

@@ -49,7 +49,17 @@ protocol ARGBookDocumentContentSizeContainer: ARGBookDocumentLayout {
     
     func measureContentSize(completionHandler: ((CGSize?) -> Void)?)
     
-    static func pageCount(for contentSize: CGSize, viewPort: CGSize) -> Int
+    static func pageSize(for viewPort: CGSize, sizeClass: UIUserInterfaceSizeClass) -> CGSize
+    
+    static func pageCount(for contentSize: CGSize, pageSize: CGSize) -> Int
+    
+}
+
+extension ARGBookDocumentContentSizeContainer {
+    
+    static func pageSize(for viewPort: CGSize, sizeClass: UIUserInterfaceSizeClass) -> CGSize {
+        return viewPort
+    }
     
 }
 

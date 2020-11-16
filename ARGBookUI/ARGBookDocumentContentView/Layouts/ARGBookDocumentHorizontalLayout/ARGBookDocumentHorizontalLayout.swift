@@ -19,11 +19,11 @@ class ARGBookDocumentHorizontalLayout: ARGBookDocumentSettingsControllerContaine
                 webView.scrollView.isPagingEnabled = true
                 webView.scrollView.bounces = false
                 
-                if self.webView.scrollView.contentSize.width > self.webView.scrollView.bounds.size.width {
+                if webView.scrollView.contentSize.width > webView.scrollView.bounds.size.width {
                     self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: (self.settingsController as! ARGFlowableLayoutSettingsController).absolutePageMargins.horizontal)
                     webView.scrollView.isPagingEnabled = true
                 } else {
-                    self.webView.scrollView.contentInset = UIEdgeInsets()
+                    webView.scrollView.contentInset = UIEdgeInsets()
                 }
             }
         }
@@ -31,8 +31,8 @@ class ARGBookDocumentHorizontalLayout: ARGBookDocumentSettingsControllerContaine
     
     required init(webView: WKWebView) {
         self.webView = webView
-        isReady = false
-        self.settingsController = ARGFlowableLayoutSettingsController(webView: webView)
+        self.isReady = false
+        self.settingsController = ARGFlowableLayoutSettingsController(webView: webView, pageSize: Self.pageSize(for: webView.bounds.size, sizeClass: webView.traitCollection.horizontalSizeClass))
     }
     
     deinit {
@@ -85,8 +85,20 @@ extension ARGBookDocumentHorizontalLayout: ARGBookDocumentContentSizeContainer {
         }
     }
     
-    class func pageCount(for contentSize: CGSize, viewPort: CGSize) -> Int {
-        return Int(ceil(contentSize.width / viewPort.width))
+    static func pageSize(for viewPort: CGSize, sizeClass: UIUserInterfaceSizeClass) -> CGSize {
+        var pageWidth: CGFloat
+        
+        if (sizeClass == .regular && viewPort.width > viewPort.height) {
+            pageWidth = viewPort.width / 2
+        } else {
+            pageWidth = viewPort.width
+        }
+        
+        return CGSize(width: pageWidth, height: viewPort.height)
+    }
+    
+    class func pageCount(for contentSize: CGSize, pageSize: CGSize) -> Int {
+        return Int(ceil(contentSize.width / pageSize.width))
     }
     
 }

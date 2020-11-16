@@ -19,6 +19,8 @@ class ARGDocumentOverlayView: UIView {
     
     var pageConverter: ARGBookPageConverter?
     
+    var layoutType: ARGBookDocumentContentSizeContainer.Type?
+    
     var cacheObserver: NSObjectProtocol?
     
     public override init(frame: CGRect) {
@@ -41,9 +43,10 @@ class ARGDocumentOverlayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func prepare(for document: ARGBookDocument, pageConverter: ARGBookPageConverter) {
+    func prepare(for document: ARGBookDocument, pageConverter: ARGBookPageConverter, layoutType: ARGBookDocumentContentSizeContainer.Type) {
         self.pageConverter = pageConverter
         self.document = document
+        self.layoutType = layoutType
         
         pageConverter.settings.configure(collectionView: collectionView)
         
@@ -85,13 +88,15 @@ class ARGDocumentOverlayView: UIView {
             }
         }
     }
-
+    
     func refreshView () {
-        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.itemSize = self.bounds.size
-        
-        collectionView.reloadData()
-        collectionView.isHidden = false
+        if let documentLayout = layoutType {
+            let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+            layout.itemSize = documentLayout.pageSize(for: collectionView.bounds.size, sizeClass: self.traitCollection.horizontalSizeClass)
+            
+            collectionView.reloadData()
+            collectionView.isHidden = false
+        }
     }
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

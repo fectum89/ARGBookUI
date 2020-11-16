@@ -31,6 +31,8 @@ class ARGBookInternalPageManager: NSObject, ARGBookPageConverter {
     
     var viewPort: CGSize
     
+    var sizeClass: UIUserInterfaceSizeClass
+    
     var pagesCache = [String: [ARGDocumentPage]]()
     
     var cachedPageCount: Int?
@@ -56,10 +58,11 @@ class ARGBookInternalPageManager: NSObject, ARGBookPageConverter {
         }
     }
     
-    init(cache: ARGBookCache, settings: ARGBookReadingSettings, viewPort: CGSize) {
+    init(cache: ARGBookCache, settings: ARGBookReadingSettings, viewPort: CGSize, sizeClass: UIUserInterfaceSizeClass) {
         self.bookCache = cache
         self.settings = settings
         self.viewPort = viewPort
+        self.sizeClass = sizeClass
     }
     
     func fillPagesCache(till targetDocument: ARGBookDocument) -> [ARGDocumentPage]? {
@@ -139,7 +142,8 @@ class ARGBookInternalPageManager: NSObject, ARGBookPageConverter {
                                                  viewPort: viewPort)
         if documentSize != .zero {
             let LayoutClass = document.layoutType(for: settings.scrollType) as! ARGBookDocumentContentSizeContainer.Type
-            let pageCount = LayoutClass.pageCount(for: documentSize, viewPort: viewPort)
+            let pageSize = LayoutClass.pageSize(for: viewPort, sizeClass: sizeClass)
+            let pageCount = LayoutClass.pageCount(for: documentSize, pageSize: pageSize)
             var pages = [ARGDocumentPage]()
             
             for pageNumber in 0..<pageCount {

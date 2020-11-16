@@ -30,7 +30,7 @@ class ARGBookDocumentVerticalLayout: ARGBookDocumentSettingsControllerContainer 
     required init(webView: WKWebView) {
         self.webView = webView
         isReady = false
-        self.settingsController = ARGBookVerticalLayoutSettingsController(webView: webView)
+        self.settingsController = ARGBookVerticalLayoutSettingsController(webView: webView, pageSize: Self.pageSize(for: webView.bounds.size, sizeClass: webView.traitCollection.horizontalSizeClass))
     }
 
 }
@@ -80,8 +80,8 @@ extension ARGBookDocumentVerticalLayout: ARGBookDocumentContentSizeContainer {
         }
     }
     
-    static func pageCount(for contentSize: CGSize, viewPort: CGSize) -> Int {
-        return Int(ceil(contentSize.height / viewPort.height))
+    static func pageCount(for contentSize: CGSize, pageSize: CGSize) -> Int {
+        return Int(ceil(contentSize.height / pageSize.height))
     }
     
 }

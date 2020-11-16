@@ -26,7 +26,9 @@
 
 @property (nonatomic, strong, readonly) UIColor *textColor;
 
-- (instancetype)initWithWebView:(WKWebView *)webView;
+@property (nonatomic, assign, readonly) CGSize pageSize;
+
+- (instancetype)initWithWebView:(WKWebView *)webView pageSize:(CGSize)pageSize;
 
 - (void)setSettings:(id<ARGBookReadingSettings>)settings completion:(dispatch_block_t)completion;
 

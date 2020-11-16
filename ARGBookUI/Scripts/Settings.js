@@ -75,13 +75,7 @@ function setPageSettings(pageWidth, pageHeight, topInset, rightInset, bottomInse
     columnWidth = pageWidth;
     columnGap = (rightInset + leftInset);
     
-    setPadding(topInset, rightInset, bottomInset, leftInset);
-    
-    setMaxMediaContentSize('img', pageWidth, pageHeight);
-    setMaxMediaContentSize('svg', pageWidth, pageHeight);
-    setMaxMediaContentSize('iframe', pageWidth, pageHeight);
-    setMaxMediaContentSize('frame', pageWidth, pageHeight);
-    setMaxMediaContentSize('video', pageWidth, pageHeight);
+    setPaddings(pageWidth, pageHeight, topInset, rightInset, bottomInset, leftInset);
     
     var css = getCSSRule('html');
     setCSSRule(css, 'height', pageHeight + 'px');
@@ -90,9 +84,15 @@ function setPageSettings(pageWidth, pageHeight, topInset, rightInset, bottomInse
     setCSSRule(css, '-webkit-column-fill', 'auto');
 }
 
-function setPadding(top, right, bottom, left) {
+function setPaddings(pageWidth, pageHeight, top, right, bottom, left) {
     var padding = top + 'px ' + right + 'px ' + bottom + 'px ' + left + 'px';
     setCSSRule('html', 'padding', padding);
+    
+    setMaxMediaContentSize('img', pageWidth, pageHeight);
+    setMaxMediaContentSize('svg', pageWidth, pageHeight);
+    setMaxMediaContentSize('iframe', pageWidth, pageHeight);
+    setMaxMediaContentSize('frame', pageWidth, pageHeight);
+    setMaxMediaContentSize('video', pageWidth, pageHeight);
 }
 
 function setMaxMediaContentSize(media, pageWidth, pageHeight) {

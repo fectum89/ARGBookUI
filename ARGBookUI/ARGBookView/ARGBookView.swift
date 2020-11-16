@@ -61,7 +61,8 @@ import ARGContinuousScroll
             collectionView.removeFromSuperview()
         }
         
-        collectionView = ARGBookCollectionView(frame: self.bounds, collectionViewLayout: ARGBookCollectionViewLayout())
+        let layout = ARGBookCollectionViewLayout()
+        collectionView = ARGBookCollectionView(frame: self.bounds, collectionViewLayout: layout)
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -97,13 +98,13 @@ import ARGContinuousScroll
         let previousScrollDirection = layout.scrollDirection
         
         settings.configure(collectionView: collectionView)
+        
         if self.scrollController == nil || layout.scrollDirection != previousScrollDirection {
             self.scrollController = ARGContiniousScrollController(scrollView: collectionView, delegate: self, scrollDirection: layout.scrollDirection, proxyConfigurationHandler: { [weak self] (proxy: ARGScrollViewDelegateProxy) in
                 if let view = self {
                     proxy.addDelegate(view)
                 }
             })
-
         }
 
         refreshView()
@@ -114,7 +115,7 @@ import ARGContinuousScroll
             return
         }
         
-        pageManager = ARGBookInternalPageManager(cache: cacheManager, settings: settings!, viewPort: self.bounds.size)
+        pageManager = ARGBookInternalPageManager(cache: cacheManager, settings: settings!, viewPort: self.bounds.size, sizeClass: self.traitCollection.horizontalSizeClass)
         
         self.cacheManager.startCacheUpdating(for: self.book!.documents, with: self.settings!, viewPort: self.bounds.size)
         
@@ -188,7 +189,7 @@ extension ARGBookView: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let cell = cell as? ARGDocumentCollectionViewCell, let document = book?.documents[indexPath.item], let settings = self.settings {
             
-            cell.documentView.load(document: document, settings: settings, pageConverter: pageManager)
+            cell.documentView.load(targetSize: collectionView.bounds.size, document: document, settings: settings, pageConverter: pageManager)
             
             if let navigationPoint = self.currentNavigationPoint, navigationPoint.document.filePath == book?.documents[indexPath.item].filePath {
                 cell.documentView.scroll(to: navigationPoint)

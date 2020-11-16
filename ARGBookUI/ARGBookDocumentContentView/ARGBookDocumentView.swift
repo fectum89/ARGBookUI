@@ -8,10 +8,20 @@
 import UIKit
 import ARGContinuousScroll
 
+struct ARGBookDocumentPendingItem {
+    var targetSize: CGSize
+    var document: ARGBookDocument
+    var settings: ARGBookReadingSettings
+    var pageConverter: ARGBookPageConverter
+    var completionHandler: (() -> Void)?
+}
+
 class ARGBookDocumentView: UIView {
     var cacheView: ARGBookDocumentCacheView
     var contentView: ARGBookDocumentContentView
     var overlayView: ARGDocumentOverlayView
+    
+    var pendingItem: ARGBookDocumentPendingItem?
     
     override init(frame: CGRect) {
         cacheView = ARGBookDocumentCacheView()
@@ -40,21 +50,47 @@ class ARGBookDocumentView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public override var frame: CGRect {
+        didSet {
+            if let pendingItem = self.pendingItem {
+                if frame.size == pendingItem.targetSize {
+                    load(targetSize: frame.size, document: pendingItem.document, settings: pendingItem.settings, pageConverter: pendingItem.pageConverter, completionHandler: pendingItem.completionHandler)
+                }
+            }
+        }
+    }
+    
+    public override var bounds: CGRect {
+        didSet {
+            if let pendingItem = self.pendingItem {
+                if bounds.size == pendingItem.targetSize {
+                    load(targetSize: bounds.size, document: pendingItem.document, settings: pendingItem.settings, pageConverter: pendingItem.pageConverter, completionHandler: pendingItem.completionHandler)
+                }
+            }
+        }
+    }
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentOffset" {
             overlayView.collectionView.contentOffset = contentView.webView.scrollView.contentOffset
         }
     }
     
-    func load(document: ARGBookDocument, settings: ARGBookReadingSettings, pageConverter: ARGBookPageConverter, completionHandler: (() -> Void)? = nil) {
-        contentView.isHidden = true
-        let layoutType: (ARGBookDocumentLayout).Type = document.layoutType(for: settings.scrollType)
-        
-        overlayView.prepare(for: document, pageConverter: pageConverter)
-        
-        contentView.load(document: document, layoutType: layoutType, settings: settings, cache: pageConverter.bookCache) { [weak self] in
-            self?.contentView.isHidden = false
-            completionHandler?()
+    func load(targetSize: CGSize, document: ARGBookDocument, settings: ARGBookReadingSettings, pageConverter: ARGBookPageConverter, completionHandler: (() -> Void)? = nil) {
+        if self.bounds.size == targetSize {
+            contentView.isHidden = true
+            let layoutType: (ARGBookDocumentLayout).Type = document.layoutType(for: settings.scrollType)
+            
+            self.overlayView.prepare(for: document, pageConverter: pageConverter, layoutType: layoutType as! ARGBookDocumentContentSizeContainer.Type)
+            
+            contentView.load(document: document, layoutType: layoutType, settings: settings, cache: pageConverter.bookCache) { [weak self] in
+                self?.contentView.isHidden = false
+                completionHandler?()
+            }
+            
+            pendingItem = nil
+        } else {
+            pendingItem = ARGBookDocumentPendingItem(targetSize: targetSize, document: document, settings: settings, pageConverter: pageConverter, completionHandler: completionHandler)
         }
     }
     
@@ -62,10 +98,10 @@ class ARGBookDocumentView: UIView {
         contentView.scroll(to: navigationPoint)
     }
     
-    override var description: String {
-        let url = URL(fileURLWithPath: contentView.documentLoader.document?.filePath ?? "")
-        return url.lastPathComponent
-    }
+//    override var description: String {
+//        let url = URL(fileURLWithPath: contentView.documentLoader.document?.filePath ?? "")
+//        return url.lastPathComponent
+//    }
     
     deinit {
         contentView.webView.scrollView.removeObserver(self, forKeyPath: "contentOffset")

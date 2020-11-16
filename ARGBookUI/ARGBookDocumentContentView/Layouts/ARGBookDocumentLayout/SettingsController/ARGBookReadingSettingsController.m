@@ -10,12 +10,14 @@
 
 @implementation ARGBookReadingSettingsController
 
-- (instancetype)initWithWebView:(WKWebView *)webView {
+- (instancetype)initWithWebView:(WKWebView *)webView pageSize:(CGSize)pageSize {
     self = [super init];
     if (self) {
         _webView = webView;
         _alignment = -1;
+        _pageSize = pageSize;
     }
+    
     return self;
 }
 

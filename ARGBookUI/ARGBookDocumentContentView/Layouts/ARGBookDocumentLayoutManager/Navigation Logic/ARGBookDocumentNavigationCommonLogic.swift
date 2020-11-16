@@ -35,7 +35,7 @@ class ARGBookDocumentNavigationCommonLogic {
         if let navigationPoint = self.pendingNavigationPoint {
             self.scroll(to: navigationPoint)
         } else {
-            self.scroll(to: ARGBookNavigationPointInternal(document: document, position: 0))
+            //self.scroll(to: ARGBookNavigationPointInternal(document: document, position: 0))
         }
     }
     

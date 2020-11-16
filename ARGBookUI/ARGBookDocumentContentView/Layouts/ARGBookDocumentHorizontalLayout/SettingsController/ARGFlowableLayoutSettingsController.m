@@ -16,7 +16,6 @@
 
 @implementation ARGFlowableLayoutSettingsController
 
-
 - (void)setSettings:(id<ARGBookReadingSettings>)settings completion:(dispatch_block_t)completion {
     __weak typeof (self) wself = self;
     
@@ -39,7 +38,7 @@
 - (void)setRelativePageMargins:(UIOffset)pageMargins completion:(dispatch_block_t)completion {
     _relativePageMargins = pageMargins;
     
-    UIOffset absolutePageMargins = UIOffsetMake(floor(self.webView.bounds.size.width / 100 * pageMargins.horizontal), floor(self.webView.bounds.size.height / 100 * pageMargins.vertical));
+    UIOffset absolutePageMargins = UIOffsetMake(floor(self.pageSize.width / 100 * pageMargins.horizontal), floor(self.pageSize.height / 100 * pageMargins.vertical));
     
     [self setAbsolutePageMargins:absolutePageMargins completion:completion];
 }
@@ -48,8 +47,8 @@
     _absolutePageMargins = pageMargins;
     
     NSString *pageSizeScript = [NSString stringWithFormat:@"setPageSettings(%f, %f, %f, %f, %f, %f)",
-                                floor(self.webView.bounds.size.width - pageMargins.horizontal * 2),
-                                floor(self.webView.bounds.size.height - pageMargins.vertical * 2),
+                                floor(self.pageSize.width - pageMargins.horizontal * 2),
+                                floor(self.pageSize.height - pageMargins.vertical * 2),
                                 floor(pageMargins.vertical),
                                 floor(pageMargins.horizontal),
                                 floor(pageMargins.vertical),

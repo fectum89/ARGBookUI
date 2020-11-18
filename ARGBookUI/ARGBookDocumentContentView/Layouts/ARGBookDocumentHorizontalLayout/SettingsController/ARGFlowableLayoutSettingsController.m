@@ -16,10 +16,10 @@
 
 @implementation ARGFlowableLayoutSettingsController
 
-- (void)setSettings:(id<ARGBookReadingSettings>)settings completion:(dispatch_block_t)completion {
+- (void)setSettings:(id<ARGBookReadingSettings>)settings pageSize:(CGSize)pageSize completion:(dispatch_block_t)completion {
     __weak typeof (self) wself = self;
     
-    [super setSettings:settings completion:^{
+    [super setSettings:settings pageSize:pageSize completion:^{
         dispatch_group_t settingsGroup = dispatch_group_create();
         
         dispatch_group_notify(settingsGroup, dispatch_get_main_queue(), ^{

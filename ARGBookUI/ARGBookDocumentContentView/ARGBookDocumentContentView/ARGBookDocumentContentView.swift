@@ -63,7 +63,7 @@ class ARGBookDocumentContentView: UIView {
             //print("\(images)")
        // }
     
-    func load(document: ARGBookDocument, layoutType: (ARGBookDocumentLayout).Type, settings: ARGBookReadingSettings, cache: ARGBookCache, completionHandler: (() -> Void)? = nil) {
+    func load(document: ARGBookDocument, layoutType: ARGBookDocumentLayout.Type, settings: ARGBookReadingSettings, cache: ARGBookCache, completionHandler: (() -> Void)? = nil) {
 
         if layoutManager == nil || !(type(of:layoutManager!.layout) == layoutType) || layoutManager!.document.uid != document.uid {
             let layout = layoutType.init(webView: webView)

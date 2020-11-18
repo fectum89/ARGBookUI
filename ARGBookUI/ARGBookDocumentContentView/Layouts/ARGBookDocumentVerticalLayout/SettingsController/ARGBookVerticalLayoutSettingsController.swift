@@ -12,8 +12,8 @@ class ARGBookVerticalLayoutSettingsController: ARGBookReadingSettingsController 
     private(set) var absoluteHorizontalMargins: Int64?
     private(set) var marginsScript: String?
     
-    override func setSettings(_ settings: ARGBookReadingSettings!, completion: (() -> Void)!) {
-        super.setSettings(settings) {
+    override func setSettings(_ settings: ARGBookReadingSettings!, pageSize:CGSize, completion: (() -> Void)!) {
+        super.setSettings(settings, pageSize: pageSize) {
             let group = DispatchGroup()
             
             group.notify(queue: DispatchQueue.main) {

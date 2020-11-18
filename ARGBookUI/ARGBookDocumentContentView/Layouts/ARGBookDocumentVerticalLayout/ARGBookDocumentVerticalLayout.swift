@@ -30,7 +30,7 @@ class ARGBookDocumentVerticalLayout: ARGBookDocumentSettingsControllerContainer 
     required init(webView: WKWebView) {
         self.webView = webView
         isReady = false
-        self.settingsController = ARGBookVerticalLayoutSettingsController(webView: webView, pageSize: Self.pageSize(for: webView.bounds.size, sizeClass: webView.traitCollection.horizontalSizeClass))
+        self.settingsController = ARGBookVerticalLayoutSettingsController(webView: webView)
     }
 
 }

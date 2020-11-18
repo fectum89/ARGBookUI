@@ -18,7 +18,7 @@ class ARGBookDocumentFixedLayout: ARGBookDocumentLayout {
     required init(webView: WKWebView) {
         self.webView = webView
         isReady = false
-        self.settingsController = ARGFlowableLayoutSettingsController(webView: webView, pageSize: Self.pageSize(for: webView.bounds.size, sizeClass: webView.traitCollection.horizontalSizeClass))
+        self.settingsController = ARGFlowableLayoutSettingsController(webView: webView)
     }
     
 }

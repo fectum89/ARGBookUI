@@ -29,7 +29,9 @@ import UIKit
         return .zero
     }
     
-    fileprivate var fileManager: ARGBookCacheFileManager!
+    var fileManager: ARGBookCacheFileManager!
+    
+    weak var containerView: UIView?
     
 }
 
@@ -161,7 +163,6 @@ class ARGBookCacheUpdater {
 
 class ARGBookCacheManager: ARGBookCache {
     
-    weak var containerView: UIView?
     var contentSizeDictionary = [String : CGSize]()
     var cacheUpdater: ARGBookCacheUpdater?
     

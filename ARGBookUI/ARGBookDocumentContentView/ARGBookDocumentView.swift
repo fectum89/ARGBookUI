@@ -13,6 +13,7 @@ struct ARGBookDocumentPendingItem {
     var document: ARGBookDocument
     var settings: ARGBookReadingSettings
     var pageConverter: ARGBookPageConverter
+    var navigationPoint: ARGBookNavigationPoint?
     var completionHandler: (() -> Void)?
 }
 
@@ -88,6 +89,10 @@ class ARGBookDocumentView: UIView {
                 completionHandler?()
             }
             
+            if let navigationPoint = pendingItem?.navigationPoint {
+                contentView.scroll(to: navigationPoint)
+            }
+            
             pendingItem = nil
         } else {
             pendingItem = ARGBookDocumentPendingItem(targetSize: targetSize, document: document, settings: settings, pageConverter: pageConverter, completionHandler: completionHandler)
@@ -95,7 +100,11 @@ class ARGBookDocumentView: UIView {
     }
     
     func scroll(to navigationPoint: ARGBookNavigationPoint) {
-        contentView.scroll(to: navigationPoint)
+        if pendingItem != nil {
+            pendingItem?.navigationPoint = navigationPoint
+        } else {
+            contentView.scroll(to: navigationPoint)
+        }
     }
     
 //    override var description: String {

@@ -48,6 +48,8 @@ import UIKit.UIColor
     
     var scrollType: ARGBookScrollType {get}
     
+    var twoColumnsLayout: Bool {get}
+    
 }
 
 extension ARGBookReadingSettings {
@@ -61,7 +63,8 @@ extension ARGBookReadingSettings {
             + String(lineSpacing) + "."
             + String(paragraphIndent) + "."
             + String(paragraphSpacing) + "."
-            + String(scrollType.rawValue)
+            + String(scrollType.rawValue) + "."
+            + String(twoColumnsLayout)
     }
     
     func stringRepresentationForSnapshotsCache() -> String {

@@ -32,7 +32,7 @@ class ARGBookDocumentHorizontalLayout: ARGBookDocumentSettingsControllerContaine
     required init(webView: WKWebView) {
         self.webView = webView
         self.isReady = false
-        self.settingsController = ARGFlowableLayoutSettingsController(webView: webView, pageSize: Self.pageSize(for: webView.bounds.size, sizeClass: webView.traitCollection.horizontalSizeClass))
+        self.settingsController = ARGFlowableLayoutSettingsController(webView: webView)
     }
     
     deinit {
@@ -85,10 +85,10 @@ extension ARGBookDocumentHorizontalLayout: ARGBookDocumentContentSizeContainer {
         }
     }
     
-    static func pageSize(for viewPort: CGSize, sizeClass: UIUserInterfaceSizeClass) -> CGSize {
+    static func pageSize(for viewPort: CGSize, settings: ARGBookReadingSettings,sizeClass: UIUserInterfaceSizeClass) -> CGSize {
         var pageWidth: CGFloat
         
-        if (sizeClass == .regular && viewPort.width > viewPort.height) {
+        if (sizeClass == .regular && viewPort.width > viewPort.height && settings.twoColumnsLayout) {
             pageWidth = viewPort.width / 2
         } else {
             pageWidth = viewPort.width

@@ -34,6 +34,8 @@ class TestReadingSettingsMock: ARGBookReadingSettings {
     var backGroundColor = UIColor.red
     
     var scrollType = ARGBookScrollType.horizontal
+    
+    var twoColumnsLayout = false
 }
 
 class TestBookMock: ARGBook {

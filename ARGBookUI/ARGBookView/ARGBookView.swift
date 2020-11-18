@@ -115,14 +115,17 @@ import ARGContinuousScroll
             return
         }
         
-        pageManager = ARGBookInternalPageManager(cache: cacheManager, settings: settings!, viewPort: self.bounds.size, sizeClass: self.traitCollection.horizontalSizeClass)
+        pageManager = ARGBookInternalPageManager(cache: cacheManager,
+                                                 settings: settings!)
         
-        self.cacheManager.startCacheUpdating(for: self.book!.documents, with: self.settings!, viewPort: self.bounds.size)
+        cacheManager.startCacheUpdating(for: self.book!.documents,
+                                        with: settings!,
+                                        viewPort: bounds.size)
         
-        self.collectionView.reloadData()
+        collectionView.reloadData()
         
         if let navigationPoint = self.currentNavigationPoint {
-            self.scroll(to: navigationPoint)
+            scroll(to: navigationPoint)
         }
     }
     

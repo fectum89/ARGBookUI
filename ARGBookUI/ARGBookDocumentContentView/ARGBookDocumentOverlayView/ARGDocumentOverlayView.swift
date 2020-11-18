@@ -90,9 +90,11 @@ class ARGDocumentOverlayView: UIView {
     }
     
     func refreshView () {
-        if let documentLayout = layoutType {
+        if let documentLayout = layoutType, let pageConverter = self.pageConverter{
             let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-            layout.itemSize = documentLayout.pageSize(for: collectionView.bounds.size, sizeClass: self.traitCollection.horizontalSizeClass)
+            layout.itemSize = documentLayout.pageSize(for: collectionView.bounds.size,
+                                                      settings: pageConverter.settings,
+                                                      sizeClass: self.traitCollection.horizontalSizeClass)
             
             collectionView.reloadData()
             collectionView.isHidden = false

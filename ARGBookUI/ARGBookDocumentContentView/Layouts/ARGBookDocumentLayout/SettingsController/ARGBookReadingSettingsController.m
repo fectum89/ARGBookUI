@@ -10,19 +10,19 @@
 
 @implementation ARGBookReadingSettingsController
 
-- (instancetype)initWithWebView:(WKWebView *)webView pageSize:(CGSize)pageSize {
+- (instancetype)initWithWebView:(WKWebView *)webView {
     self = [super init];
     if (self) {
         _webView = webView;
         _alignment = -1;
-        _pageSize = pageSize;
     }
     
     return self;
 }
 
-- (void)setSettings:(id<ARGBookReadingSettings>)settings completion:(dispatch_block_t)completion {
+- (void)setSettings:(id<ARGBookReadingSettings>)settings pageSize:(CGSize)pageSize completion:(dispatch_block_t)completion {
     _settings = settings;
+    _pageSize = pageSize;
     
     __weak typeof (self) wself = self;
     

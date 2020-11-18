@@ -23,12 +23,16 @@ protocol ARGBookDocumentSettingsControllerContainer: ARGBookDocumentLayout {
     
 }
 
-extension ARGBookDocumentSettingsControllerContainer {
+extension ARGBookDocumentSettingsControllerContainer where Self: ARGBookDocumentContentSizeContainer {
     
-    mutating func apply(settings: ARGBookReadingSettings?, completionHandler: (() -> Void)? = nil) {
+    mutating func apply(settings: ARGBookReadingSettings, completionHandler: (() -> Void)? = nil) {
         isReady = false
         
-        settingsController.setSettings(settings) {
+        let pageSize = Self.pageSize(for: webView.bounds.size,
+                                     settings: settings,
+                                     sizeClass: webView.traitCollection.horizontalSizeClass)
+        
+        settingsController.setSettings(settings, pageSize: pageSize) {
             completionHandler?()
         }
     }
@@ -49,7 +53,7 @@ protocol ARGBookDocumentContentSizeContainer: ARGBookDocumentLayout {
     
     func measureContentSize(completionHandler: ((CGSize?) -> Void)?)
     
-    static func pageSize(for viewPort: CGSize, sizeClass: UIUserInterfaceSizeClass) -> CGSize
+    static func pageSize(for viewPort: CGSize, settings: ARGBookReadingSettings, sizeClass: UIUserInterfaceSizeClass) -> CGSize
     
     static func pageCount(for contentSize: CGSize, pageSize: CGSize) -> Int
     
@@ -57,7 +61,7 @@ protocol ARGBookDocumentContentSizeContainer: ARGBookDocumentLayout {
 
 extension ARGBookDocumentContentSizeContainer {
     
-    static func pageSize(for viewPort: CGSize, sizeClass: UIUserInterfaceSizeClass) -> CGSize {
+    static func pageSize(for viewPort: CGSize, settings: ARGBookReadingSettings, sizeClass: UIUserInterfaceSizeClass) -> CGSize {
         return viewPort
     }
     

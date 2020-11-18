@@ -29,10 +29,6 @@ class ARGBookInternalPageManager: NSObject, ARGBookPageConverter {
     
     var settings: ARGBookReadingSettings
     
-    var viewPort: CGSize
-    
-    var sizeClass: UIUserInterfaceSizeClass
-    
     var pagesCache = [String: [ARGDocumentPage]]()
     
     var cachedPageCount: Int?
@@ -58,11 +54,9 @@ class ARGBookInternalPageManager: NSObject, ARGBookPageConverter {
         }
     }
     
-    init(cache: ARGBookCache, settings: ARGBookReadingSettings, viewPort: CGSize, sizeClass: UIUserInterfaceSizeClass) {
+    init(cache: ARGBookCache, settings: ARGBookReadingSettings) {
         self.bookCache = cache
         self.settings = settings
-        self.viewPort = viewPort
-        self.sizeClass = sizeClass
     }
     
     func fillPagesCache(till targetDocument: ARGBookDocument) -> [ARGDocumentPage]? {
@@ -137,27 +131,31 @@ class ARGBookInternalPageManager: NSObject, ARGBookPageConverter {
     }
     
     func unnumberedPages(for document: ARGBookDocument) -> [ARGDocumentPage]? {
-        let documentSize = bookCache.contentSize(for: document,
-                                                 settings: settings,
-                                                 viewPort: viewPort)
-        if documentSize != .zero {
-            let LayoutClass = document.layoutType(for: settings.scrollType) as! ARGBookDocumentContentSizeContainer.Type
-            let pageSize = LayoutClass.pageSize(for: viewPort, sizeClass: sizeClass)
-            let pageCount = LayoutClass.pageCount(for: documentSize, pageSize: pageSize)
-            var pages = [ARGDocumentPage]()
-            
-            for pageNumber in 0..<pageCount {
-                let position = CGFloat(pageNumber) / CGFloat(pageCount)
-                let navigationPoint = ARGBookNavigationPointInternal(document: document, position: position)
+        if let containerView = bookCache.containerView {
+            let documentSize = bookCache.contentSize(for: document,
+                                                     settings: settings,
+                                                     viewPort: containerView.bounds.size)
+            if documentSize != .zero {
+                let LayoutClass = document.layoutType(for: settings.scrollType) as! ARGBookDocumentContentSizeContainer.Type
+                let pageSize = LayoutClass.pageSize(for: containerView.bounds.size,
+                                                    settings: settings,
+                                                    sizeClass: containerView.traitCollection.horizontalSizeClass)
+                let pageCount = LayoutClass.pageCount(for: documentSize, pageSize: pageSize)
+                var pages = [ARGDocumentPage]()
                 
-                let page = ARGDocumentPage(startNavigationPoint: navigationPoint)
+                for pageNumber in 0..<pageCount {
+                    let position = CGFloat(pageNumber) / CGFloat(pageCount)
+                    let navigationPoint = ARGBookNavigationPointInternal(document: document, position: position)
+                    
+                    let page = ARGDocumentPage(startNavigationPoint: navigationPoint)
+                    
+                    pages.append(page)
+                }
                 
-                pages.append(page)
+                return !pages.isEmpty ? pages : nil
             }
-            
-            return !pages.isEmpty ? pages : nil
-        } else {
-            return nil
         }
+        
+        return nil
     }
 }

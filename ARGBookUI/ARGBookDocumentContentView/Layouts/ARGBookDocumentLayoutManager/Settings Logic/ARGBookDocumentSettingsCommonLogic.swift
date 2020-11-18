@@ -29,7 +29,7 @@ class ARGBookDocumentSettingsCommonLogic {
         self.layout = layout
     }
     
-    func applyReadingSettings(_ settings: ARGBookReadingSettings?, completionHandler: (() -> Void)? = nil) {
+    func applyReadingSettings(_ settings: ARGBookReadingSettings, completionHandler: (() -> Void)? = nil) {
         let applySettingsClosure = {
             self.layout.apply(settings: settings) {
                 let waitForDom = { size in
@@ -39,7 +39,7 @@ class ARGBookDocumentSettingsCommonLogic {
                     }
                 }
                 
-                let size = self.cache.contentSize(for: self.document, settings: settings!, viewPort: self.layout.webView.bounds.size)
+                let size = self.cache.contentSize(for: self.document, settings: settings, viewPort: self.layout.webView.bounds.size)
                 
                 if size != .zero {
                     waitForDom(size)

@@ -23,11 +23,11 @@ class ARGBookDocumentStateManager: NSObject {
         self.completionHandler = completionHandler
         self.webView.scrollView.addObserver(self, forKeyPath: "contentSize", options: .initial, context: nil)
         
-        self.perform(#selector(stopWaiting), with: webView.scrollView.contentSize, afterDelay: 2.0)
+        self.perform(#selector(stopWaiting), with: nil, afterDelay: 2.0)
     }
     
-    @objc func stopWaiting(with size: CGSize) {
-        self.completionHandler?(size)
+    @objc func stopWaiting() {
+        self.completionHandler?(webView.scrollView.contentSize)
         observingStopped = true
     }
     
@@ -42,7 +42,7 @@ class ARGBookDocumentStateManager: NSObject {
         
         if measuredSize == size {
             NSObject.cancelPreviousPerformRequests(withTarget: self)
-            stopWaiting(with: size)
+            stopWaiting()
         }
     }
     

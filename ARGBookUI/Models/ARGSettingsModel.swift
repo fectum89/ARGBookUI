@@ -9,14 +9,21 @@ import Foundation
 import UIKit.UIColor
 
 @objc public enum ARGBookScrollType: Int {
+    
     case horizontal
+    
     case vertical
+    
     case paging
+    
 }
 
 @objc public enum ARGBookReadingSettingsAlignment: Int64 {
+    
     case left
+    
     case justify
+    
 }
 
 

@@ -115,8 +115,14 @@ import ARGContinuousScroll
             return
         }
         
+        let snapshotManager = ARGBookPageSnapshotManager(fileManager: ARGBookPageSnapshotFileManager(book: book!),
+                                                         cache: cacheManager,
+                                                         settings: settings!,
+                                                         containerView: self)
+        
         pageManager = ARGBookInternalPageManager(cache: cacheManager,
-                                                 settings: settings!)
+                                                 settings: settings!,
+                                                 snapshotManager: snapshotManager)
         
         cacheManager.startCacheUpdating(for: self.book!.documents,
                                         with: settings!,
@@ -192,11 +198,22 @@ extension ARGBookView: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let cell = cell as? ARGDocumentCollectionViewCell, let document = book?.documents[indexPath.item], let settings = self.settings {
             
-            cell.documentView.load(targetSize: collectionView.bounds.size, document: document, settings: settings, pageConverter: pageManager)
             
-            if let navigationPoint = self.currentNavigationPoint, navigationPoint.document.filePath == book?.documents[indexPath.item].filePath {
-                cell.documentView.scroll(to: navigationPoint)
+            if let navigationPoint = self.currentNavigationPoint, navigationPoint.document.filePath == document.filePath {
+                
             }
+            
+            let navigationPoint = (self.currentNavigationPoint?.document.uid == document.uid) ? currentNavigationPoint : nil
+            
+            cell.documentView.load(targetSize: collectionView.bounds.size,
+                                   document: document,
+                                   settings: settings,
+                                   navigationPoint: navigationPoint,
+                                   pageConverter: pageManager)
+//            
+//            if let navigationPoint = self.currentNavigationPoint, navigationPoint.document.filePath == book?.documents[indexPath.item].filePath {
+//                cell.documentView.scroll(to: navigationPoint)
+//            }
         }
     }
     

@@ -28,6 +28,7 @@ class ARGBookWebViewConfigurator: NSObject {
         configuration.userContentController.addUserScript(prepareScript)
         configuration.userContentController.addUserScript(settingsScript)
         configuration.userContentController.addUserScript(navigationScript)
+        configuration.suppressesIncrementalRendering = true
        
         return configuration
     }

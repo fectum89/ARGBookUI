@@ -22,7 +22,7 @@ class ARGBookDocumentNavigationCommonLogic {
 //        }
 //    }
     
-    //var scrollCompletionHandler: (() -> Void)?
+    var scrollCompletionHandler: (() -> Void)?
     
     var obtainCurrentNavigationPointCompletionHandler: ((ARGBookNavigationPoint) -> Void)?
     
@@ -42,21 +42,20 @@ class ARGBookDocumentNavigationCommonLogic {
     func scroll(to navigationPoint: ARGBookNavigationPoint, completionHandler: (() -> Void)? = nil) {
         self.pendingNavigationPoint = navigationPoint
         
+        
         guard layout.isReady else {
-            //self.scrollCompletionHandler = completionHandler
+            self.scrollCompletionHandler = completionHandler
             return
         }
         
         let scrollCompletion = {
-            //self.updateCurrentNavigationPoint {
-            completionHandler?()
+            completionHandler?() ?? self.scrollCompletionHandler?()
             self.pendingNavigationPoint = nil
             
             self.obtainCurrentNavigationPointCompletionHandler?(self.currentNavigationPoint())
             self.obtainCurrentNavigationPointCompletionHandler = nil
             
-            //self.scrollCompletionHandler = nil
-           // }
+            self.scrollCompletionHandler = nil
         }
         
         if let navigationPoint = navigationPoint as? ARGBookAnchorNavigationPoint {
@@ -64,9 +63,8 @@ class ARGBookDocumentNavigationCommonLogic {
                 scrollCompletion()
             }
         } else {
-            layout.scroll(to: navigationPoint.position) {
-                scrollCompletion()
-            }
+            layout.scroll(to: navigationPoint.position)
+            scrollCompletion()
         }
     }
     

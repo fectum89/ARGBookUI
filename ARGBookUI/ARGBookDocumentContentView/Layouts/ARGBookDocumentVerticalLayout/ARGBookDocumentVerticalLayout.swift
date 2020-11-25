@@ -36,30 +36,32 @@ class ARGBookDocumentVerticalLayout: ARGBookDocumentSettingsControllerContainer 
 }
 
 extension ARGBookDocumentVerticalLayout: ARGBookDocumentScrollBehavior {
-    
+
     func scroll(to element: String, completionHandler: (() -> Void)? = nil) {
         let script = "getHorizontalOffsetForElementID('\(element)')"
         
         webView.evaluateJavaScript(script) { (result, error) in
             if let offset = result as? CGFloat {
-                self.webView.scrollView.contentOffset = CGPoint(x: self.webView.scrollView.contentOffset.x,
-                                                                y: offset)
+                Self.constrainedScroll(scrollView: self.webView.scrollView, toOffset: offset)
             }
             
             completionHandler?()
         }
     }
     
-    func scroll(to position: CGFloat, completionHandler: (() -> Void)?) {
-        let contentSize = webView.scrollView.contentSize.height + webView.scrollView.contentInset.bottom
-        let lastPageOffset = contentSize - webView.scrollView.bounds.height
+    static func constrainedScroll(scrollView: UIScrollView, toOffset: CGFloat) {
+        let contentSize = scrollView.contentSize.height + scrollView.contentInset.bottom
+        let lastPageOffset = contentSize - scrollView.bounds.height
+        let page = floor(toOffset / scrollView.bounds.height)
+        
+        scrollView.contentOffset = CGPoint(x: scrollView.contentOffset.x,
+                                           y: min(page * scrollView.bounds.height, lastPageOffset))
+    }
+    
+    static func scroll(scrollView: UIScrollView, to position: CGFloat) {
+        let contentSize = scrollView.contentSize.height + scrollView.contentInset.bottom
         let offset = position * contentSize
-        let page = floor(offset / self.webView.scrollView.bounds.height)
-        
-        self.webView.scrollView.contentOffset = CGPoint(x: self.webView.scrollView.contentOffset.x,
-                                                        y: min(page * self.webView.scrollView.bounds.height, lastPageOffset))
-        
-        completionHandler?()
+        constrainedScroll(scrollView: scrollView, toOffset: offset)
     }
     
     func currentScrollPosition() -> CGFloat {

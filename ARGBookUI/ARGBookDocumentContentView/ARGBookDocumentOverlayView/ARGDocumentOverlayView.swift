@@ -19,9 +19,11 @@ class ARGDocumentOverlayView: UIView {
     
     var pageConverter: ARGBookPageConverter?
     
-    var layoutType: ARGBookDocumentContentSizeContainer.Type?
+    var layoutType: (ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer).Type?
     
     var cacheObserver: NSObjectProtocol?
+    
+    var showSnapshots: Bool = true
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,7 +45,7 @@ class ARGDocumentOverlayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func prepare(for document: ARGBookDocument, pageConverter: ARGBookPageConverter, layoutType: ARGBookDocumentContentSizeContainer.Type) {
+    func prepare(for document: ARGBookDocument, pageConverter: ARGBookPageConverter, layoutType: (ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer).Type) {
         self.pageConverter = pageConverter
         self.document = document
         self.layoutType = layoutType
@@ -96,10 +98,21 @@ class ARGDocumentOverlayView: UIView {
                                                       settings: pageConverter.settings,
                                                       sizeClass: self.traitCollection.horizontalSizeClass)
             
-            collectionView.reloadData()
+            reload(withSnapshots: true)
             collectionView.isHidden = false
         }
     }
+    
+    func reload(withSnapshots: Bool) {
+        showSnapshots = withSnapshots
+        collectionView.reloadData()
+    }
+    
+//    func scroll(to position: CGFloat) {
+//        if let documentLayout = layoutType {
+//            documentLayout.scroll(scrollView: collectionView, to: position)
+//        }
+//    }
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         return nil
@@ -124,8 +137,8 @@ extension ARGDocumentOverlayView: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ARGBookDocumentPageCollectionViewCell.self), for: indexPath) as! ARGBookDocumentPageCollectionViewCell
         
-        if let page = pages?[indexPath.item], let pageConverter = self.pageConverter {
-            cell.set(page: page, pageConverter: pageConverter)
+        if let page = pages?[indexPath.item] {
+            cell.update(with: page, showSnapshot: showSnapshots)
         }
         
         return cell

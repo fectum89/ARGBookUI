@@ -80,17 +80,12 @@ class ARGBookDocumentContentView: UIView {
         }
     }
     
-    func scroll(to navigationPoint: ARGBookNavigationPoint) {
-        layoutManager?.scroll(to: navigationPoint)
+    func scroll(to navigationPoint: ARGBookNavigationPoint, completionHandler: (() -> Void)? = nil) {
+        layoutManager?.scroll(to: navigationPoint, completionHandler: completionHandler)
     }
     
     func obtainCurrentNavigationPoint(completionHandler: ((ARGBookNavigationPoint) -> Void)? = nil) {
         layoutManager?.obtainCurrentNavigationPoint(completionHandler: completionHandler)
-    }
-    
-    func contentSize() -> CGSize {
-        return CGSize(width: webView.scrollView.contentSize.width + webView.scrollView.contentInset.right,
-                      height: webView.scrollView.contentSize.height + webView.scrollView.contentInset.bottom)
     }
     
     deinit {

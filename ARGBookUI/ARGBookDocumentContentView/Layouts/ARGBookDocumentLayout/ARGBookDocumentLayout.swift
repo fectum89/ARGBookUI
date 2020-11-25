@@ -41,11 +41,19 @@ extension ARGBookDocumentSettingsControllerContainer where Self: ARGBookDocument
 
 protocol ARGBookDocumentScrollBehavior: ARGBookDocumentLayout {
     
-    func scroll(to position: CGFloat, completionHandler: (() -> Void)?)
-    
     func scroll(to element: String, completionHandler: (() -> Void)?)
     
+    static func scroll(scrollView: UIScrollView, to position: CGFloat)
+    
     func currentScrollPosition() -> CGFloat
+    
+}
+
+extension ARGBookDocumentScrollBehavior {
+    
+    func scroll(to position: CGFloat) {
+        Self.scroll(scrollView: webView.scrollView, to: position)
+    }
     
 }
 

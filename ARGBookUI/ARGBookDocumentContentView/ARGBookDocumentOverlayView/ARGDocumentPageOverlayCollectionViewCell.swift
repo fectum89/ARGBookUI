@@ -8,7 +8,9 @@
 import UIKit
 
 class ARGBookDocumentPageCollectionViewCell: UICollectionViewCell {
+    
     var overlayView: ARGDocumentPageOverlayView!
+    
     var currentLayoutType: ARGBookDocumentPageOverlayCreator.Type? {
         didSet {
             if currentLayoutType == nil || currentLayoutType != oldValue {
@@ -21,20 +23,14 @@ class ARGBookDocumentPageCollectionViewCell: UICollectionViewCell {
         }
     }
     
-//    override init(frame: CGRect) {
-//        super.init()
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-    
-    func set(page: ARGDocumentPage, pageConverter: ARGBookPageConverter) {
-        let overlayCreator = page.startNavigationPoint.document.layoutType(for: pageConverter.settings.scrollType) as! ARGBookDocumentPageOverlayCreator.Type
-        
-        currentLayoutType = overlayCreator
-        
-        overlayView.page = page
+    func update(with page: ARGDocumentPage, showSnapshot: Bool) {
+        if let converter = page.pageConverter {
+            let overlayCreator = page.startNavigationPoint.document.layoutType(for: converter.settings.scrollType) as! ARGBookDocumentPageOverlayCreator.Type
+            
+            currentLayoutType = overlayCreator
+            
+            overlayView.update(with: page, showSnapshot: showSnapshot)
+        }
     }
     
 }

@@ -7,23 +7,10 @@
 
 import UIKit
 
-@objc public protocol ARGBookPageConverter {
-    
-    var bookCache: ARGBookCache {get}
-    
-    var settings: ARGBookReadingSettings {get}
-    
-    var pageCount: Int {get}
-    
-    func page(for point: ARGBookNavigationPoint) -> ARGDocumentPage?
-    
-    func pages(for document: ARGBookDocument) -> [ARGDocumentPage]?
-    
-    func point(for pageNumber: Int) -> ARGBookNavigationPoint?
-    
-}
 
-class ARGBookInternalPageManager: NSObject, ARGBookPageConverter {
+class ARGBookInternalPageManager: ARGBookPageConverter, ARGBookPageSnapshotFetcherDelegate {
+    
+    var snapshotManager: ARGBookPageSnapshotFetcher
     
     var bookCache: ARGBookCache
     
@@ -54,9 +41,11 @@ class ARGBookInternalPageManager: NSObject, ARGBookPageConverter {
         }
     }
     
-    init(cache: ARGBookCache, settings: ARGBookReadingSettings) {
+    init(cache: ARGBookCache, settings: ARGBookReadingSettings, snapshotManager: ARGBookPageSnapshotFetcher) {
         self.bookCache = cache
         self.settings = settings
+        self.snapshotManager = snapshotManager
+        snapshotManager.delegate = self
     }
     
     func fillPagesCache(till targetDocument: ARGBookDocument) -> [ARGDocumentPage]? {
@@ -147,7 +136,8 @@ class ARGBookInternalPageManager: NSObject, ARGBookPageConverter {
                     let position = CGFloat(pageNumber) / CGFloat(pageCount)
                     let navigationPoint = ARGBookNavigationPointInternal(document: document, position: position)
                     
-                    let page = ARGDocumentPage(startNavigationPoint: navigationPoint)
+                    let page = ARGDocumentPage(startNavigationPoint: navigationPoint, pageConverter: self)
+                    page.relativePageNumber = pageNumber + 1
                     
                     pages.append(page)
                 }
@@ -157,5 +147,9 @@ class ARGBookInternalPageManager: NSObject, ARGBookPageConverter {
         }
         
         return nil
+    }
+    
+    deinit {
+        print("deinit")
     }
 }

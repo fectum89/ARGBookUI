@@ -13,30 +13,35 @@ import Foundation
     
     @objc public var pageNumber: Int = 0
     
-    init(startNavigationPoint: ARGBookNavigationPoint) {
+    @objc public var relativePageNumber: Int = 0
+    
+    weak var pageConverter: ARGBookPageConverter?
+    
+    init(startNavigationPoint: ARGBookNavigationPoint, pageConverter: ARGBookPageConverter) {
         self.startNavigationPoint = startNavigationPoint
+        self.pageConverter = pageConverter
     }
     
 }
 
 extension ARGDocumentPage {
-    //TBD
-    var snapshot: UIImage? {
-        get {
-            return nil
-        }
+    
+    func loadSnapshot(completionHandler: ((UIImage?) -> Void)?) {
+        pageConverter?.snapshotManager.snapshot(for: self, completionHandler: completionHandler)
     }
     
+    //TBD
     var isBookmarked: Bool? {
         get {
             return nil
         }
     }
     
+    //TBD
     var notes: [ARGBookHighlight]? {
         get {
             return nil
         }
     }
-    
+
 }

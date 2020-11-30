@@ -23,13 +23,13 @@ class ARGBookDocumentPageCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func update(with page: ARGDocumentPage, showSnapshot: Bool) {
-        if let converter = page.pageConverter {
-            let overlayCreator = page.startNavigationPoint.document.layoutType(for: converter.settings.scrollType) as! ARGBookDocumentPageOverlayCreator.Type
+    func update(with page: ARGDocumentPage) {
+        if let counter = page.pageCounter {
+            let overlayCreator = page.startNavigationPoint.document.layoutType(for: counter.settings.scrollType) as! ARGBookDocumentPageOverlayCreator.Type
             
             currentLayoutType = overlayCreator
             
-            overlayView.update(with: page, showSnapshot: showSnapshot)
+            overlayView.update(with: page)
         }
     }
     

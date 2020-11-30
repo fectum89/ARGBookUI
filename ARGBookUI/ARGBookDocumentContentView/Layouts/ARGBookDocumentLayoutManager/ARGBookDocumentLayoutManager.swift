@@ -24,7 +24,7 @@ class ARGBookDocumentLayoutManager {
         }
     }
     
-    init(layout: ARGBookDocumentLayout, document: ARGBookDocument, cache: ARGBookCache) {
+    init(layout: ARGBookDocumentLayout, document: ARGBookDocument, cache: ARGBookContentSizeCache) {
         self.layout = layout
         self.document = document
         self.settingsLogic = ARGBookDocumentSettingsCommonLogic(document: document,

@@ -11,24 +11,20 @@ import Foundation
     
     @objc public var startNavigationPoint: ARGBookNavigationPoint
     
-    @objc public var pageNumber: Int = 0
+    @objc public var globalPageNumber: Int = 0
     
-    @objc public var relativePageNumber: Int = 0
+    var relativePageNumber: Int = 0
     
-    weak var pageConverter: ARGBookPageConverter?
+    weak var pageCounter: ARGBookPageCounter?
     
-    init(startNavigationPoint: ARGBookNavigationPoint, pageConverter: ARGBookPageConverter) {
+    init(startNavigationPoint: ARGBookNavigationPoint, pageCounter: ARGBookPageCounter) {
         self.startNavigationPoint = startNavigationPoint
-        self.pageConverter = pageConverter
+        self.pageCounter = pageCounter
     }
     
 }
 
 extension ARGDocumentPage {
-    
-    func loadSnapshot(completionHandler: ((UIImage?) -> Void)?) {
-        pageConverter?.snapshotManager.snapshot(for: self, completionHandler: completionHandler)
-    }
     
     //TBD
     var isBookmarked: Bool? {

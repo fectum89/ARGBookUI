@@ -47,25 +47,25 @@ extension ARGBookDocumentHorizontalLayout: ARGBookDocumentScrollBehavior {
         
         webView.evaluateJavaScript(script) { (result, error) in
             if let offset = result as? CGFloat {
-                Self.constrainedScroll(scrollView: self.webView.scrollView, toOffset: offset)
+                self.constrainedScroll(toOffset: offset)
             }
             
             completionHandler?()
         }
     }
     
-    static func constrainedScroll(scrollView: UIScrollView, toOffset: CGFloat) {
-        let contentSize = scrollView.contentSize.width + scrollView.contentInset.right
-        let lastPageOffset = contentSize - scrollView.bounds.width
-        let page = floor(toOffset / scrollView.bounds.width)
-        scrollView.contentOffset = CGPoint(x: min(page * scrollView.bounds.width, lastPageOffset),
-                                           y: scrollView.contentOffset.y)
+    func constrainedScroll(toOffset: CGFloat) {
+        let contentSize = webView.scrollView.contentSize.width + webView.scrollView.contentInset.right
+        let lastPageOffset = contentSize - webView.scrollView.bounds.width
+        let page = floor(toOffset / webView.scrollView.bounds.width)
+        webView.scrollView.contentOffset = CGPoint(x: min(page * webView.scrollView.bounds.width, lastPageOffset),
+                                                   y: webView.scrollView.contentOffset.y)
     }
     
-    static func scroll(scrollView: UIScrollView, to position: CGFloat) {
-        let contentSize = scrollView.contentSize.width + scrollView.contentInset.right
+    func scroll(to position: CGFloat) {
+        let contentSize = webView.scrollView.contentSize.width + webView.scrollView.contentInset.right
         let offset = position * contentSize
-        constrainedScroll(scrollView: scrollView, toOffset: offset)
+        constrainedScroll(toOffset: offset)
     }
     
     func currentScrollPosition() -> CGFloat {

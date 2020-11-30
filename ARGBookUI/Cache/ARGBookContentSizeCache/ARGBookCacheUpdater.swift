@@ -19,14 +19,14 @@ class ARGBookCacheUpdater {
     }
     
     func updateCache(for documents: [ARGBookDocument], with settings: ARGBookReadingSettings, viewPort: CGSize, completionHandler: (() -> Void)? = nil) {
-        if let containerView = self.containerView {
+        if let containerView = self.containerView, let book = cacheManager?.book {
             if let document = documents.first {
-                let item = ARGPresentationItem(document: document, settings: settings, viewPort: viewPort)
+                let item = ARGPresentationItem(book: book, document: document, settings: settings, viewPort: viewPort)
                 
                 cacheManager?.readContentSize(for: item) { (contentSize) in
                     if contentSize != nil {
                         if let cacheManager = self.cacheManager {
-                            cacheManager.progress += 1 / CGFloat(cacheManager.fileManager.book.documents.count)
+                            cacheManager.progress += 1 / CGFloat(book.documents.count)
                         }
                         
                         self.updateCache(for: documents.filter {$0.uid != document.uid},
@@ -47,7 +47,7 @@ class ARGBookCacheUpdater {
                             self?.cacheManager?.saveContentSize(contentSize, for: item)
                             
                             if let cacheManager = self?.cacheManager {
-                                cacheManager.progress += 1 / CGFloat(cacheManager.fileManager.book.documents.count)
+                                cacheManager.progress += 1 / CGFloat(book.documents.count)
                             }
                             
                             self?.updateCache(for: documents.filter {$0.uid != document.uid},

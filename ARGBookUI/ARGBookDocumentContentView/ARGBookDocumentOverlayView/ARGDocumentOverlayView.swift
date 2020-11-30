@@ -17,13 +17,11 @@ class ARGDocumentOverlayView: UIView {
     
     var document: ARGBookDocument?
     
-    var pageConverter: ARGBookPageConverter?
+    var pageCounter: ARGBookPageCounter?
     
     var layoutType: (ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer).Type?
     
     var cacheObserver: NSObjectProtocol?
-    
-    var showSnapshots: Bool = true
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,15 +43,15 @@ class ARGDocumentOverlayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func prepare(for document: ARGBookDocument, pageConverter: ARGBookPageConverter, layoutType: (ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer).Type) {
-        self.pageConverter = pageConverter
+    func prepare(for document: ARGBookDocument, pageCounter: ARGBookPageCounter, layoutType: (ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer).Type) {
+        self.pageCounter = pageCounter
         self.document = document
         self.layoutType = layoutType
         
-        pageConverter.settings.configure(collectionView: collectionView)
+        pageCounter.settings.configure(collectionView: collectionView)
         
         if !isObservingCache {
-            cacheObserver = NotificationCenter.default.addObserver(forName: ARGBookCache.progressDidChangeNotification, object: nil, queue: .main) { [weak self] (_) in
+            cacheObserver = NotificationCenter.default.addObserver(forName: ARGBookContentSizeCache.progressDidChangeNotification, object: nil, queue: .main) { [weak self] (_) in
                 self?.preparePages()
             }
             
@@ -65,9 +63,9 @@ class ARGDocumentOverlayView: UIView {
     
     
     func preparePages() {
-        if let document = self.document, let pageConverter = self.pageConverter {
+        if let document = self.document, let pageCounter = self.pageCounter {
             collectionView.isHidden = true
-            if let pages = pageConverter.pages(for: document) {
+            if let pages = pageCounter.pages(for: document) {
                 self.pages = pages
             }
             
@@ -92,27 +90,16 @@ class ARGDocumentOverlayView: UIView {
     }
     
     func refreshView () {
-        if let documentLayout = layoutType, let pageConverter = self.pageConverter{
+        if let documentLayout = layoutType, let pageCounter = self.pageCounter{
             let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
             layout.itemSize = documentLayout.pageSize(for: collectionView.bounds.size,
-                                                      settings: pageConverter.settings,
+                                                      settings: pageCounter.settings,
                                                       sizeClass: self.traitCollection.horizontalSizeClass)
             
-            reload(withSnapshots: true)
+            collectionView.reloadData()
             collectionView.isHidden = false
         }
     }
-    
-    func reload(withSnapshots: Bool) {
-        showSnapshots = withSnapshots
-        collectionView.reloadData()
-    }
-    
-//    func scroll(to position: CGFloat) {
-//        if let documentLayout = layoutType {
-//            documentLayout.scroll(scrollView: collectionView, to: position)
-//        }
-//    }
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         return nil
@@ -138,7 +125,7 @@ extension ARGDocumentOverlayView: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ARGBookDocumentPageCollectionViewCell.self), for: indexPath) as! ARGBookDocumentPageCollectionViewCell
         
         if let page = pages?[indexPath.item] {
-            cell.update(with: page, showSnapshot: showSnapshots)
+            cell.update(with: page)
         }
         
         return cell

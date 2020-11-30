@@ -61,21 +61,21 @@ import UIKit.UIColor
 
 extension ARGBookReadingSettings {
     
-    func stringRepresentationForPageCache() -> String {
+    func layoutAffectingStringRepresentation() -> String {
         return String(fontSize) + "."
             + String(alignment.rawValue) + "."
             + String(horizontalMargin) + "."
-            + String(verticalMargin) + "."
+            + (scrollType == .vertical ? "" : String(verticalMargin) + ".")
             + String(hyphenation) + "."
             + String(lineSpacing) + "."
             + String(paragraphIndent) + "."
             + String(paragraphSpacing) + "."
             + String(scrollType.rawValue) + "."
-            + String(twoColumnsLayout)
+            + (scrollType == .vertical ? "" : String(twoColumnsLayout))
     }
     
-    func stringRepresentationForSnapshotsCache() -> String {
-        return stringRepresentationForPageCache() + "."
+    func appearanceAffectingStringRepresentation() -> String {
+        return layoutAffectingStringRepresentation() + "."
             + textColor.htmlRGBaColor + "."
             + highlightColor.htmlRGBaColor + "."
     }

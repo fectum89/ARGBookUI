@@ -16,7 +16,9 @@ struct ARGBookDocumentPendingItem {
     
     var settings: ARGBookReadingSettings
     
-    var pageConverter: ARGBookPageConverter
+    var pageCounter: ARGBookPageCounter
+    
+    var snapshotCache: ARGBookPageSnapshotCache
     
     var navigationPoint: ARGBookNavigationPoint?
     
@@ -68,7 +70,8 @@ class ARGBookDocumentView: UIView {
                          document: pendingItem.document,
                          settings: pendingItem.settings,
                          navigationPoint: pendingItem.navigationPoint,
-                         pageConverter: pendingItem.pageConverter,
+                         pageCounter: pendingItem.pageCounter,
+                         snapshotCache: pendingItem.snapshotCache,
                          completionHandler: pendingItem.completionHandler)
                 }
             }
@@ -83,7 +86,8 @@ class ARGBookDocumentView: UIView {
                          document: pendingItem.document,
                          settings: pendingItem.settings,
                          navigationPoint: pendingItem.navigationPoint,
-                         pageConverter: pendingItem.pageConverter,
+                         pageCounter: pendingItem.pageCounter,
+                         snapshotCache: pendingItem.snapshotCache,
                          completionHandler: pendingItem.completionHandler)
                 }
             }
@@ -98,7 +102,13 @@ class ARGBookDocumentView: UIView {
         }
     }
     
-    func load(targetSize: CGSize, document: ARGBookDocument, settings: ARGBookReadingSettings, navigationPoint: ARGBookNavigationPoint?, pageConverter: ARGBookPageConverter, completionHandler: (() -> Void)? = nil) {
+    func load(targetSize: CGSize,
+              document: ARGBookDocument,
+              settings: ARGBookReadingSettings,
+              navigationPoint: ARGBookNavigationPoint?,
+              pageCounter: ARGBookPageCounter,
+              snapshotCache: ARGBookPageSnapshotCache,
+              completionHandler: (() -> Void)? = nil) {
         contentView.isHidden = true
         overlayView.isHidden = true
         snapshotView.isHidden = true
@@ -108,9 +118,9 @@ class ARGBookDocumentView: UIView {
             
             let layoutType: (ARGBookDocumentLayout).Type = document.layoutType(for: settings.scrollType)
             
-            self.overlayView.prepare(for: document, pageConverter: pageConverter, layoutType: layoutType as! (ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer).Type)
+            self.overlayView.prepare(for: document, pageCounter: pageCounter, layoutType: layoutType as! (ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer).Type)
             
-            contentView.load(document: document, layoutType: layoutType, settings: settings, cache: pageConverter.bookCache) { [weak self] in
+            contentView.load(document: document, layoutType: layoutType, settings: settings, cache: pageCounter.contentSizeCache) { [weak self] in
                 if navigationPoint == nil {
                     self?.contentView.isHidden = false
                     self?.overlayView.isHidden = false
@@ -122,10 +132,11 @@ class ARGBookDocumentView: UIView {
             if let navigationPoint = navigationPoint {
                 scroll(to: navigationPoint)
                 
-                if let page = pageConverter.page(for: navigationPoint) {
-                    pageConverter.snapshotManager.snapshot(for: page) { (image) in
-                        self.snapshotView.image = image
-                        self.snapshotView.isHidden = image == nil || self.contentView.layoutManager?.layout.isReady ?? true
+                if let page = pageCounter.page(for: navigationPoint) {
+                    snapshotCache.snapshot(for: page) { [weak self] (image) in
+                        print(image)
+                        self?.snapshotView.image = image
+                        self?.snapshotView.isHidden = image == nil || self?.contentView.layoutManager?.layout.isReady ?? true
                     }
                 }
             }
@@ -133,7 +144,8 @@ class ARGBookDocumentView: UIView {
             pendingItem = ARGBookDocumentPendingItem(targetSize: targetSize,
                                                      document: document,
                                                      settings: settings,
-                                                     pageConverter: pageConverter,
+                                                     pageCounter: pageCounter,
+                                                     snapshotCache: snapshotCache,
                                                      navigationPoint: navigationPoint,
                                                      completionHandler: completionHandler)
         }
@@ -143,12 +155,12 @@ class ARGBookDocumentView: UIView {
         if pendingItem != nil {
             pendingItem?.navigationPoint = navigationPoint
         } else {
-            contentView.scroll(to: navigationPoint) {
-                self.contentView.isHidden = false
-                self.overlayView.isHidden = false
+            contentView.scroll(to: navigationPoint) { [weak self] in
+                self?.contentView.isHidden = false
+                self?.overlayView.isHidden = false
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self.snapshotView.isHidden = true
+                    self?.snapshotView.isHidden = true
                 }
             }
         }

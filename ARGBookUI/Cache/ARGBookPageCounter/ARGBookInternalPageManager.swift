@@ -7,12 +7,9 @@
 
 import UIKit
 
-
-class ARGBookInternalPageManager: ARGBookPageConverter, ARGBookPageSnapshotFetcherDelegate {
+class ARGBookInternalPageManager: ARGBookPageCounter {
     
-    var snapshotManager: ARGBookPageSnapshotFetcher
-    
-    var bookCache: ARGBookCache
+    var contentSizeCache: ARGBookContentSizeCache
     
     var settings: ARGBookReadingSettings
     
@@ -26,12 +23,12 @@ class ARGBookInternalPageManager: ARGBookPageConverter, ARGBookPageSnapshotFetch
                 return cachedPageCount!
             }
             
-            if let lastDocument = bookCache.book.documents.last {
+            if let lastDocument = contentSizeCache.book.documents.last {
                 if pagesCache[lastDocument.uid] == nil {
                     let _ = fillPagesCache(till: lastDocument)
                 }
                 
-                if let lastPageNumber = pagesCache[lastDocument.uid]?.last?.pageNumber {
+                if let lastPageNumber = pagesCache[lastDocument.uid]?.last?.globalPageNumber {
                     cachedPageCount = lastPageNumber
                     return lastPageNumber
                 }
@@ -41,20 +38,18 @@ class ARGBookInternalPageManager: ARGBookPageConverter, ARGBookPageSnapshotFetch
         }
     }
     
-    init(cache: ARGBookCache, settings: ARGBookReadingSettings, snapshotManager: ARGBookPageSnapshotFetcher) {
-        self.bookCache = cache
+    init(cache: ARGBookContentSizeCache, settings: ARGBookReadingSettings) {
+        self.contentSizeCache = cache
         self.settings = settings
-        self.snapshotManager = snapshotManager
-        snapshotManager.delegate = self
     }
     
     func fillPagesCache(till targetDocument: ARGBookDocument) -> [ARGDocumentPage]? {
         var pageNumber: Int = 0
-        if let targetDocumentIndex = bookCache.book.documents.firstIndex(where: { (document) -> Bool in
+        if let targetDocumentIndex = contentSizeCache.book.documents.firstIndex(where: { (document) -> Bool in
             document.uid == targetDocument.uid
         }) {
             for index in 0...targetDocumentIndex {
-                let document = bookCache.book.documents[index]
+                let document = contentSizeCache.book.documents[index]
                 
                 if let pages = pagesCache[document.uid] {
                     pageNumber += pages.count
@@ -62,7 +57,7 @@ class ARGBookInternalPageManager: ARGBookPageConverter, ARGBookPageSnapshotFetch
                 } else {
                     if let pages = unnumberedPages(for: document) {
                         pages.forEach { (page) in
-                            page.pageNumber = pageNumber + 1
+                            page.globalPageNumber = pageNumber + 1
                             pageNumber += 1
                         }
                         
@@ -102,7 +97,7 @@ class ARGBookInternalPageManager: ARGBookPageConverter, ARGBookPageSnapshotFetch
     }
     
     func point(for pageNumber: Int) -> ARGBookNavigationPoint? {
-        if let lastDocument = bookCache.book.documents.last {
+        if let lastDocument = contentSizeCache.book.documents.last {
             if pagesCache[lastDocument.uid] == nil {
                 let _ = fillPagesCache(till: lastDocument)
             }
@@ -110,7 +105,7 @@ class ARGBookInternalPageManager: ARGBookPageConverter, ARGBookPageSnapshotFetch
         
         for pages in pagesCache.values {
             for page in pages {
-                if page.pageNumber == pageNumber {
+                if page.globalPageNumber == pageNumber {
                     return page.startNavigationPoint
                 }
             }
@@ -120,8 +115,8 @@ class ARGBookInternalPageManager: ARGBookPageConverter, ARGBookPageSnapshotFetch
     }
     
     func unnumberedPages(for document: ARGBookDocument) -> [ARGDocumentPage]? {
-        if let containerView = bookCache.containerView {
-            let documentSize = bookCache.contentSize(for: document,
+        if let containerView = contentSizeCache.containerView {
+            let documentSize = contentSizeCache.contentSize(for: document,
                                                      settings: settings,
                                                      viewPort: containerView.bounds.size)
             if documentSize != .zero {
@@ -136,7 +131,7 @@ class ARGBookInternalPageManager: ARGBookPageConverter, ARGBookPageSnapshotFetch
                     let position = CGFloat(pageNumber) / CGFloat(pageCount)
                     let navigationPoint = ARGBookNavigationPointInternal(document: document, position: position)
                     
-                    let page = ARGDocumentPage(startNavigationPoint: navigationPoint, pageConverter: self)
+                    let page = ARGDocumentPage(startNavigationPoint: navigationPoint, pageCounter: self)
                     page.relativePageNumber = pageNumber + 1
                     
                     pages.append(page)
@@ -150,6 +145,6 @@ class ARGBookInternalPageManager: ARGBookPageConverter, ARGBookPageSnapshotFetch
     }
     
     deinit {
-        print("deinit")
+        print("ARGBookInternalPageManager deinit")
     }
 }

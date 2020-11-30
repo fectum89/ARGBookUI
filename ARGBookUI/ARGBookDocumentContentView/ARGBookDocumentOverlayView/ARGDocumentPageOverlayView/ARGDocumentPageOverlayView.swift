@@ -10,17 +10,9 @@ import UIKit
 class ARGDocumentPageOverlayView: UIView {
 
     @IBOutlet weak var pageNumberLabel: UILabel!
-    //@IBOutlet weak var snapshotView: UIImageView!
     
-    func update(with page: ARGDocumentPage, showSnapshot: Bool) {
-        pageNumberLabel.text = (page.pageNumber > 0) ? String(page.pageNumber) : ""
-//        snapshotView.isHidden = !showSnapshot
-//
-//        if showSnapshot {
-//            page.loadSnapshot { (image) in
-//                self.snapshotView.image = image
-//            }
-//        }
+    func update(with page: ARGDocumentPage) {
+        pageNumberLabel.text = (page.globalPageNumber > 0) ? String(page.globalPageNumber) : ""
     }
     
 }

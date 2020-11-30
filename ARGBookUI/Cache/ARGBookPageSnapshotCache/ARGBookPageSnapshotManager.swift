@@ -7,17 +7,35 @@
 
 import Foundation
 
-@objc public protocol ARGBookPageSnapshotFetcherDelegate: class {
+struct ARGBookPageSnapshotInfo {
     
-    func pages(for: ARGBookDocument) -> [ARGDocumentPage]?
+    var book: ARGBook
+    
+    var document: ARGBookDocument
+    
+    var settings: ARGBookReadingSettings
+    
+    var viewPort: CGSize
+    
+    var pageNumber: Int
     
 }
 
-@objc public protocol ARGBookPageSnapshotFetcher {
+extension ARGBookPageSnapshotInfo: ARGBookCacheFileStorageItem {
     
-    var delegate: ARGBookPageSnapshotFetcherDelegate? {set get}
-    
-    func snapshot(for page: ARGDocumentPage, completionHandler: ((UIImage?) -> Void)?)
+    var relativePath: URL {
+        get {
+            let filePath = URL(fileURLWithPath: "")
+                .appendingPathComponent(book.uid)
+                .appendingPathComponent(document.uid)
+                .appendingPathComponent(NSCoder.string(for: viewPort))
+                .appendingPathComponent(settings.appearanceAffectingStringRepresentation())
+                .appendingPathComponent(String(pageNumber))
+                .appendingPathExtension("png")
+            
+            return filePath
+        }
+    }
     
 }
 
@@ -32,10 +50,10 @@ class ARGBookPageSnapshotCreator {
     func updateSnapshots(for documents:[ARGBookDocument], completionHandler: (() -> Void)? = nil) {
         if let document = documents.first,
            let snapshotManager = snapshotManager,
-           let containerView = snapshotManager.containerView {
+           let containerView = snapshotManager.pageCounter.contentSizeCache.containerView {
             var snapshotsCacheCreated = true
             
-            if let pages = snapshotManager.delegate?.pages(for: document) {
+            if let pages = snapshotManager.pageCounter.pages(for: document) {
                 let cacheCheckingGroup = DispatchGroup()
                 
                 for page in pages {
@@ -61,9 +79,9 @@ class ARGBookPageSnapshotCreator {
                         weak var weakContentView = contentView
                         
                         contentView.load(document: document,
-                                         layoutType: document.layoutType(for: snapshotManager.settings.scrollType),
-                                         settings: snapshotManager.settings,
-                                         cache: snapshotManager.cache) { [weak self] in
+                                         layoutType: document.layoutType(for: snapshotManager.pageCounter.settings.scrollType),
+                                         settings: snapshotManager.pageCounter.settings,
+                                         cache: snapshotManager.pageCounter.contentSizeCache) { [weak self] in
                             weakContentView?.takeSnapshots { (images) in
                                 let createNextSnapshotsBatch = {
                                     weakContentView?.removeFromSuperview()
@@ -72,12 +90,12 @@ class ARGBookPageSnapshotCreator {
                                 
                                 if let images = images {
                                     var snapshots = [(UIImage, ARGBookPageSnapshotInfo)]()
-
+                                    
                                     for (pageNumber, image) in images.enumerated() {
                                         if let snapshotManager = self?.snapshotManager {
-                                            let info = ARGBookPageSnapshotInfo(book: snapshotManager.cache.book,
+                                            let info = ARGBookPageSnapshotInfo(book: snapshotManager.pageCounter.contentSizeCache.book,
                                                                                document: document,
-                                                                               settings: snapshotManager.settings,
+                                                                               settings: snapshotManager.pageCounter.settings,
                                                                                viewPort: containerView.bounds.size,
                                                                                pageNumber: pageNumber + 1)
                                             snapshots.append((image, info))
@@ -94,7 +112,6 @@ class ARGBookPageSnapshotCreator {
                         }
                     }
                 }
-                
             }
         } else {
             completionHandler?()
@@ -102,43 +119,30 @@ class ARGBookPageSnapshotCreator {
     }
     
     deinit {
-        print("deinit")
+        print("snapshot creator deinit")
     }
     
 }
 
-class ARGBookPageSnapshotManager: ARGBookPageSnapshotFetcher {
-    weak var delegate: ARGBookPageSnapshotFetcherDelegate? {
-        didSet {
-            if delegate != nil {
-                
-            }
-        }
-    }
+class ARGBookPageSnapshotManager: ARGBookPageSnapshotCache {
+    
+    var pageCounter: ARGBookPageCounter
     
     var snapshotsCache = NSCache<NSString, UIImage>()
     
-    var fileManager: ARGBookPageSnapshotFileManager!
-    
-    var settings: ARGBookReadingSettings
-    
-    var cache: ARGBookCache
+    var fileStorage: ARGBookCacheFileStorage
     
     var snapshotCreator: ARGBookPageSnapshotCreator?
     
-    weak var containerView: UIView?
-    
     var cacheObserver: NSObjectProtocol?
     
-    init(fileManager: ARGBookPageSnapshotFileManager, cache: ARGBookCache, settings: ARGBookReadingSettings, containerView: UIView) {
+    init(pageCounter: ARGBookPageCounter, fileStorage: ARGBookCacheFileStorage) {
         snapshotsCache.countLimit = 10
-        self.fileManager = fileManager
-        self.containerView = containerView
-        self.settings = settings
-        self.cache = cache
+        self.pageCounter = pageCounter
+        self.fileStorage = fileStorage
         
-        cacheObserver = NotificationCenter.default.addObserver(forName: ARGBookCache.progressDidChangeNotification, object: nil, queue: OperationQueue.main) { [weak self] (notification) in
-            if let progress = self?.cache.progress {
+        cacheObserver = NotificationCenter.default.addObserver(forName: ARGBookContentSizeCache.progressDidChangeNotification, object: nil, queue: OperationQueue.main) { [weak self] (notification) in
+            if let progress = self?.pageCounter.contentSizeCache.progress {
                 if progress == 1.0 {
                     self?.startCreatingSnapshots()
                 }
@@ -147,38 +151,38 @@ class ARGBookPageSnapshotManager: ARGBookPageSnapshotFetcher {
     }
     
     func startCreatingSnapshots(completionHandler: (() -> Void)? = nil) {
-        let documents = cache.book.documents
+        let documents = pageCounter.contentSizeCache.book.documents
         snapshotCreator = ARGBookPageSnapshotCreator(snapshotManager: self)
         snapshotCreator?.updateSnapshots(for: documents) { [weak self] in
             self?.snapshotCreator = nil
         }
     }
     
-    func save(snapshots: [(image: UIImage, info: ARGBookPageSnapshotInfo)], completionHandler: (() -> Void)? = nil) {
+    func save(snapshots: [(object: UIImage, item: ARGBookPageSnapshotInfo)], completionHandler: (() -> Void)? = nil) {
         for snapshot in snapshots {
-            snapshotsCache.setObject(snapshot.image, forKey: snapshot.info.key)
+            snapshotsCache.setObject(snapshot.object, forKey: NSString(string: snapshot.item.relativePath.path))
         }
         
-        fileManager.save(snapshots: snapshots, completionHandler: completionHandler)
+        fileStorage.save(items: snapshots, completionHandler: completionHandler)
     }
     
     func snapshot(for page: ARGDocumentPage, completionHandler: ((UIImage?) -> Void)?) {
-        if let viewPort = containerView?.bounds.size {
-            let info = ARGBookPageSnapshotInfo(book: cache.book,
+        if let viewPort = pageCounter.contentSizeCache.containerView?.bounds.size {
+            let info = ARGBookPageSnapshotInfo(book: pageCounter.contentSizeCache.book,
                                                document: page.startNavigationPoint.document,
-                                               settings: settings,
+                                               settings: pageCounter.settings,
                                                viewPort: viewPort,
                                                pageNumber: page.relativePageNumber)
             
-            if let snapshot = snapshotsCache.object(forKey: info.key) {
+            if let snapshot = snapshotsCache.object(forKey: NSString(string: info.relativePath.path)) {
                 completionHandler?(snapshot)
             } else {
-                fileManager.read(for: info) { (image) in
-                    if let image = image {
-                        self.snapshotsCache.setObject(image, forKey: info.key)
+                fileStorage.read(item: info) { (image) in
+                    if let image = image as? UIImage {
+                        self.snapshotsCache.setObject(image, forKey: NSString(string: info.relativePath.path))
                     }
                     
-                    completionHandler?(image)
+                    completionHandler?(image as? UIImage)
                 }
             }
         } else {

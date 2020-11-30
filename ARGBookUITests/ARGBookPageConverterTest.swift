@@ -1,5 +1,5 @@
 //
-//  ARGBookPageConverterTest.swift
+//  ARGBookPageCounterTest.swift
 //  ARGBookUITests
 //
 //  Created by Sergei Polshcha on 11.11.2020.
@@ -41,7 +41,7 @@ class BookCacheMock: ARGBookCache {
     
 }
 
-class ARGBookPageConverterTest: XCTestCase {
+class ARGBookPageCounterTest: XCTestCase {
     
     func test_PagesForDocument_Filled_Single_Horizontal() throws {
         let documents = [TestDocumentMock(uid: "1")]

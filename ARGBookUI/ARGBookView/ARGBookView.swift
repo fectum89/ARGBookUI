@@ -15,7 +15,10 @@ import ARGContinuousScroll
     var scrollController: ARGContiniousScrollController?
     
     var cacheManager: ARGBookCacheManager!
-    @objc public var pageManager: ARGBookPageConverter!
+    
+    @objc public var pageCounter: ARGBookPageCounter!
+    
+    var snapshotCache: ARGBookPageSnapshotCache!
     
     var book: ARGBook?
     
@@ -55,7 +58,7 @@ import ARGContinuousScroll
         }
     }
     
-    @objc func createCollectionView() {
+    func createCollectionView() {
         if collectionView != nil {
             scrollController = nil
             collectionView.removeFromSuperview()
@@ -83,7 +86,7 @@ import ARGContinuousScroll
     
     public func load(book: ARGBook) {
         self.book = book
-        cacheManager = ARGBookCacheManager(containerView: self, fileManager: ARGBookCacheFileManager(book: book))
+        cacheManager = ARGBookCacheManager(book: book, fileStorage: ARGBookContentSizeCacheFileStorage(), containerView: self)
         refreshView()
     }
     
@@ -115,18 +118,11 @@ import ARGContinuousScroll
             return
         }
         
-        let snapshotManager = ARGBookPageSnapshotManager(fileManager: ARGBookPageSnapshotFileManager(book: book!),
-                                                         cache: cacheManager,
-                                                         settings: settings!,
-                                                         containerView: self)
+        pageCounter = ARGBookInternalPageManager(cache: cacheManager, settings: settings!)
         
-        pageManager = ARGBookInternalPageManager(cache: cacheManager,
-                                                 settings: settings!,
-                                                 snapshotManager: snapshotManager)
+        snapshotCache = ARGBookPageSnapshotManager(pageCounter: pageCounter, fileStorage: ARGBookPageSnapshotCacheFileStorage())
         
-        cacheManager.startCacheUpdating(for: self.book!.documents,
-                                        with: settings!,
-                                        viewPort: bounds.size)
+        cacheManager.startCacheUpdating(for: self.book!.documents, with: settings!, viewPort: bounds.size)
         
         collectionView.reloadData()
         
@@ -209,8 +205,9 @@ extension ARGBookView: UICollectionViewDelegateFlowLayout {
                                    document: document,
                                    settings: settings,
                                    navigationPoint: navigationPoint,
-                                   pageConverter: pageManager)
-//            
+                                   pageCounter: pageCounter,
+                                   snapshotCache: snapshotCache)
+//
 //            if let navigationPoint = self.currentNavigationPoint, navigationPoint.document.filePath == book?.documents[indexPath.item].filePath {
 //                cell.documentView.scroll(to: navigationPoint)
 //            }

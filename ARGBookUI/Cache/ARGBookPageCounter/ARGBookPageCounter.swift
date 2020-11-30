@@ -1,5 +1,5 @@
 //
-//  ARGBookPageConverter.swift
+//  ARGBookPageCounter.swift
 //  ARGBookUI
 //
 //  Created by Sergei Polshcha on 20.11.2020.
@@ -7,11 +7,9 @@
 
 import Foundation
 
-@objc public protocol ARGBookPageConverter {
+@objc public protocol ARGBookPageCounter {
     
-    var bookCache: ARGBookCache {get}
-    
-    var snapshotManager: ARGBookPageSnapshotFetcher {get}
+    var contentSizeCache: ARGBookContentSizeCache {get}
     
     var settings: ARGBookReadingSettings {get}
     

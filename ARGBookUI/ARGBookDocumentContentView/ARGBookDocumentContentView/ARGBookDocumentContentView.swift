@@ -38,32 +38,7 @@ class ARGBookDocumentContentView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var images = [UIImage]()
-    
-//    func takeSnapshots(offset: CGFloat) {
-//        if offset >= 8200 {
-//            return
-//        }
-//
-//        //for offset in stride(from: 0, to: 8280, by: 414) {
-//            let config = WKSnapshotConfiguration()
-//            config.rect = CGRect(x: 0, y: 0, width: 414, height: 896)
-//            self.webView.takeSnapshot(with: config) { (image, error) in
-//                if image != nil {
-//                    self.images.append(image!)
-//                }
-//
-//                self.webView.scrollView.contentOffset = CGPoint(x: offset + 414, y: self.webView.scrollView.contentOffset.y)
-//                self.takeSnapshots(offset: self.webView.scrollView.contentOffset.x)
-//
-//            }
-//        }
-    
-      //  DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-            //print("\(images)")
-       // }
-    
-    func load(document: ARGBookDocument, layoutType: ARGBookDocumentLayout.Type, settings: ARGBookReadingSettings, cache: ARGBookCache, completionHandler: (() -> Void)? = nil) {
+    func load(document: ARGBookDocument, layoutType: ARGBookDocumentLayout.Type, settings: ARGBookReadingSettings, cache: ARGBookContentSizeCache, completionHandler: (() -> Void)? = nil) {
 
         if layoutManager == nil || !(type(of:layoutManager!.layout) == layoutType) || layoutManager!.document.uid != document.uid {
             let layout = layoutType.init(webView: webView)

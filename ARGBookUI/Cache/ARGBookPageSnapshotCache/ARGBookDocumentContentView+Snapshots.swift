@@ -27,7 +27,7 @@ extension ARGBookDocumentContentView {
                         config.afterScreenUpdates = true
                     } else {}
                     
-                    self.webView.takeSnapshot(with: nil) { (image, error) in
+                    self.webView.takeSnapshot(with: config) { (image, error) in
                         if let image = image {
                             var newSnapshots = snapshots ?? [UIImage]()
                             newSnapshots.append(TestImage(cgImage: image.cgImage!))

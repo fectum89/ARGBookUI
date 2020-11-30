@@ -21,9 +21,9 @@ class ARGBookDocumentSettingsCommonLogic {
     
     var applyingInProgress = false
     
-    var cache: ARGBookCache
+    var cache: ARGBookContentSizeCache
     
-    init(document: ARGBookDocument, layout: ARGBookDocumentSettingsControllerContainer & ARGBookDocumentContentSizeContainer, cache: ARGBookCache) {
+    init(document: ARGBookDocument, layout: ARGBookDocumentSettingsControllerContainer & ARGBookDocumentContentSizeContainer, cache: ARGBookContentSizeCache) {
         self.document = document
         self.cache = cache
         self.layout = layout

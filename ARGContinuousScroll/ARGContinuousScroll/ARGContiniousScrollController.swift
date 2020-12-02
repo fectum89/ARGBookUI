@@ -104,10 +104,6 @@ import UIKit
             return size.height
         }
     }
-    
-    deinit {
-        print("scroll controller deinit")
-    }
 
 }
 

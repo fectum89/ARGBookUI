@@ -28,6 +28,8 @@
 
 @property (nonatomic, assign, readonly) CGSize pageSize;
 
+@property (nonatomic, strong) NSString *languageCode;
+
 - (instancetype)initWithWebView:(WKWebView *)webView;
 
 - (void)setSettings:(id<ARGBookReadingSettings>)settings pageSize:(CGSize)pageSize completion:(dispatch_block_t)completion;

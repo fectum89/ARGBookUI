@@ -164,7 +164,7 @@
     
     _hyphenation = hyphenation;
     
-    [_webView evaluateJavaScript:[NSString stringWithFormat:@"hyphenate(%d)", hyphenation]
+    [_webView evaluateJavaScript:[NSString stringWithFormat:@"hyphenate(%d, '%@')", hyphenation, _languageCode]
                completionHandler:^(id _Nullable result, NSError * _Nullable error) {
                       if (completion) {
                           completion();

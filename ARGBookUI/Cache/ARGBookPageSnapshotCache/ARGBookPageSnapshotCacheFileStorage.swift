@@ -23,7 +23,7 @@ class ARGBookPageSnapshotCacheFileStorage: ARGBookCacheFileStorage {
             let filePath = self.prepareFilePath(for: item)
             
             let image = autoreleasepool {() -> UIImage? in
-                let image = TestImage(contentsOfFile: filePath.path)
+                let image = UIImage(contentsOfFile: filePath.path)
                 return image
             }
             

@@ -7,12 +7,6 @@
 
 import Foundation
 
-class TestImage: UIImage {
-    deinit {
-        print("deinit image")
-    }
-}
-
 extension ARGBookDocumentContentView {
     
     func createSnapshots(for document: ARGBookDocument, at page: Int, pageCount: Int, snapshots: [UIImage]? = nil, completionHandler: (([UIImage]?) -> Void)? = nil) {
@@ -30,7 +24,7 @@ extension ARGBookDocumentContentView {
                     self.webView.takeSnapshot(with: config) { (image, error) in
                         if let image = image {
                             var newSnapshots = snapshots ?? [UIImage]()
-                            newSnapshots.append(TestImage(cgImage: image.cgImage!))
+                            newSnapshots.append(UIImage(cgImage: image.cgImage!))
                             
                             self.createSnapshots(for: document,
                                                  at: page + 1,

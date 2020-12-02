@@ -78,8 +78,4 @@ class ARGBookDocumentLayoutManager {
         navigationLogic.obtainCurrentNavigationPoint(completionHandler: completionHandler)
     }
     
-    deinit {
-        print("layoutmanager deallocated")
-    }
-    
 }

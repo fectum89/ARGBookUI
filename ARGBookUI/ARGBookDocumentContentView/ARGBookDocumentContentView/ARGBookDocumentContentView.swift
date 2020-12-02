@@ -20,7 +20,7 @@ class ARGBookDocumentContentView: UIView {
         
         let configuration = ARGBookWebViewConfigurator.configuration()
         
-        webView = ARGWebView(frame: frame, configuration: configuration)
+        webView = WKWebView(frame: frame, configuration: configuration)
         
         webView.frame = bounds
         webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -61,10 +61,6 @@ class ARGBookDocumentContentView: UIView {
     
     func obtainCurrentNavigationPoint(completionHandler: ((ARGBookNavigationPoint) -> Void)? = nil) {
         layoutManager?.obtainCurrentNavigationPoint(completionHandler: completionHandler)
-    }
-    
-    deinit {
-        print("contentView deallocated")
     }
     
 }

@@ -8,7 +8,6 @@ function onLoadSetup() {
     setCSSRule('a', 'text-decoration', 'none');
     setCSSRule('p', 'line-height', 'normal');
     setCSSRule('li', 'line-height', 'normal');
-    
     setCSSRule('body', 'background-color', 'transparent');
 }
 
@@ -21,15 +20,15 @@ function setViewportWidth(viewportWidth) {
         var head = document.getElementsByTagName('head')[0];
         head.appendChild(viewport);
     }
-    
+
     var value;
     var scale = 1.0;
     value = 'initial-scale=' + scale + ', minimum-scale=' + scale + ', maximum-scale=' + scale + ', user-scalable=no';
-    
+
     if (viewportWidth > 0) {
         value += ', width=' + viewportWidth;
     }
-    
+
     viewport.setAttribute('content', value);
 }
 
@@ -37,7 +36,7 @@ function setCSSRule(selector, property, value) {
     if (typeof selector === 'string' || selector instanceof String) {
         selector = getCSSRule(selector);
     }
-    
+
     if (typeof selector !== 'undefined') {
         selector.style.setProperty(property, value, 'important');
     }
@@ -47,17 +46,17 @@ function getCSSRule(selector) {
     if (document.head == null) {
         return;
     }
-    
+
     if (!mySheet) {
         var style = document.createElement("style");
 
         style.appendChild(document.createTextNode("")); //webkit hack
 
         document.head.appendChild(style);
-        
+
         mySheet = style.sheet;
     }
-    
+
     var cssRules = (mySheet && mySheet.cssRules) ? mySheet.cssRules : [];
     for (var i = 0; i < cssRules.length; i++) {
         var cssRule = cssRules[i];
@@ -65,7 +64,7 @@ function getCSSRule(selector) {
             return cssRule;
         }
     }
-    
+
     var newRuleIndex = cssRules.length;
     mySheet.insertRule(selector + '{ }', newRuleIndex);
     return mySheet.cssRules[newRuleIndex];
@@ -74,9 +73,9 @@ function getCSSRule(selector) {
 function setPageSettings(pageWidth, pageHeight, topInset, rightInset, bottomInset, leftInset) {
     columnWidth = pageWidth;
     columnGap = (rightInset + leftInset);
-    
+
     setPaddings(pageWidth, pageHeight, topInset, rightInset, bottomInset, leftInset);
-    
+
     var css = getCSSRule('html');
     setCSSRule(css, 'height', pageHeight + 'px');
     setCSSRule(css, '-webkit-column-width', columnWidth + 'px');
@@ -87,7 +86,7 @@ function setPageSettings(pageWidth, pageHeight, topInset, rightInset, bottomInse
 function setPaddings(pageWidth, pageHeight, top, right, bottom, left) {
     var padding = top + 'px ' + right + 'px ' + bottom + 'px ' + left + 'px';
     setCSSRule('html', 'padding', padding);
-    
+
     setMaxMediaContentSize('img', pageWidth, pageHeight);
     setMaxMediaContentSize('svg', pageWidth, pageHeight);
     setMaxMediaContentSize('iframe', pageWidth, pageHeight);
@@ -127,21 +126,23 @@ function setFontFamily(fontFamily) {
     document.body.style.fontFamily = fontFamily;
 }
 
-function hyphenate(enabled) {
-//    var htmlElement = document.getElementsByTagName('html')[0];
-//    htmlElement.setAttribute('lang', language);
+function hyphenate(enabled, lang) {
+    if (lang) {
+        var htmlElement = document.getElementsByTagName('html')[0];
+        htmlElement.setAttribute('lang', lang);
+    }
 
     var state;
-    
+
     if (enabled) {
         state = 'auto';
     } else {
         state = 'none';
     }
 
-    setCSSRule('p', '-webkit-hyphens', state);
-    setCSSRule('li', '-webkit-hyphens', state);
-    setCSSRule('div', '-webkit-hyphens', state);
+    setCSSRule('body', '-webkit-hyphens', state);
+    //setCSSRule('li', '-webkit-hyphens', state);
+    // setCSSRule('div', '-webkit-hyphens', state);
 }
 
 function setTextAlignment(alignment) {

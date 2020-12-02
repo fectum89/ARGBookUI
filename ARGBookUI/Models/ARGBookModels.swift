@@ -75,6 +75,8 @@ class ARGBookNavigationPointInternal: ARGBookNavigationPoint {
     
     var book: ARGBook? {get}
     
+    var languageCode: String {get}
+    
 }
 
 extension ARGBookDocument {

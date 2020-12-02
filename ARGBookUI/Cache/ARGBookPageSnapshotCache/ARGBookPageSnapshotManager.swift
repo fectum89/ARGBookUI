@@ -118,10 +118,6 @@ class ARGBookPageSnapshotCreator {
         }
     }
     
-    deinit {
-        print("snapshot creator deinit")
-    }
-    
 }
 
 class ARGBookPageSnapshotManager: ARGBookPageSnapshotCache {
@@ -177,9 +173,9 @@ class ARGBookPageSnapshotManager: ARGBookPageSnapshotCache {
             if let snapshot = snapshotsCache.object(forKey: NSString(string: info.relativePath.path)) {
                 completionHandler?(snapshot)
             } else {
-                fileStorage.read(item: info) { (image) in
+                fileStorage.read(item: info) { [weak self] (image) in
                     if let image = image as? UIImage {
-                        self.snapshotsCache.setObject(image, forKey: NSString(string: info.relativePath.path))
+                        self?.snapshotsCache.setObject(image, forKey: NSString(string: info.relativePath.path))
                     }
                     
                     completionHandler?(image as? UIImage)
@@ -191,8 +187,6 @@ class ARGBookPageSnapshotManager: ARGBookPageSnapshotCache {
     }
     
     deinit {
-        print("deinit")
-        
         if cacheObserver != nil {
             NotificationCenter.default.removeObserver(cacheObserver!)
         }

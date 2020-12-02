@@ -109,8 +109,6 @@ class ARGDocumentOverlayView: UIView {
         if cacheObserver != nil {
             NotificationCenter.default.removeObserver(cacheObserver!)
         }
-        
-        print("overlay deinit")
     }
     
 }

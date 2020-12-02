@@ -35,7 +35,4 @@ class ARGDocumentCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(documentView)
     }
     
-    deinit {
-        print("cell deinit")
-    }
 }

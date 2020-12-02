@@ -144,7 +144,4 @@ class ARGBookInternalPageManager: ARGBookPageCounter {
         return nil
     }
     
-    deinit {
-        print("ARGBookInternalPageManager deinit")
-    }
 }

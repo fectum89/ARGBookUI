@@ -80,8 +80,4 @@ class ARGBookDocumentNavigationCommonLogic {
         }
     }
     
-    deinit {
-        print("navigation logic deallocated")
-    }
-    
 }

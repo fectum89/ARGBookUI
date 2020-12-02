@@ -13,7 +13,7 @@ class ARGBookDocumentVerticalLayout: ARGBookDocumentSettingsControllerContainer 
     
     var settingsController: ARGBookReadingSettingsController
     
-    var isReady: Bool {
+    var isReady: Bool = false {
         didSet {
             if isReady {
                 webView.scrollView.bounces = false
@@ -29,7 +29,6 @@ class ARGBookDocumentVerticalLayout: ARGBookDocumentSettingsControllerContainer 
     
     required init(webView: WKWebView) {
         self.webView = webView
-        isReady = false
         self.settingsController = ARGBookVerticalLayoutSettingsController(webView: webView)
     }
 

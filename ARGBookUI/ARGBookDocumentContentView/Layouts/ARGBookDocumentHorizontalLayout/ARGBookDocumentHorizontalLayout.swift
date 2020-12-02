@@ -30,12 +30,7 @@ class ARGBookDocumentHorizontalLayout: ARGBookDocumentSettingsControllerContaine
     
     required init(webView: WKWebView) {
         self.webView = webView
-        self.isReady = false
         self.settingsController = ARGFlowableLayoutSettingsController(webView: webView)
-    }
-    
-    deinit {
-        print("layout deinit")
     }
     
 }

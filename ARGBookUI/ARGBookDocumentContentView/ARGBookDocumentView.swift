@@ -36,6 +36,10 @@ class ARGBookDocumentView: UIView {
     
     var pendingItem: ARGBookDocumentPendingItem?
     
+    var pageCounter: ARGBookPageCounter?
+    
+    var snapshotCache: ARGBookPageSnapshotCache?
+    
     override init(frame: CGRect) {
         contentView = ARGBookDocumentContentView()
         overlayView = ARGDocumentOverlayView()
@@ -116,6 +120,9 @@ class ARGBookDocumentView: UIView {
         if self.bounds.size == targetSize {
             pendingItem = nil
             
+            self.pageCounter = pageCounter
+            self.snapshotCache = snapshotCache
+            
             let layoutType: (ARGBookDocumentLayout).Type = document.layoutType(for: settings.scrollType)
             
             self.overlayView.prepare(for: document, pageCounter: pageCounter, layoutType: layoutType as! (ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer).Type)
@@ -131,14 +138,6 @@ class ARGBookDocumentView: UIView {
             
             if let navigationPoint = navigationPoint {
                 scroll(to: navigationPoint)
-                
-                if let page = pageCounter.page(for: navigationPoint) {
-                    snapshotCache.snapshot(for: page) { [weak self] (image) in
-                        print(image)
-                        self?.snapshotView.image = image
-                        self?.snapshotView.isHidden = image == nil || self?.contentView.layoutManager?.layout.isReady ?? true
-                    }
-                }
             }
         } else {
             pendingItem = ARGBookDocumentPendingItem(targetSize: targetSize,
@@ -155,6 +154,13 @@ class ARGBookDocumentView: UIView {
         if pendingItem != nil {
             pendingItem?.navigationPoint = navigationPoint
         } else {
+            if let page = pageCounter?.page(for: navigationPoint) {
+                snapshotCache?.snapshot(for: page) { [weak self] (image) in
+                    self?.snapshotView.image = image
+                    self?.snapshotView.isHidden = image == nil || self?.contentView.layoutManager?.layout.isReady ?? false
+                }
+            }
+            
             contentView.scroll(to: navigationPoint) { [weak self] in
                 self?.contentView.isHidden = false
                 self?.overlayView.isHidden = false
@@ -173,7 +179,6 @@ class ARGBookDocumentView: UIView {
     
     deinit {
         contentView.webView.scrollView.removeObserver(self, forKeyPath: "contentOffset")
-        print("documentView deinit")
     }
     
 }

@@ -30,21 +30,22 @@ class ARGBookDocumentSettingsCommonLogic {
     }
     
     func applyReadingSettings(_ settings: ARGBookReadingSettings, completionHandler: (() -> Void)? = nil) {
-        let applySettingsClosure = {
-            self.layout.apply(settings: settings) {
+        let applySettingsClosure = { [self] in
+            layout.settingsController.languageCode = document.languageCode
+            layout.apply(settings: settings) {
                 let waitForDom = { size in
-                    self.waitForDOMReady(measuredSize: size) {
-                        self.applyingInProgress = false
+                    waitForDOMReady(measuredSize: size) {
+                        applyingInProgress = false
                         completionHandler?()
                     }
                 }
                 
-                let size = self.cache.contentSize(for: self.document, settings: settings, viewPort: self.layout.webView.bounds.size)
+                let size = cache.contentSize(for: document, settings: settings, viewPort: layout.webView.bounds.size)
                 
                 if size != .zero {
                     waitForDom(size)
                 } else {
-                    self.layout.measureContentSize { (size) in
+                    layout.measureContentSize { (size) in
                         waitForDom(size)
                     }
                 }
@@ -60,6 +61,9 @@ class ARGBookDocumentSettingsCommonLogic {
         }
     }
     
+    func setLanguage(code: String) {
+        layout.webView.evaluateJavaScript("setLanguage(\(code)")
+    }
     
     func prepare(completionHandler: (() -> Void)? = nil) {
         if #available(iOS 13, *) {} else {
@@ -90,10 +94,6 @@ class ARGBookDocumentSettingsCommonLogic {
             completionHandler?()
         }
         
-    }
-    
-    deinit {
-        print("settings logic deallocated")
     }
     
 }

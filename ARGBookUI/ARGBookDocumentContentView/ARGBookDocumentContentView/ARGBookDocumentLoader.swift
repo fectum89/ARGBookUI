@@ -64,10 +64,6 @@ class ARGBookDocumentLoader: NSObject {
         }
     }
     
-    deinit {
-        print("documentLoader deinit")
-    }
-    
 }
 
 extension ARGBookDocumentLoader: WKNavigationDelegate {

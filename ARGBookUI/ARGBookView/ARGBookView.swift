@@ -16,9 +16,11 @@ import ARGContinuousScroll
     
     var cacheManager: ARGBookCacheManager!
     
-    @objc public var pageCounter: ARGBookPageCounter!
+    @objc public var pageCounter: ARGBookPageCounter?
     
-    var snapshotCache: ARGBookPageSnapshotCache!
+    @objc public var snapshotCache: ARGBookPageSnapshotCache?
+    
+    //@objc public var languageCode: String?
     
     var book: ARGBook?
     
@@ -65,7 +67,7 @@ import ARGContinuousScroll
         }
         
         let layout = ARGBookCollectionViewLayout()
-        collectionView = ARGBookCollectionView(frame: self.bounds, collectionViewLayout: layout)
+        collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: layout)
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -75,7 +77,6 @@ import ARGContinuousScroll
         collectionView.register(nib, forCellWithReuseIdentifier: identifier)
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.backgroundColor = .clear
-        collectionView.dataSource = self
         
         self.addSubview(collectionView)
         
@@ -86,6 +87,7 @@ import ARGContinuousScroll
     
     public func load(book: ARGBook) {
         self.book = book
+        currentNavigationPoint = nil
         cacheManager = ARGBookCacheManager(book: book, fileStorage: ARGBookContentSizeCacheFileStorage(), containerView: self)
         refreshView()
     }
@@ -110,17 +112,21 @@ import ARGContinuousScroll
             })
         }
 
-        refreshView()
+        DispatchQueue.main.async {
+            self.refreshView()
+        }
     }
     
-    @objc func refreshView () {
+    @objc public func refreshView () {
         guard book != nil, settings != nil, collectionView != nil else {
             return
         }
         
+        collectionView.dataSource = self
+        
         pageCounter = ARGBookInternalPageManager(cache: cacheManager, settings: settings!)
         
-        snapshotCache = ARGBookPageSnapshotManager(pageCounter: pageCounter, fileStorage: ARGBookPageSnapshotCacheFileStorage())
+        snapshotCache = ARGBookPageSnapshotManager(pageCounter: pageCounter!, fileStorage: ARGBookPageSnapshotCacheFileStorage())
         
         cacheManager.startCacheUpdating(for: self.book!.documents, with: settings!, viewPort: bounds.size)
         
@@ -128,6 +134,8 @@ import ARGContinuousScroll
         
         if let navigationPoint = self.currentNavigationPoint {
             scroll(to: navigationPoint)
+        } else {
+            scroll(to: ARGBookNavigationPointInternal(document: book!.documents[0], position: 0))
         }
     }
     
@@ -194,23 +202,14 @@ extension ARGBookView: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let cell = cell as? ARGDocumentCollectionViewCell, let document = book?.documents[indexPath.item], let settings = self.settings {
             
-            
-            if let navigationPoint = self.currentNavigationPoint, navigationPoint.document.filePath == document.filePath {
-                
-            }
-            
             let navigationPoint = (self.currentNavigationPoint?.document.uid == document.uid) ? currentNavigationPoint : nil
             
             cell.documentView.load(targetSize: collectionView.bounds.size,
                                    document: document,
                                    settings: settings,
                                    navigationPoint: navigationPoint,
-                                   pageCounter: pageCounter,
-                                   snapshotCache: snapshotCache)
-//
-//            if let navigationPoint = self.currentNavigationPoint, navigationPoint.document.filePath == book?.documents[indexPath.item].filePath {
-//                cell.documentView.scroll(to: navigationPoint)
-//            }
+                                   pageCounter: pageCounter!,
+                                   snapshotCache: snapshotCache!)
         }
     }
     

@@ -24,6 +24,15 @@ import UIKit.UIColor
     
     case justify
     
+    func stringRepresentation() -> String {
+        switch self {
+        case .left:
+            return "left"
+        default:
+            return "justify"
+        }
+    }
+    
 }
 
 
@@ -50,8 +59,6 @@ import UIKit.UIColor
     var textColor: UIColor {get}
     
     var highlightColor: UIColor {get}
-    
-    var backGroundColor: UIColor {get}
     
     var scrollType: ARGBookScrollType {get}
     

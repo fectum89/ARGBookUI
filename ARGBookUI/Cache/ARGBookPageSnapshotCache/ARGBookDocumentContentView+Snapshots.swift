@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import UIKit.UIImage
+import WebKit
 
 extension ARGBookDocumentContentView {
     

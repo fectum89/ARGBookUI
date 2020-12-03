@@ -15,6 +15,6 @@ FOUNDATION_EXPORT const unsigned char ARGBookUIVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <ARGBookUI/PublicHeader.h>
 
-#import <ARGBookUI/ARGBookReadingSettingsController.h>
-#import <ARGBookUI/ARGFlowableLayoutSettingsController.h>
+//#import <ARGBookUI/ARGBookReadingSettingsController.h>
+//#import <ARGBookUI/ARGFlowableLayoutSettingsController.h>
 

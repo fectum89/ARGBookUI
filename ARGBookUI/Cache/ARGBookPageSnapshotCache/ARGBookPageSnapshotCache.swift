@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit.UIImage
 
 @objc public protocol ARGBookPageSnapshotCache {
     

@@ -11,7 +11,6 @@
 		5D0B053A255BDA5300BC0698 /* CommonMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0B0539255BDA5300BC0698 /* CommonMocks.swift */; };
 		5D0B0540255D57D700BC0698 /* ARGBookCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0B053F255D57D600BC0698 /* ARGBookCollectionViewLayout.swift */; };
 		5D165CD12570D06E00C810D9 /* ARGBookCacheFileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D165CD02570D06E00C810D9 /* ARGBookCacheFileStorage.swift */; };
-		5D165CE72570D3D600C810D9 /* ARGContinuousScroll.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5D165CE52570D3D600C810D9 /* ARGContinuousScroll.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5D2C8C2D253C66A70034D6CC /* ARGBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2C8C2C253C66A70034D6CC /* ARGBookView.swift */; };
 		5D2C8C5925415EB50034D6CC /* UIColor+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2C8C5825415EB50034D6CC /* UIColor+String.swift */; };
 		5D43215D253C2DDB0086FED9 /* ARGBookDocumentSettingsCommonLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D43215C253C2DDB0086FED9 /* ARGBookDocumentSettingsCommonLogic.swift */; };
@@ -48,6 +47,8 @@
 		5DBC0A952531E7F0004DE451 /* PrepareDocument.js in Resources */ = {isa = PBXBuildFile; fileRef = 5DBC0A912531E7F0004DE451 /* PrepareDocument.js */; };
 		5DBC0A962531E7F0004DE451 /* Navigation.js in Resources */ = {isa = PBXBuildFile; fileRef = 5DBC0A922531E7F0004DE451 /* Navigation.js */; };
 		5DBC0AAA2531F62B004DE451 /* ARGBookWebViewConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC0AA92531F62B004DE451 /* ARGBookWebViewConfigurator.swift */; };
+		5DC24ADC2578A7FD00BFEBE5 /* ARGContinuousScroll.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DC24ADB2578A7FD00BFEBE5 /* ARGContinuousScroll.framework */; };
+		5DC24ADD2578A7FD00BFEBE5 /* ARGContinuousScroll.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5DC24ADB2578A7FD00BFEBE5 /* ARGContinuousScroll.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5DC52AB0255F8C37001D3D36 /* ARGDocumentPageHorizontalOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DC52AAE255F8C37001D3D36 /* ARGDocumentPageHorizontalOverlayView.xib */; };
 		5DC52AB1255F8C37001D3D36 /* ARGDocumentPageVerticalOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DC52AAF255F8C37001D3D36 /* ARGDocumentPageVerticalOverlayView.xib */; };
 		5DD92031253229E60023E58C /* WKWebView+Scripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD92030253229E60023E58C /* WKWebView+Scripts.swift */; };
@@ -80,7 +81,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5D165CE72570D3D600C810D9 /* ARGContinuousScroll.framework in Embed Frameworks */,
+				5DC24ADD2578A7FD00BFEBE5 /* ARGContinuousScroll.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -92,7 +93,6 @@
 		5D0B0539255BDA5300BC0698 /* CommonMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonMocks.swift; sourceTree = "<group>"; };
 		5D0B053F255D57D600BC0698 /* ARGBookCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookCollectionViewLayout.swift; sourceTree = "<group>"; };
 		5D165CD02570D06E00C810D9 /* ARGBookCacheFileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookCacheFileStorage.swift; sourceTree = "<group>"; };
-		5D165CE52570D3D600C810D9 /* ARGContinuousScroll.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ARGContinuousScroll.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D2C8C2C253C66A70034D6CC /* ARGBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookView.swift; sourceTree = "<group>"; };
 		5D2C8C5825415EB50034D6CC /* UIColor+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+String.swift"; sourceTree = "<group>"; };
 		5D43215C253C2DDB0086FED9 /* ARGBookDocumentSettingsCommonLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentSettingsCommonLogic.swift; sourceTree = "<group>"; };
@@ -131,6 +131,7 @@
 		5DBC0A912531E7F0004DE451 /* PrepareDocument.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = PrepareDocument.js; sourceTree = "<group>"; };
 		5DBC0A922531E7F0004DE451 /* Navigation.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Navigation.js; sourceTree = "<group>"; };
 		5DBC0AA92531F62B004DE451 /* ARGBookWebViewConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookWebViewConfigurator.swift; sourceTree = "<group>"; };
+		5DC24ADB2578A7FD00BFEBE5 /* ARGContinuousScroll.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ARGContinuousScroll.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DC52AAE255F8C37001D3D36 /* ARGDocumentPageHorizontalOverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ARGDocumentPageHorizontalOverlayView.xib; sourceTree = "<group>"; };
 		5DC52AAF255F8C37001D3D36 /* ARGDocumentPageVerticalOverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ARGDocumentPageVerticalOverlayView.xib; sourceTree = "<group>"; };
 		5DD92030253229E60023E58C /* WKWebView+Scripts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKWebView+Scripts.swift"; sourceTree = "<group>"; };
@@ -139,7 +140,6 @@
 		5DD920412532339B0023E58C /* ARGFlowableLayoutSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARGFlowableLayoutSettingsController.m; sourceTree = "<group>"; };
 		5DD920422532339B0023E58C /* ARGFlowableLayoutSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARGFlowableLayoutSettingsController.h; sourceTree = "<group>"; };
 		5DD92047253235E50023E58C /* ARGSettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGSettingsModel.swift; sourceTree = "<group>"; };
-		5DD92070253238AA0023E58C /* ARGView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ARGView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DD920DB253449560023E58C /* ARGBookDocumentLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookDocumentLoader.swift; sourceTree = "<group>"; };
 		5DD999E2254804BB00F5E1EC /* ARGBookVerticalLayoutSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookVerticalLayoutSettingsController.swift; sourceTree = "<group>"; };
 		5DD999E62549614B00F5E1EC /* ARGBookContentSizeCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBookContentSizeCache.swift; sourceTree = "<group>"; };
@@ -153,6 +153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DC24ADC2578A7FD00BFEBE5 /* ARGContinuousScroll.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -428,8 +429,7 @@
 		5DD9206F253238AA0023E58C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5D165CE52570D3D600C810D9 /* ARGContinuousScroll.framework */,
-				5DD92070253238AA0023E58C /* ARGView.framework */,
+				5DC24ADB2578A7FD00BFEBE5 /* ARGContinuousScroll.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

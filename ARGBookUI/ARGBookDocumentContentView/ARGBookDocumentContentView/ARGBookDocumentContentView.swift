@@ -28,6 +28,8 @@ class ARGBookDocumentContentView: UIView {
         webView.clipsToBounds = true
         webView.navigationDelegate = self
         webView.scrollView.contentInsetAdjustmentBehavior = .never
+        webView.scrollView.showsVerticalScrollIndicator = false
+        webView.scrollView.showsHorizontalScrollIndicator = false
         webView.allowsLinkPreview = false
         addSubview(webView)
         

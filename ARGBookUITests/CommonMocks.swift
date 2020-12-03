@@ -53,6 +53,7 @@ class TestBookMock: ARGBook {
 }
 
 class TestDocumentMock: ARGBookDocument {
+    var languageCode: String?
     
     var highlights: [ARGBookHighlight]?
     

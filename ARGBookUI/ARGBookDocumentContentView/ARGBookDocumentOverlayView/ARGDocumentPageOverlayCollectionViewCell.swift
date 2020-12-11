@@ -23,13 +23,13 @@ class ARGBookDocumentPageCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func update(with page: ARGDocumentPage) {
+    func update(with page: ARGDocumentPage, contentEdgeInsets: UIEdgeInsets) {
         if let counter = page.pageCounter {
             let overlayCreator = page.startNavigationPoint.document.layoutType(for: counter.settings.scrollType) as! ARGBookDocumentPageOverlayCreator.Type
             
             currentLayoutType = overlayCreator
             
-            overlayView.update(with: page)
+            overlayView.update(with: page, contentEdgeInsets: contentEdgeInsets)
         }
     }
     

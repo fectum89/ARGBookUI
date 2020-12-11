@@ -20,9 +20,8 @@ class ARGBookDocumentHorizontalLayout: ARGBookDocumentSettingsControllerContaine
                 webView.scrollView.isPagingEnabled = true
                 webView.scrollView.bounces = false
                 
-                
-                if webView.scrollView.contentSize.width > webView.scrollView.bounds.size.width, let margins = (self.settingsController as! ARGFlowableLayoutSettingsController).absolutePageMargins {
-                    self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: margins.horizontal)
+                if webView.scrollView.contentSize.width > webView.scrollView.bounds.size.width, let margins = self.settingsController.contentEdgeInsets {
+                    self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: margins.right)
                 } else {
                     webView.scrollView.contentInset = UIEdgeInsets()
                 }

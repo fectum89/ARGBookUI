@@ -8,8 +8,7 @@
 import UIKit
 
 class ARGBookVerticalLayoutSettingsController: ARGBookReadingSettingsController {
-    private(set) var relativeHorizontalMargins: Int64?
-    private(set) var absoluteHorizontalMargins: Int64?
+    
     private(set) var marginsScript: String?
     
     override func setSettings(_ settings: ARGBookReadingSettings!, pageSize:CGSize, completionHandler: (() -> Void)? = nil) {
@@ -28,18 +27,20 @@ class ARGBookVerticalLayoutSettingsController: ARGBookReadingSettingsController 
     }
     
     func setRelativeHorizontalMargins(_ margins: Int64, completion: (() -> Void)?) {
-        relativeHorizontalMargins = margins
-        
         if let pageSize = self.pageSize {
-            let absoluteMargins = Int64(floor(pageSize.width / 100 * CGFloat(margins)))
-            setAbsoluteHorizontalMargins(absoluteMargins, completion: completion)
+            let horizontalMargin = floor(pageSize.width / 100 * CGFloat(margins))
+            let insets = UIEdgeInsets(top: 0, left: max(horizontalMargin, webView.safeAreaInsets.left), bottom: 0, right: max(horizontalMargin, webView.safeAreaInsets.right))
+            setAbsoluteHorizontalMargins(insets, completion: completion)
         }
     }
     
-    func setAbsoluteHorizontalMargins(_ margins: Int64, completion: (() -> Void)?) {
-        absoluteHorizontalMargins = margins
+    func setAbsoluteHorizontalMargins(_ margins: UIEdgeInsets, completion: (() -> Void)?) {
+        contentEdgeInsets = margins
         
-        let marginsScript = "setPaddings(\(self.pageSize!.width), \(self.pageSize!.height), 0, \(margins), 0, \(margins))"
+        let pageWidth = floor(pageSize!.width - margins.left - margins.right)
+        let pageHeight = floor(pageSize!.height - margins.top - margins.bottom)
+        
+        let marginsScript = "setPaddings(\(pageWidth), \(pageHeight), 0, \(margins.right), 0, \(margins.left))"
         
         guard self.marginsScript != nil || self.marginsScript != marginsScript else {
             completion?()

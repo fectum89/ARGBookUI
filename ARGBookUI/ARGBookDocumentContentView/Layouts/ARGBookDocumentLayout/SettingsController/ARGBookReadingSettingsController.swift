@@ -29,6 +29,8 @@ class ARGBookReadingSettingsController {
     private(set) var textColor: UIColor?
 
     private(set) var pageSize: CGSize?
+    
+    var contentEdgeInsets: UIEdgeInsets?
 
     var languageCode: String?
     

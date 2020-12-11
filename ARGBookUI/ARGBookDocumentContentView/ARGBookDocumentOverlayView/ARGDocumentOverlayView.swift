@@ -19,7 +19,7 @@ class ARGDocumentOverlayView: UIView {
     
     var pageCounter: ARGBookPageCounter?
     
-    var layoutType: (ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer).Type?
+    var layout: (ARGBookDocumentSettingsControllerContainer & ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer)?
     
     var cacheObserver: NSObjectProtocol?
     
@@ -37,24 +37,30 @@ class ARGDocumentOverlayView: UIView {
         
         let identifier = String(describing: ARGBookDocumentPageCollectionViewCell.self)
         collectionView.register(ARGBookDocumentPageCollectionViewCell.self, forCellWithReuseIdentifier: identifier)
+        
+        collectionView.addObserver(self, forKeyPath: "contentSize", options: .initial, context: nil)
     }
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func prepare(for document: ARGBookDocument, pageCounter: ARGBookPageCounter, layoutType: (ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer).Type) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "contentSize" {
+            conditionallyUpdateContentOffset()
+        }
+    }
+    
+    func prepare(for document: ARGBookDocument, pageCounter: ARGBookPageCounter, layout: (ARGBookDocumentSettingsControllerContainer & ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer)?) {
         self.pageCounter = pageCounter
         self.document = document
-        self.layoutType = layoutType
-        
-        pageCounter.settings.configure(collectionView: collectionView)
-        
+        self.layout = layout
+
         if !isObservingCache {
             cacheObserver = NotificationCenter.default.addObserver(forName: ARGBookContentSizeCache.progressDidChangeNotification, object: nil, queue: .main) { [weak self] (_) in
                 self?.preparePages()
             }
-            
+
             isObservingCache = true
         }
         
@@ -64,12 +70,11 @@ class ARGDocumentOverlayView: UIView {
     
     func preparePages() {
         if let document = self.document, let pageCounter = self.pageCounter {
-            collectionView.isHidden = true
+            //collectionView.isHidden = true
             if let pages = pageCounter.pages(for: document) {
                 self.pages = pages
+                refreshView()
             }
-            
-            refreshView()
         }
     }
     
@@ -89,15 +94,32 @@ class ARGDocumentOverlayView: UIView {
         }
     }
     
+    var contentOffset: CGPoint = .zero {
+        didSet {
+            conditionallyUpdateContentOffset()
+        }
+    }
+    
+    func conditionallyUpdateContentOffset() {
+        if collectionView.contentSize.width > 0 && collectionView.contentSize.height > 0 {
+            collectionView.contentOffset = contentOffset
+        }
+    }
+    
     func refreshView () {
-        if let documentLayout = layoutType, let pageCounter = self.pageCounter{
-            let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-            layout.itemSize = documentLayout.pageSize(for: collectionView.bounds.size,
+        if let layout = layout, let pageCounter = self.pageCounter {
+            let documentLayout = type(of: layout)
+            let collectionViewLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+            collectionViewLayout.itemSize = documentLayout.pageSize(for: collectionView.bounds.size,
                                                       settings: pageCounter.settings,
                                                       sizeClass: self.traitCollection.horizontalSizeClass)
+            pageCounter.settings.configure(collectionView: collectionView)
             
-            collectionView.reloadData()
-            collectionView.isHidden = false
+            collectionView.performBatchUpdates {
+                collectionViewLayout.invalidateLayout()
+            } completion: { (ready) in
+                self.collectionView.reloadData()
+            }
         }
     }
 
@@ -109,6 +131,8 @@ class ARGDocumentOverlayView: UIView {
         if cacheObserver != nil {
             NotificationCenter.default.removeObserver(cacheObserver!)
         }
+        
+        collectionView.removeObserver(self, forKeyPath: "contentSize")
     }
     
 }
@@ -122,13 +146,11 @@ extension ARGDocumentOverlayView: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ARGBookDocumentPageCollectionViewCell.self), for: indexPath) as! ARGBookDocumentPageCollectionViewCell
         
-        if let page = pages?[indexPath.item] {
-            cell.update(with: page)
+        if let page = pages?[indexPath.item], let contentEdgeInsets = layout?.settingsController.contentEdgeInsets {
+            cell.update(with: page, contentEdgeInsets: contentEdgeInsets)
         }
         
         return cell
     }
-    
+
 }
-
-

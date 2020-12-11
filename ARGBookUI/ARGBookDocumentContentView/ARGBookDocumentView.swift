@@ -101,7 +101,7 @@ class ARGBookDocumentView: UIView {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentOffset" {
             if contentView.layoutManager?.layout.isReady ?? false {
-                overlayView.collectionView.contentOffset = contentView.webView.scrollView.contentOffset
+                overlayView.contentOffset = contentView.webView.scrollView.contentOffset
             }
         }
     }
@@ -123,15 +123,17 @@ class ARGBookDocumentView: UIView {
             self.pageCounter = pageCounter
             self.snapshotCache = snapshotCache
             
-            let layoutType: (ARGBookDocumentLayout).Type = document.layoutType(for: settings.scrollType)
-            
-            self.overlayView.prepare(for: document, pageCounter: pageCounter, layoutType: layoutType as! (ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer).Type)
+            let layoutType: ARGBookDocumentLayout.Type = document.layoutType(for: settings.scrollType)
             
             contentView.load(document: document, layoutType: layoutType, settings: settings, cache: pageCounter.contentSizeCache) { [weak self] in
                 if navigationPoint == nil {
                     self?.contentView.isHidden = false
                     self?.overlayView.isHidden = false
                 }
+                
+                self?.overlayView.prepare(for: document,
+                                          pageCounter: pageCounter,
+                                          layout: self?.contentView.layoutManager?.layout as? (ARGBookDocumentSettingsControllerContainer & ARGBookDocumentScrollBehavior & ARGBookDocumentContentSizeContainer))
                 
                 completionHandler?()
             }

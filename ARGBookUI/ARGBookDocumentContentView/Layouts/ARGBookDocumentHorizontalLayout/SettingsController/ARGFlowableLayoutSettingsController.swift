@@ -10,10 +10,6 @@ import UIKit
 
 class ARGFlowableLayoutSettingsController : ARGBookReadingSettingsController {
     
-    private(set) var relativePageMargins: UIOffset?
-    
-    private(set) var absolutePageMargins: UIOffset?
-    
     private(set) var pageSettingsString: String?
     
     override func setSettings(_ settings: ARGBookReadingSettings, pageSize: CGSize, completionHandler: (() -> Void)? = nil) {
@@ -33,23 +29,28 @@ class ARGFlowableLayoutSettingsController : ARGBookReadingSettingsController {
     }
     
     func setRelativePageMargins(_ pageMargins: UIOffset, completionHandler: (() -> Void)? = nil) {
-        relativePageMargins = pageMargins
+       //relativePageMargins = pageMargins
         
         if let pageSize = self.pageSize {
-            let absolutePageMargins = UIOffset(horizontal: floor(pageSize.width / 100 * pageMargins.horizontal), vertical: floor(pageSize.height / 100 * pageMargins.vertical))
+            let horizontalMargin = floor(pageSize.width / 100 * pageMargins.horizontal)
+            let verticalMargin = floor(pageSize.height / 100 * pageMargins.vertical)
+            let absolutePageMargins = UIEdgeInsets(top: max(verticalMargin, webView.safeAreaInsets.top),
+                                                   left: max(horizontalMargin, webView.safeAreaInsets.left),
+                                                   bottom: max(verticalMargin, webView.safeAreaInsets.bottom),
+                                                   right: max(horizontalMargin, webView.safeAreaInsets.right))
             setAbsolutePageMargins(absolutePageMargins, completionHandler: completionHandler)
         }
     }
     
-    func setAbsolutePageMargins(_ pageMargins: UIOffset, completionHandler: (() -> Void)? = nil) {
-        absolutePageMargins = pageMargins
+    func setAbsolutePageMargins(_ pageMargins: UIEdgeInsets, completionHandler: (() -> Void)? = nil) {
+        contentEdgeInsets = pageMargins
         
-        let pageWidth = floor(pageSize!.width - pageMargins.horizontal * 2)
-        let pageHeight = floor(pageSize!.height - pageMargins.vertical * 2)
-        let topInset = floor(pageMargins.vertical)
-        let rightInset = floor(pageMargins.horizontal)
-        let bottomInset = floor(pageMargins.vertical)
-        let leftInset = floor(pageMargins.horizontal)
+        let pageWidth = floor(pageSize!.width - pageMargins.left - pageMargins.right)
+        let pageHeight = floor(pageSize!.height - pageMargins.top - pageMargins.bottom)
+        let topInset = floor(pageMargins.top)
+        let rightInset = floor(pageMargins.right)
+        let bottomInset = floor(pageMargins.bottom)
+        let leftInset = floor(pageMargins.left)
 
         let pageSizeScript = "setPageSettings(\(pageWidth),\(pageHeight),\(topInset),\(rightInset),\(bottomInset),\(leftInset))"
         

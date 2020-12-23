@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,18 +21,34 @@
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JYh-XM-1pl">
+                    <rect key="frame" x="285.5" y="44" width="47.5" height="47"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="tintColor" name="AccentColor"/>
+                    <inset key="contentEdgeInsets" minX="15" minY="15" maxX="15" maxY="10"/>
+                    <state key="normal" image="bookmark.fill" catalog="system"/>
+                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="gJ7-Wp-2O7" secondAttribute="bottom" constant="20" id="VQt-mt-fYO"/>
                 <constraint firstItem="gJ7-Wp-2O7" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="WKx-C7-tUA"/>
+                <constraint firstItem="JYh-XM-1pl" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="X7m-6R-mYn"/>
+                <constraint firstAttribute="trailing" secondItem="JYh-XM-1pl" secondAttribute="trailing" constant="5" id="pf4-W4-a8N"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="bookmarkButton" destination="JYh-XM-1pl" id="i2G-j5-0im"/>
                 <outlet property="pageNumberLabel" destination="gJ7-Wp-2O7" id="bMS-6V-ktl"/>
             </connections>
-            <point key="canvasLocation" x="-235" y="-95"/>
+            <point key="canvasLocation" x="-642" y="-138"/>
         </view>
     </objects>
+    <resources>
+        <image name="bookmark.fill" catalog="system" width="112" height="128"/>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

@@ -112,3 +112,17 @@ extension ARGBookDocument {
     func currentNavigationPointDidChange(_ navigationPoint: ARGBookNavigationPoint)
     
 }
+
+@objc public protocol ARGBookDocumentOverlayDelegate {
+    
+    func removeBookmarks(for page: ARGDocumentPage)
+    
+    func presentNoteUI(for highlights: [ARGBookHighlight], sourceRect: CGRect, page: ARGDocumentPage)
+    
+    func createHighlight(highlight: ARGBookHighlight, for page: ARGDocumentPage)
+    
+    func updateHighlight(highlight: ARGBookHighlight, for page: ARGDocumentPage)
+    
+    func removeHighlight(highlight: ARGBookHighlight, for page: ARGDocumentPage)
+    
+}

@@ -11,14 +11,19 @@ import Foundation
     
     @objc public var startNavigationPoint: ARGBookNavigationPoint
     
+    @objc public var endNavigationPoint: ARGBookNavigationPoint
+    
     @objc public var globalPageNumber: Int = 0
     
     var relativePageNumber: Int = 0
     
     weak var pageCounter: ARGBookPageCounter?
     
-    init(startNavigationPoint: ARGBookNavigationPoint, pageCounter: ARGBookPageCounter) {
+    var refreshHandler: (() -> ())?
+    
+    init(startNavigationPoint: ARGBookNavigationPoint, endNavigationPoint: ARGBookNavigationPoint, pageCounter: ARGBookPageCounter) {
         self.startNavigationPoint = startNavigationPoint
+        self.endNavigationPoint = endNavigationPoint
         self.pageCounter = pageCounter
     }
     
@@ -27,10 +32,24 @@ import Foundation
 extension ARGDocumentPage {
     
     //TBD
-    var isBookmarked: Bool? {
+    @objc public var bookmarks: [ARGBookmark]? {
         get {
-            return nil
+            var bookmarks = [ARGBookmark]()
+            
+            if let documentBookmarks = startNavigationPoint.document.bookmarks {
+                for bookmark in documentBookmarks {
+                    if bookmark.navigationPoint.position >= startNavigationPoint.position && bookmark.navigationPoint.position < endNavigationPoint.position {
+                        bookmarks.append(bookmark)
+                    }
+                }
+            }
+            
+            return bookmarks.isEmpty ? nil : bookmarks
         }
+    }
+    
+    @objc public func refresh() {
+        refreshHandler?()
     }
     
     //TBD

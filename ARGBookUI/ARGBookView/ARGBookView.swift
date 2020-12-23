@@ -20,15 +20,27 @@ import ARGContinuousScroll
     
     @objc public var snapshotCache: ARGBookPageSnapshotCache?
     
-    //@objc public var languageCode: String?
+    @objc public var book: ARGBook?
     
-    var book: ARGBook?
-    
-    var settings: ARGBookReadingSettings?
+    @objc public var settings: ARGBookReadingSettings?
     
     @objc public var currentNavigationPoint: ARGBookNavigationPoint?
     
+    @objc public var visiblePages: [ARGDocumentPage]? {
+        var views = [ARGDocumentPageOverlayView]()
+        
+        if let visibleViews = (scrollController?.sortedContainers() ?? nil) as? [ARGBookDocumentView] {
+            for documentView in visibleViews {
+                views.append(contentsOf: documentView.overlayView.pageOverlayViews ?? [])
+            }
+        }
+        
+        return views.compactMap { return $0.page }.sorted { $0.relativePageNumber < $1.relativePageNumber }
+    }
+    
     @objc public weak var navigationDelegate: ARGBookNavigationDelegate?
+    
+    @objc public weak var overlayDelegate: ARGBookNavigationDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -67,6 +79,7 @@ import ARGContinuousScroll
         }
         
         let layout = ARGBookCollectionViewLayout()
+        
         collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: layout)
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.showsVerticalScrollIndicator = false
@@ -111,7 +124,7 @@ import ARGContinuousScroll
                 }
             })
         }
-
+        
         DispatchQueue.main.async {
             self.refreshView()
         }

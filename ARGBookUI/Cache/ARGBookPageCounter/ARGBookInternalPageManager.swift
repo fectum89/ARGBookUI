@@ -128,10 +128,9 @@ class ARGBookInternalPageManager: ARGBookPageCounter {
                 var pages = [ARGDocumentPage]()
                 
                 for pageNumber in 0..<pageCount {
-                    let position = CGFloat(pageNumber) / CGFloat(pageCount)
-                    let navigationPoint = ARGBookNavigationPointInternal(document: document, position: position)
-                    
-                    let page = ARGDocumentPage(startNavigationPoint: navigationPoint, pageCounter: self)
+                    let startNavigationPoint = ARGBookNavigationPointInternal(document: document, position: CGFloat(pageNumber) / CGFloat(pageCount))
+                    let endNavigationPoint = ARGBookNavigationPointInternal(document: document, position: CGFloat(pageNumber + 1) / CGFloat(pageCount))
+                    let page = ARGDocumentPage(startNavigationPoint: startNavigationPoint, endNavigationPoint: endNavigationPoint, pageCounter: self)
                     page.relativePageNumber = pageNumber + 1
                     
                     pages.append(page)

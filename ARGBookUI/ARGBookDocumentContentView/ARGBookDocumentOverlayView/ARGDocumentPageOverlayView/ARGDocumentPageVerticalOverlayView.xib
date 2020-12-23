@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,23 +16,39 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="101" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gJ7-Wp-2O7">
-                    <rect key="frame" x="309" y="44" width="19" height="14.5"/>
+                    <rect key="frame" x="309" y="44" width="19" height="14"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bVg-Qm-67x">
+                    <rect key="frame" x="295" y="58" width="47.5" height="47"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="tintColor" name="AccentColor"/>
+                    <inset key="contentEdgeInsets" minX="15" minY="15" maxX="15" maxY="10"/>
+                    <state key="normal" image="bookmark.fill" catalog="system"/>
+                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="gJ7-Wp-2O7" secondAttribute="trailing" constant="10" id="O7D-eg-EZU"/>
+                <constraint firstItem="bVg-Qm-67x" firstAttribute="centerX" secondItem="gJ7-Wp-2O7" secondAttribute="centerX" id="Ca4-jG-VYs"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="gJ7-Wp-2O7" secondAttribute="trailing" constant="10" id="O7D-eg-EZU"/>
                 <constraint firstItem="gJ7-Wp-2O7" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="Vjo-ls-dEa"/>
+                <constraint firstItem="bVg-Qm-67x" firstAttribute="top" secondItem="gJ7-Wp-2O7" secondAttribute="bottom" id="j1S-df-xUM"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="bookmarkButton" destination="bVg-Qm-67x" id="yNr-TI-H8i"/>
                 <outlet property="pageNumberLabel" destination="gJ7-Wp-2O7" id="bMS-6V-ktl"/>
             </connections>
-            <point key="canvasLocation" x="-235" y="-95"/>
+            <point key="canvasLocation" x="-288" y="-68"/>
         </view>
     </objects>
+    <resources>
+        <image name="bookmark.fill" catalog="system" width="112" height="128"/>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

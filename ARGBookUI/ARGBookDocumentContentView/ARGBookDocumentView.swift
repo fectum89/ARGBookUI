@@ -50,7 +50,7 @@ class ARGBookDocumentView: UIView {
         contentView.frame = bounds
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.addSubview(contentView)
-        
+       
         snapshotView.frame = bounds
         snapshotView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.addSubview(snapshotView)
